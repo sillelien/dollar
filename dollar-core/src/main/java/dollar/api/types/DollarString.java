@@ -18,11 +18,11 @@ package dollar.api.types;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
 import dollar.api.json.JsonArray;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
@@ -48,13 +48,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._BOOLEAN)) {
             return DollarStatic.$("true".equals(value) || "yes".equals(value));
         } else if (type.is(Type._STRING)) {
@@ -80,14 +80,14 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $dec() {
+    public Value $dec() {
         return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) - 1)));
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $divide(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.string() && !rhsFix.toString().isEmpty()) {
             try {
 //                final Pattern pattern = Pattern.compile(rhsFix.toString(),Pattern.LITERAL);
@@ -121,27 +121,27 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $inc() {
+    public Value $inc() {
         return DollarFactory.fromStringValue(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
+    public Value $minus(@NotNull Value rhs) {
         return DollarFactory.fromStringValue(value.replace(rhs.toString(), ""));
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         throw new DollarFailureException(INVALID_STRING_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var rhs) {
+    public Value $multiply(@NotNull Value rhs) {
         StringBuilder newValue = new StringBuilder();
-        var rhsFix = rhs.$fixDeep();
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.number()) {
             if (rhsFix.toDouble() == 0.0) {
                 return DollarFactory.fromStringValue("");
@@ -167,7 +167,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         return DollarFactory.fromValue(new StringBuilder(value).reverse().toString());
     }
 
@@ -246,13 +246,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
+    public Value $plus(@NotNull Value rhs) {
         return DollarFactory.wrap(new DollarString(value + rhs.$S()));
     }
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         return DollarStatic.$(value.length());
     }
 
@@ -263,7 +263,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 

@@ -18,9 +18,9 @@ package dollar.api.js;
 
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.collections.CollectionUtil;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
@@ -55,7 +55,7 @@ public class JSFileScript implements Pipeable {
 
     @NotNull
     @Override
-    public var pipe(var... in) throws Exception {
+    public Value pipe(Value... in) throws Exception {
         SimpleScriptContext context = new SimpleScriptContext();
         nashorn.eval("var $=" + in[0].toJsonObject() + ";", context);
         try {

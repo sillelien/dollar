@@ -19,9 +19,9 @@ package dollar.redis;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -32,10 +32,13 @@ import java.util.List;
 
 public class RedisURIHandler implements URIHandler {
     private static final int BLOCKING_TIMEOUT = 10;
-    @NotNull private final JedisPool jedisPool;
+    @NotNull
+    private final JedisPool jedisPool;
+    @NotNull
+    private final String path;
+    @NotNull
+    private final String query;
     private final int timeout = 60000;
-    @NotNull private final String path;
-    @NotNull private final String query;
 
     public RedisURIHandler(@NotNull URI uri, @NotNull JedisPoolConfig jedisPoolConfig) {
         URI uri1 = uri;
@@ -52,25 +55,23 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @NotNull @Override
-    public var all() {
+    @NotNull
+    @Override
+    public Value all() {
         try (Jedis jedis = jedisPool.getResource()) {
             List<String> result = jedis.lrange(path, 0, -1);
             return DollarStatic.$(result);
         }
     }
 
-    @NotNull @Override
-    public var write(@NotNull var value, boolean blocking, boolean mutating) {
-        return send(value);
-    }
-
-    @Override public void destroy() {
+    @Override
+    public void destroy() {
         //TODO
     }
 
-    @NotNull @Override
-    public var drain() {
+    @NotNull
+    @Override
+    public Value drain() {
         try (Jedis jedis = jedisPool.getResource()) {
             List<String> result = jedis.lrange(path, 0, -1);
             jedis.ltrim(path, 1, 0);
@@ -80,23 +81,25 @@ public class RedisURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var get(@NotNull var key) {
+    public Value get(@NotNull Value key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return DollarStatic.$(jedis.hget(path, key.$S()));
         }
     }
 
-    @Override public void init() {
+    @Override
+    public void init() {
         //TODO
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         //TODO
     }
 
     @NotNull
     @Override
-    public var read(boolean blocking, boolean mutating) {
+    public Value read(boolean blocking, boolean mutating) {
         if (blocking && !mutating) {
             return receive();
         } else if (!blocking && mutating) {
@@ -110,20 +113,21 @@ public class RedisURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var remove(@NotNull var key) {
+    public Value remove(@NotNull Value key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return DollarStatic.$(jedis.hdel(path, key.$S()));
         }
     }
 
-    @NotNull @Override
-    public var removeValue(@NotNull var v) {
+    @NotNull
+    @Override
+    public Value removeValue(@NotNull Value v) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var set(@NotNull var key, @NotNull var value) {
+    public Value set(@NotNull Value key, @NotNull Value value) {
         try (Jedis jedis = jedisPool.getResource()) {
             return DollarStatic.$(jedis.hset(path, key.$S(), value.$S()));
         }
@@ -134,11 +138,13 @@ public class RedisURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
-    @Override public void start() {
+    @Override
+    public void start() {
         //TODO
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
         //TODO
     }
 
@@ -187,7 +193,8 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override public void unpause() {
+    @Override
+    public void unpause() {
         //TODO
     }
 
@@ -197,27 +204,33 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @NotNull
-    var receive() {
+    @Override
+    public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
+        return send(value);
+    }
+
+    @NotNull
+    Value peek() {
         try (Jedis jedis = jedisPool.getResource()) {
-            return DollarStatic.$(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
+            return DollarStatic.$(jedis.lindex(path, -1));
         }
     }
 
     @NotNull
-    var poll() {
+    Value poll() {
         try (Jedis jedis = jedisPool.getResource()) {
             return DollarStatic.$(jedis.rpop(path));
         }
     }
 
     @NotNull
-    var peek() {
+    Value receive() {
         try (Jedis jedis = jedisPool.getResource()) {
-            return DollarStatic.$(jedis.lindex(path, -1));
+            return DollarStatic.$(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
         }
     }
 
-    @NotNull var send(@NotNull var value) {
+    @NotNull Value send(@NotNull Value value) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.lpush(path, value.$S());
         }

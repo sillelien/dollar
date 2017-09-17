@@ -16,7 +16,7 @@
 
 package dollar.api.guard;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ public class AllVarMapGuard implements Guard {
     @Override
     public void postCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args, @NotNull Object result) {
         if (result instanceof Map) {
-            ((Map) result).forEach((k, v) -> assertTrue(v instanceof var, method));
+            ((Map) result).forEach((k, v) -> assertTrue(v instanceof Value, method));
         }
     }
 
@@ -43,7 +43,7 @@ public class AllVarMapGuard implements Guard {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Map) {
-                    ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var, method));
+                    ((Map) arg).forEach((k, v) -> assertTrue(v instanceof Value, method));
                 }
             }
         }

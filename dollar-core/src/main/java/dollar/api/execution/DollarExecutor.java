@@ -16,9 +16,9 @@
 
 package dollar.api.execution;
 
+import dollar.api.Value;
 import dollar.api.plugin.ExtensionPoint;
 import dollar.api.script.Source;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
@@ -51,9 +51,25 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      */
     void forceStop();
 
-    @NotNull var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call);
+    /**
+     * Forks and returns a future value.
+     *
+     * @param source
+     * @param in
+     * @param call
+     * @return
+     */
+    @NotNull Value fork(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call);
 
-    @NotNull var forkAndReturnId(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call);
+    /**
+     * Fork and returns the id which can be used to cancel later.
+     *
+     * @param source
+     * @param in
+     * @param call
+     * @return
+     */
+    @NotNull Value forkAndReturnId(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call);
 
     /**
      * Stop the execution processing and restart it.

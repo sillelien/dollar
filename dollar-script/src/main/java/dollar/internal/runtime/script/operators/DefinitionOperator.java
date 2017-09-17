@@ -19,13 +19,13 @@ package dollar.internal.runtime.script.operators;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
-import dollar.api.var;
 import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.parser.Func;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -42,7 +42,7 @@ import static dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
 import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 
-public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
+public class DefinitionOperator implements Function<Token, Function<? super Value, ? extends Value>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DefinitionOperator");
     private final boolean def;
@@ -58,30 +58,30 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
 
     @Override
     @Nullable
-    public Function<? super var, ? extends var> apply(@NotNull Token token) {
+    public Function<? super Value, ? extends Value> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         Scope scope = DollarUtilFactory.util().scope();
 
         final Object exportObj = objects[1];
 
-        return (Function<var, var>) rhs -> {
-            var value;
-            var variableName;
-            final var typeConstraintObj;
-            @Nullable var constraint;
+        return (Function<Value, Value>) rhs -> {
+            Value value;
+            Value variableName;
+            final Value typeConstraintObj;
+            @Nullable Value constraint;
             @Nullable SubType constraintSource;
             boolean readonly;
 
             if (def) {
-                variableName = (var) objects[3];
+                variableName = (Value) objects[3];
                 value = rhs;
-                typeConstraintObj = (var) objects[1];
+                typeConstraintObj = (Value) objects[1];
                 readonly = true;
 
             } else {
-                variableName = (var) objects[3];
+                variableName = (Value) objects[3];
                 value = rhs;
-                typeConstraintObj = (var) objects[2];
+                typeConstraintObj = (Value) objects[2];
                 readonly = objects[1] != null;
             }
 
@@ -95,11 +95,11 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
                 constraint = DollarUtilFactory.util().node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                                           new SourceCode(DollarUtilFactory.util().scope(), token), null,
+                                                           new SourceImpl(DollarUtilFactory.util().scope(), token), null,
                                                            new ArrayList<>(),
                                                            i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
                 DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
-                SourceCode meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
+                SourceImpl meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
                     constraintSource = new SimpleSubType(meta);
                 } else {
@@ -112,12 +112,13 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
 
             boolean finalReadonly = readonly;
 
-            var node = DollarUtilFactory.util().node(DEFINITION, pure, parser, token,
-                                                     Arrays.asList(rhs, DollarUtilFactory.util().constrain(scope, value, constraint,
-                                                                                                           constraintSource)),
-                                                     i -> Func.definitionFunc(token, (exportObj != null), value, variableName,
-                                                                              constraint, constraintSource,
-                                                                              parser, pure, finalReadonly)
+            Value node = DollarUtilFactory.util().node(DEFINITION, pure, parser, token,
+                                                       Arrays.asList(rhs,
+                                                                     DollarUtilFactory.util().constrain(scope, value, constraint,
+                                                                                                        constraintSource)),
+                                                       i -> Func.definitionFunc(token, (exportObj != null), value, variableName,
+                                                                                constraint, constraintSource,
+                                                                                parser, pure, finalReadonly)
             );
 
             node.$listen(i -> scope.notify(VarKey.of(variableName)));

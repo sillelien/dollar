@@ -19,10 +19,10 @@ package dollar.uri.socketio;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -73,13 +73,7 @@ public class SocketURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var all() {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var write(@NotNull var value, boolean blocking, boolean mutating) {
+    public Value all() {
         throw new UnsupportedOperationException();
     }
 
@@ -94,13 +88,13 @@ public class SocketURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var drain() {
+    public Value drain() {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var get(@NotNull var key) {
+    public Value get(@NotNull Value key) {
         throw new UnsupportedOperationException();
     }
 
@@ -117,8 +111,8 @@ public class SocketURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var publish(@NotNull var value) {
-        ArrayList<var> responses = new ArrayList<>();
+    public Value publish(@NotNull Value value) {
+        ArrayList<Value> responses = new ArrayList<>();
         server.getBroadcastOperations()
                 .sendEvent(value.$pairKey().toString(), value.$pairValue().toJsonObject().toMap());
         for (SocketIOSubscription subscription : subscriptions.values()) {
@@ -128,25 +122,25 @@ public class SocketURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var read(boolean blocking, boolean mutating) {
+    public Value read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var remove(@NotNull var key) {
+    public Value remove(@NotNull Value key) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var removeValue(@NotNull var v) {
+    public Value removeValue(@NotNull Value v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     @NotNull
-    public var set(@NotNull var key, @NotNull var value) {
+    public Value set(@NotNull Value key, @NotNull Value value) {
         throw new UnsupportedOperationException();
     }
 
@@ -189,6 +183,12 @@ public class SocketURIHandler implements URIHandler {
     @Override
     public void unsubscribe(@NotNull String subId) {
         subscriptions.remove(subId).destroy();
+    }
+
+    @NotNull
+    @Override
+    public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -18,8 +18,8 @@ package dollar;
 
 import com.jayway.restassured.RestAssured;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 
 public class DollarSerializationTest {
 
-    private static var profile;
+    private static Value profile;
 
     static {
         RestAssured.port = 4567;
@@ -63,7 +63,7 @@ public class DollarSerializationTest {
         System.out.println(serialized);
         final Type type = profile.$type();
         System.out.println(type);
-        final var deserialized = DollarFactory.deserialize(serialized);
+        final Value deserialized = DollarFactory.deserialize(serialized);
         System.out.println(deserialized);
         System.out.println(profile.$get($("progYears")));
         assertEquals(profile, deserialized);

@@ -26,9 +26,9 @@ import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.SubType;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.types.prediction.SingleValueTypePrediction;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ import java.util.stream.Stream;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
 
-public abstract class AbstractDollar implements var {
+public abstract class AbstractDollar implements Value {
 
     @NotNull
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -85,24 +85,24 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $all() {
+    public Value $all() {
         return $void();
     }
 
     @NotNull
     @Override
-    public var $avg(boolean parallel) {
+    public Value $avg(boolean parallel) {
         return $sum(parallel).$divide($size());
     }
 
     @NotNull
     @Override
-    public var $choose(@NotNull var map) {
+    public Value $choose(@NotNull Value map) {
         return map.$get(DollarStatic.$($S()));
     }
 
     @Override
-    public var $constrain(@Nullable var constraint, SubType constraintFingerprint) {
+    public Value $constrain(@Nullable Value constraint, SubType constraintFingerprint) {
         if ((constraint == null) || (constraintFingerprint == null)) {
             return this;
         }
@@ -119,19 +119,19 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $copy() {
+    public Value $copy() {
         return DollarFactory.fromValue(toJavaObject());
     }
 
     @Override
     @NotNull
-    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+    public Value $copy(@NotNull ImmutableList<Throwable> errors) {
         return DollarFactory.fromValue(toJavaObject());
     }
 
     @NotNull
     @Override
-    public var $default(@NotNull var v) {
+    public Value $default(@NotNull Value v) {
         if (isVoid()) {
             return v;
         } else {
@@ -141,16 +141,16 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $drain() {
+    public Value $drain() {
         return $void();
     }
 
     @NotNull
     @Override
-    public var $each(@NotNull Pipeable pipe) {
-        List<var> result = new LinkedList<>();
-        for (var v : toVarList()) {
-            var res;
+    public Value $each(@NotNull Pipeable pipe) {
+        List<Value> result = new LinkedList<>();
+        for (Value v : toVarList()) {
+            Value res;
             try {
                 res = pipe.pipe(v);
             } catch (Exception e) {
@@ -164,87 +164,87 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     final @Override
-    public var $fix(boolean parallel) {
+    public Value $fix(boolean parallel) {
         return $fix(1, parallel);
     }
 
     @NotNull
     @Override
-    public var $fix(int depth, boolean parallel) {
+    public Value $fix(int depth, boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public final var $fixDeep(boolean parallel) {
+    public final Value $fixDeep(boolean parallel) {
         return $fix(Integer.MAX_VALUE, parallel);
     }
 
     @NotNull
     @Override
-    public var $max(boolean parallel) {
+    public Value $max(boolean parallel) {
         return $stream(parallel).max(Comparable::compareTo).orElse($void());
     }
 
     @NotNull
     @Override
-    public var $min(boolean parallel) {
+    public Value $min(boolean parallel) {
         return $stream(parallel).min(Comparable::compareTo).orElse($void());
     }
 
     @NotNull
     @Override
-    public var $notify() {
+    public Value $notify() {
 //        do nothing, not a reactive type
         return this;
     }
 
     @NotNull
     @Override
-    public var $product(boolean parallel) {
-        return $stream(parallel).reduce(var::$multiply).orElse($void());
+    public Value $product(boolean parallel) {
+        return $stream(parallel).reduce(Value::$multiply).orElse($void());
     }
 
     @NotNull
     @Override
-    public var $publish(@NotNull var lhs) {
+    public Value $publish(@NotNull Value lhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $read(boolean blocking, boolean mutating) {
+    public Value $read(boolean blocking, boolean mutating) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $reverse(boolean parallel) {
+    public Value $reverse(boolean parallel) {
         throw new UnsupportedOperationException("Cannot reverse a " + type());
     }
 
     @NotNull
     @Override
-    public var $sort(boolean parallel) {
+    public Value $sort(boolean parallel) {
         return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
+    public Stream<Value> $stream(boolean parallel) {
         return toVarList().stream();
     }
 
     @NotNull
     @Override
-    public var $sum(boolean parallel) {
-        return $stream(parallel).reduce(var::$plus).orElse($void());
+    public Value $sum(boolean parallel) {
+        return $stream(parallel).reduce(Value::$plus).orElse($void());
 
     }
 
 
 //    @NotNull
-//    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
+//    public Value $pipe(@NotNull String label, @NotNull Pipeable pipe) {
 //        try {
 //            return pipe.pipe(this);
 //        } catch (Exception e) {
@@ -253,11 +253,11 @@ public abstract class AbstractDollar implements var {
 //    }
 //
 //    @NotNull
-//    public var $pipe(@NotNull String label, @NotNull String js) {
+//    public Value $pipe(@NotNull String label, @NotNull String js) {
 //        SimpleScriptContext context = new SimpleScriptContext();
 //        Object value;
 //        try {
-//            nashorn.eval("var $=" + toJsonObject() + ";", context);
+//            nashorn.eval("Value $=" + toJsonObject() + ";", context);
 //            value = nashorn.eval(js, context);
 //        } catch (Exception e) {
 //            return DollarStatic.handleError(e, this);
@@ -266,7 +266,7 @@ public abstract class AbstractDollar implements var {
 //    }
 //
 //    @NotNull
-//    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+//    public Value $pipe(@NotNull Class<? extends Pipeable> clazz) {
 //        DollarStatic.threadContext.get().passValue($copy());
 //        Pipeable script = null;
 //        try {
@@ -285,19 +285,19 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $unique(boolean parallel) {
+    public Value $unique(boolean parallel) {
         return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
     }
 
     @NotNull
     @Override
-    public var $unwrap() {
+    public Value $unwrap() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+    public Value $write(@NotNull Value value, boolean blocking, boolean mutating) {
         return this;
     }
 
@@ -309,21 +309,21 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var debug(@NotNull Object message) {
+    public Value debug(@NotNull Object message) {
         logger.debug(message.toString());
         return this;
     }
 
     @NotNull
     @Override
-    public var debug() {
+    public Value debug() {
         logger.debug(toString());
         return this;
     }
 
     @NotNull
     @Override
-    public var debugf(@NotNull String message, Object... values) {
+    public Value debugf(@NotNull String message, Object... values) {
         logger.debug(message, values);
         return this;
     }
@@ -340,14 +340,14 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var error(@NotNull Throwable exception) {
+    public Value error(@NotNull Throwable exception) {
         logger.error(exception.getMessage(), exception);
         return this;
     }
 
     @NotNull
     @Override
-    public var error(@NotNull Object message) {
+    public Value error(@NotNull Object message) {
         logger.error(message.toString());
         return this;
 
@@ -355,35 +355,35 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var error() {
+    public Value error() {
         logger.error(toString());
         return this;
     }
 
     @NotNull
     @Override
-    public var errorf(@NotNull String message, Object... values) {
+    public Value errorf(@NotNull String message, Object... values) {
         logger.error(message, values);
         return this;
     }
 
     @NotNull
     @Override
-    public var info(@NotNull Object message) {
+    public Value info(@NotNull Object message) {
         logger.info(message.toString());
         return this;
     }
 
     @NotNull
     @Override
-    public var info() {
+    public Value info() {
         logger.info(toString());
         return this;
     }
 
     @NotNull
     @Override
-    public var infof(@NotNull String message, Object... values) {
+    public Value infof(@NotNull String message, Object... values) {
         logger.info(message, values);
         return this;
     }
@@ -417,7 +417,7 @@ public abstract class AbstractDollar implements var {
     @Override
     public void metaAttribute(@NotNull MetaKey key, @NotNull String value) {
         if (meta.containsKey(key)) {
-            @NotNull var result;
+            @NotNull Value result;
             throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
         }
         meta.put(key, value);
@@ -485,21 +485,21 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $create() {
+    public Value $create() {
         getStateMachine().fire(Signal.CREATE);
         return this;
     }
 
     @NotNull
     @Override
-    public var $destroy() {
+    public Value $destroy() {
         getStateMachine().fire(Signal.DESTROY);
         return this;
     }
 
     @NotNull
     @Override
-    public var $pause() {
+    public Value $pause() {
         getStateMachine().fire(Signal.PAUSE);
         return this;
     }
@@ -511,27 +511,27 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $start() {
+    public Value $start() {
         getStateMachine().fire(Signal.START);
         return this;
     }
 
     @NotNull
     @Override
-    public var $state() {
+    public Value $state() {
         return DollarStatic.$(getStateMachine().getState().toString());
     }
 
     @NotNull
     @Override
-    public var $stop() {
+    public Value $stop() {
         getStateMachine().fire(Signal.STOP);
         return this;
     }
 
     @NotNull
     @Override
-    public var $unpause() {
+    public Value $unpause() {
         getStateMachine().fire(Signal.UNPAUSE);
         return this;
     }
@@ -589,8 +589,8 @@ public abstract class AbstractDollar implements var {
         if (dollarVal == null) {
             return false;
         }
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj).$unwrap();
+        if (obj instanceof Value) {
+            Value unwrapped = ((Value) obj).$unwrap();
             if (unwrapped == null) {
                 return false;
             }

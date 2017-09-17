@@ -16,12 +16,12 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
-import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -36,7 +36,7 @@ import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.FUNCTION_NAME_OP;
 import static dollar.internal.runtime.script.parser.Symbols.PARAM_OP;
 
-public class ParameterOperator implements Function<Token, Function<? super var, ? extends var>> {
+public class ParameterOperator implements Function<Token, Function<? super Value, ? extends Value>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
     @NotNull
@@ -52,12 +52,12 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
 
     @Nullable
     @Override
-    public Function<? super var, ? extends var> apply(@NotNull Token token) {
-        List<var> parameters = (List<var>) token.value();
+    public Function<? super Value, ? extends Value> apply(@NotNull Token token) {
+        List<Value> parameters = (List<Value>) token.value();
         return lhs -> {
             boolean functionName;
             boolean builtin;
-            SourceCode sourceCode = new SourceCode(util().scope(), token);
+            SourceImpl sourceCode = new SourceImpl(util().scope(), token);
             boolean isPure = pure;
             String name;
             if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
@@ -75,42 +75,42 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             }
 
             @SuppressWarnings("ConstantConditions")
-            var node = util().node(PARAM_OP, name, pure, parser, token, parameters,
-                                   i -> util().inSubScope(true, pure, "param-disposable-scope",
-                                                          newScope -> {
-                                                              util().addParameterstoCurrentScope(
-                                                                      util().scope(),
-                                                                      parameters);
+            Value node = util().node(PARAM_OP, name, pure, parser, token, parameters,
+                                     i -> util().inSubScope(true, pure, "param-disposable-scope",
+                                                            newScope -> {
+                                                                util().addParameterstoCurrentScope(
+                                                                        util().scope(),
+                                                                        parameters);
 
-                                                              var result;
-                                                              if (functionName) {
-                                                                  if (builtin) {
-                                                                      result = Builtins.execute(
-                                                                              lhs.toString(),
-                                                                              parameters, pure);
-                                                                  } else {
-                                                                      result = util().variableNode(
-                                                                              pure,
-                                                                              VarKey.of(lhs),
-                                                                              false, null,
-                                                                              token, parser)
-                                                                                       .$fix(2,
-                                                                                             false);
-                                                                  }
-                                                              } else {
+                                                                Value result;
+                                                                if (functionName) {
+                                                                    if (builtin) {
+                                                                        result = Builtins.execute(
+                                                                                lhs.toString(),
+                                                                                parameters, pure);
+                                                                    } else {
+                                                                        result = util().variableNode(
+                                                                                pure,
+                                                                                VarKey.of(lhs),
+                                                                                false, null,
+                                                                                token, parser)
+                                                                                         .$fix(2,
+                                                                                               false);
+                                                                    }
+                                                                } else {
 
-                                                                  result = lhs.$fix(2, false);
-                                                              }
-                                                              assert result != null;
-                                                              return result;
-                                                          }).orElseThrow(() -> new AssertionError("Optional should not be null " +
-                                                                                                          "here"))
+                                                                    result = lhs.$fix(2, false);
+                                                                }
+                                                                assert result != null;
+                                                                return result;
+                                                            }).orElseThrow(() -> new AssertionError("Optional should not be null " +
+                                                                                                            "here"))
             );
 
 
             //reactive links
             lhs.$listen(i -> node.$notify());
-            for (var param : parameters) {
+            for (Value param : parameters) {
                 param.$listen(i -> node.$notify());
             }
             return node;

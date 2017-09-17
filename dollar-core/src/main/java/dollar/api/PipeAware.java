@@ -29,7 +29,7 @@ public interface PipeAware {
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @Deprecated
-    var $pipe(@NotNull Pipeable pipe) {
+    Value $pipe(@NotNull Pipeable pipe) {
         return $pipe("anon", pipe);
     }
 
@@ -37,19 +37,19 @@ public interface PipeAware {
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @Deprecated
-    var $pipe(@NotNull String label, @NotNull Pipeable pipe);
+    Value $pipe(@NotNull String label, @NotNull Pipeable pipe);
 
     @NotNull
     @Guarded(NotNullGuard.class)
     @Deprecated
     @Guarded(ChainGuard.class)
-    var $pipe(@NotNull String label, @NotNull String js);
+    Value $pipe(@NotNull String label, @NotNull String js);
 
     @NotNull
     @Deprecated
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $pipe(@NotNull Class<? extends Pipeable> clazz);
+    Value $pipe(@NotNull Class<? extends Pipeable> clazz);
 
 
 }

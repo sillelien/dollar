@@ -16,7 +16,7 @@
 
 package dollar;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ import static dollar.api.DollarStatic.$;
 import static org.junit.Assert.assertEquals;
 
 public class DollarControlFlowTest {
-    private static var map;
+    private static Value map;
 
     @BeforeAll
     public static void setUp() {
@@ -33,7 +33,7 @@ public class DollarControlFlowTest {
 
     @Test
     public void testBasics() {
-        assertEquals(100, (long) $("Charlie").$choose(map).toLong());
+        assertEquals(100, $("Charlie").$choose(map).toLong());
 
     }
 

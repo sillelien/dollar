@@ -21,10 +21,10 @@ import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonObject;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
@@ -51,7 +51,7 @@ public class DollarMap extends AbstractDollar {
      */
     protected final
     @NotNull
-    LinkedHashMap<var, var> map;
+    LinkedHashMap<Value, Value> map;
 
 
     /**
@@ -72,12 +72,12 @@ public class DollarMap extends AbstractDollar {
         map = mapToVarMap(o);
     }
 
-    public DollarMap(@NotNull LinkedHashMap<var, var> o) {
+    public DollarMap(@NotNull LinkedHashMap<Value, Value> o) {
         super();
         map = deepClone(o);
     }
 
-    public DollarMap(@NotNull ImmutableMap<var, var> o) {
+    public DollarMap(@NotNull ImmutableMap<Value, Value> o) {
         super();
         map = mapToVarMap(o);
     }
@@ -94,21 +94,21 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(toVarMap());
+    public Value $append(@NotNull Value value) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>(toVarMap());
         newMap.put(value.$pairKey(), value.$pairValue());
         return DollarFactory.fromValue(newMap);
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._MAP)) {
             return this;
         } else if (type.is(Type._LIST)) {
@@ -126,25 +126,25 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         return DollarStatic.$(map.containsKey(value));
     }
 
     @Override
     @NotNull
-    public var $containsValue(@NotNull var value) {
+    public Value $containsValue(@NotNull Value value) {
         return DollarStatic.$(map.containsValue(value));
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
+    public Value $divide(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $get(@NotNull var key) {
+    public Value $get(@NotNull Value key) {
         if (key.integer()) {
             final Object mapKey = map.keySet().toArray()[key.toInteger()];
             return DollarStatic.$(mapKey, map.get(mapKey));
@@ -156,16 +156,16 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         return DollarStatic.$(map.containsKey(key));
     }
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>();
+    public Value $insert(@NotNull Value value, int position) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>();
         int count = 0;
-        for (Map.Entry<var, var> entry : newMap.entrySet()) {
+        for (Map.Entry<Value, Value> entry : newMap.entrySet()) {
             if (count == position) {
                 newMap.put(value.$pairKey(), value.$pairValue());
             }
@@ -178,7 +178,7 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe) {
+    public Value $listen(@NotNull Pipeable pipe) {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return DollarStatic.$(key);
@@ -186,8 +186,8 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
-        for (var v : map.values()) {
+    public Value $listen(@NotNull Pipeable pipe, @NotNull String key) {
+        for (Value v : map.values()) {
             //Join the children to this, so if the children change
             //listeners to this get the latest value of this.
             v.$listen(i -> this, key);
@@ -197,28 +197,28 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $map() {
+    public Value $map() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $mimeType() {
+    public Value $mimeType() {
         return DollarStatic.$("application/json");
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $minus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.map()) {
-            LinkedHashMap<var, var> copy = copyMap();
-            for (Map.Entry<var, var> entry : rhsFix.toVarMap().entrySet()) {
+            LinkedHashMap<Value, Value> copy = copyMap();
+            for (Map.Entry<Value, Value> entry : rhsFix.toVarMap().entrySet()) {
                 copy.remove(entry.getKey());
             }
             return wrap(new DollarMap(copy));
         } else {
-            LinkedHashMap<var, var> copy = copyMap();
+            LinkedHashMap<Value, Value> copy = copyMap();
             copy.remove(rhsFix);
             return wrap(new DollarMap(copy));
         }
@@ -226,23 +226,23 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
+    public Value $multiply(@NotNull Value v) {
         throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $negate() {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        final ArrayList<Map.Entry<var, var>> entries = new ArrayList<>(map.entrySet());
+    public Value $negate() {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
+        final ArrayList<Map.Entry<Value, Value>> entries = new ArrayList<>(map.entrySet());
         Collections.reverse(entries);
-        for (Map.Entry<var, var> entry : entries) {
+        for (Map.Entry<Value, Value> entry : entries) {
             result.put(entry.getKey(), entry.getValue());
         }
         return DollarFactory.fromValue(result);
@@ -250,16 +250,16 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $plus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.map()) {
-            LinkedHashMap<var, var> copy = copyMap();
+            LinkedHashMap<Value, Value> copy = copyMap();
             copy.putAll(rhsFix.toVarMap());
             return wrap(new DollarMap(copy));
         } else if (rhsFix.string()) {
             return DollarFactory.fromValue(toHumanString() + rhsFix.toHumanString());
         } else {
-            LinkedHashMap<var, var> copy = copyMap();
+            LinkedHashMap<Value, Value> copy = copyMap();
             copy.put(DollarFactory.fromValue("_" + copy.size()), rhsFix);
             return wrap(new DollarMap(copy));
         }
@@ -267,8 +267,8 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>();
+    public Value $prepend(@NotNull Value value) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>();
         newMap.put(value.$pairKey(), value.$pairValue());
         newMap.putAll(toVarMap());
         return DollarFactory.fromValue(newMap);
@@ -276,31 +276,31 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(@NotNull var key) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(map);
+    public Value $remove(@NotNull Value key) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>(map);
         newMap.remove(key);
         return DollarFactory.fromValue(newMap);
     }
 
     @NotNull
     @Override
-    public var $removeByKey(@NotNull String key) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(map);
+    public Value $removeByKey(@NotNull String key) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>(map);
         newMap.remove(DollarStatic.$(key));
         return DollarFactory.fromValue(newMap);
     }
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @NotNull Object value) {
-        LinkedHashMap<var, var> copyMap = copyMap();
+    public Value $set(@NotNull Value key, @NotNull Object value) {
+        LinkedHashMap<Value, Value> copyMap = copyMap();
         copyMap.put(key, DollarFactory.fromValue(value));
         return wrap(new DollarMap(copyMap));
     }
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         return DollarStatic.$(toJavaMap().size());
     }
 
@@ -360,7 +360,7 @@ public class DollarMap extends AbstractDollar {
     @Override
     public String toDollarScript() {
         StringBuilder builder = new StringBuilder("{");
-        for (Map.Entry<var, var> entry : map.entrySet()) {
+        for (Map.Entry<Value, Value> entry : map.entrySet()) {
             builder.append(entry.getKey().toDollarScript())
                     .append(" : ")
                     .append(entry.getValue().toDollarScript())
@@ -379,7 +379,7 @@ public class DollarMap extends AbstractDollar {
     @NotNull
     @Override
     public int toInteger() {
-        @NotNull var result;
+        @NotNull Value result;
         throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
@@ -400,7 +400,7 @@ public class DollarMap extends AbstractDollar {
     @Override
     public ImmutableList<Object> toList() {
         final ArrayList<Object> entries = new ArrayList<>();
-        for (Map.Entry<var, var> entry : map.entrySet()) {
+        for (Map.Entry<Value, Value> entry : map.entrySet()) {
             entries.add(entry.getValue().toJavaObject());
         }
         return ImmutableList.copyOf(entries);
@@ -426,8 +426,8 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
-        final List<var> entries =
+    public ImmutableList<Value> toVarList() {
+        final List<Value> entries =
                 map.entrySet()
                         .stream()
                         .map(entry -> DollarStatic.$(entry.getKey(), entry.getValue()))
@@ -437,10 +437,10 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> toVarMap() {
+    public ImmutableMap<Value, Value> toVarMap() {
 
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : map.entrySet()) {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
+        for (Map.Entry<Value, Value> entry : map.entrySet()) {
             result.put(entry.getKey(), entry.getValue().$fix(false));
         }
         return ImmutableMap.copyOf(result);
@@ -460,23 +460,23 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $copy() {
+    public Value $copy() {
         return wrap(new DollarMap(map));
     }
 
     @NotNull
     @Override
-    public var $fix(int depth, boolean parallel) {
+    public Value $fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
-            LinkedHashMap<var, var> result = new LinkedHashMap<>();
+            LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
             if (parallel) {
-                for (Map.Entry<var, var> entry : map.entrySet()) {
+                for (Map.Entry<Value, Value> entry : map.entrySet()) {
                     result.put(entry.getKey(), DollarStatic.$fork(source(), entry.getValue(), in -> in.$fix(depth - 1, true)));
                 }
             } else {
-                for (Map.Entry<var, var> entry : map.entrySet()) {
+                for (Map.Entry<Value, Value> entry : map.entrySet()) {
                     result.put(entry.getKey(), entry.getValue().$fix(depth - 1, false));
                 }
             }
@@ -486,14 +486,14 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $notify() {
-        map.values().forEach(var::$notify);
+    public Value $notify() {
+        map.values().forEach(Value::$notify);
         return this;
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
+    public Stream<Value> $stream(boolean parallel) {
         return split().values().stream();
     }
 
@@ -508,27 +508,27 @@ public class DollarMap extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<var>naturalOrder().<var>compare(this, o);
+    public int compareTo(@NotNull Value o) {
+        return Comparator.<Value>naturalOrder().<Value>compare(this, o);
     }
 
     @NotNull
-    private LinkedHashMap<var, var> copyMap() {
+    private LinkedHashMap<Value, Value> copyMap() {
         return deepClone(map);
     }
 
     @NotNull
-    private LinkedHashMap<var, var> deepClone(@NotNull LinkedHashMap<var, var> o) {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : o.entrySet()) {
+    private LinkedHashMap<Value, Value> deepClone(@NotNull LinkedHashMap<Value, Value> o) {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
+        for (Map.Entry<Value, Value> entry : o.entrySet()) {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
 
     @NotNull
-    private LinkedHashMap<var, var> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
+    private LinkedHashMap<Value, Value> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : stringObjectMap.entrySet()) {
             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
         }
@@ -536,14 +536,14 @@ public class DollarMap extends AbstractDollar {
     }
 
     @NotNull
-    Map<var, var> split() {
+    Map<Value, Value> split() {
         return copyMap();
     }
 
     @NotNull
     private <K extends Comparable<K>, V> Map<K, V> varMapToMap() {
         Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : toVarMap().entrySet()) {
+        for (Map.Entry<Value, Value> entry : toVarMap().entrySet()) {
             result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
         }
         return result;

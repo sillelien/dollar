@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.parser;
 
 import com.google.common.io.Files;
 import dollar.api.Type;
-import dollar.api.var;
+import dollar.api.Value;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.api.HasKeyword;
 import dollar.internal.runtime.script.api.HasSymbol;
@@ -43,7 +43,7 @@ public final class Symbols {
 
 
     @NotNull
-    public static final Function<var[], Type> ANY_TYPE_F = i -> Type._ANY;
+    public static final Function<Value[], Type> ANY_TYPE_F = i -> Type._ANY;
     @NotNull
     public static final KeywordDef AS = new KeywordDef("as", false, null, null);
     @NotNull
@@ -58,7 +58,7 @@ public final class Symbols {
                                              "'{' ( <expression> ';' ) * [ <expression> ] '}'",
                                              NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, i -> Type._BLOCK);
     @NotNull
-    public static final Function<var[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
+    public static final Function<Value[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
     @NotNull
     public static final Op AND = new Op(BINARY, "&&", "and", "and",
                                         false, true,
@@ -110,7 +110,7 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef FALSE = new KeywordDef("false", false, "Boolean false.", null);
     @NotNull
-    public static final Function<var[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
+    public static final Function<Value[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
     @NotNull
     public static final Op DEC = new Op(PREFIX, "--", null, "decrement",
                                         false,
@@ -180,7 +180,7 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null, null);
     @NotNull
-    public static final Function<var[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
+    public static final Function<Value[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
     @NotNull
     public static final KeywordDef IS = new KeywordDef("is", false, null, null);
     @NotNull
@@ -195,7 +195,7 @@ public final class Symbols {
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
     @NotNull
-    public static final Function<var[], Type> LIST_TYPE_F = i -> Type._LIST;
+    public static final Function<Value[], Type> LIST_TYPE_F = i -> Type._LIST;
     @NotNull
     public static final Op ALL = new Op(PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE,
                                         null, LIST_TYPE_F);
@@ -218,7 +218,7 @@ public final class Symbols {
     public static final Op LT_EQUALS = new Op(BINARY, "<=", null, "less-than-equal",
                                               false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Function<var[], Type> MAP_TYPE_F = i -> Type._MAP;
+    public static final Function<Value[], Type> MAP_TYPE_F = i -> Type._MAP;
     @NotNull
     public static final Op MAP_OP = new Op(COLLECTION, null, null, "map",
                                            false, true,
@@ -305,7 +305,7 @@ public final class Symbols {
                                             null,
                                             NO_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Function<var[], Type> RANGE_TYPE_F = i -> Type._RANGE;
+    public static final Function<Value[], Type> RANGE_TYPE_F = i -> Type._RANGE;
     @NotNull
     public static final Op RANGE = new Op(BINARY, "..", null, "range",
                                           false, true,
@@ -327,7 +327,7 @@ public final class Symbols {
                                             false, true,
                                             null, REVERSE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Function<var[], Type> RHS_TYPE_F = i -> i[1].$type();
+    public static final Function<Value[], Type> RHS_TYPE_F = i -> i[1].$type();
     @NotNull
     public static final Op ASSIGNMENT = new Op(OpType.ASSIGNMENT, "=", null, "assign", false, true, null,
                                                ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
@@ -439,7 +439,7 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef VOID = new KeywordDef("void", false, "A VOID value.", null);
     @NotNull
-    public static final Function<var[], Type> VOID_TYPE_F = i -> Type._VOID;
+    public static final Function<Value[], Type> VOID_TYPE_F = i -> Type._VOID;
     @NotNull
     public static final Op ASSERT = new Op(PREFIX, ".:", "assert", "assert",
                                            false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234", VOID_TYPE_F);

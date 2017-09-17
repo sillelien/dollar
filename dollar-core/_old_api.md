@@ -58,7 +58,7 @@ Basic
 You can just use dollar to write dynamic JSON oriented (JSON is not a requirement, you can work with maps too) using a fluent format like this:
 
         int age = new Date().getYear() + 1900 - 1970;
-        var profile = $("name", "Neil")
+        Value profile = $("name", "Neil")
                 .$("age", age)
                 .$("gender", "male")
                 .$("projects", $array("snapito", "dollar"))
@@ -70,7 +70,7 @@ You can just use dollar to write dynamic JSON oriented (JSON is not a requiremen
 
 or using a more builder format like this:
 
-        var profile = $(
+        Value profile = $(
                 $("name", "Neil"),
                 $("age", new Date().getYear() + 1900 - 1970),
                 $("gender", "male"),
@@ -102,7 +102,7 @@ To write Dollar 'scripts' you just need to extend the Script class, add a static
         }
 
         {
-            var profile = $("name", "Neil")
+            Value profile = $("name", "Neil")
                     .$("age", new Date().getYear() + 1900 - 1970)
                     .$("gender", "male")
                     .$("projects", $jsonArray("snapito", "dollar"))
@@ -158,7 +158,7 @@ The Rules
 1. Do not create your own Threads.
 2. Do not create your own Threads.
 3. Always run from a *static* context (e.g. a public static void main method)
-4. All `var` objects are **immutable**, so use the returned value after 'mutation' actions.
+4. All `Value` objects are **immutable**, so use the returned value after 'mutation' actions.
 
 
 

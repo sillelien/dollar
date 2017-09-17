@@ -22,9 +22,9 @@ import com.sillelien.jas.jproxy.JProxyScriptEngine;
 import com.sillelien.jas.jproxy.JProxyScriptEngineFactory;
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.plugin.ExtensionPoint;
 import dollar.api.scripting.ScriptingLanguage;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
 
     @Override
     @NotNull
-    public var compile(@NotNull String script, @NotNull Scope scope) {
+    public Value compile(@NotNull String script, @NotNull Scope scope) {
 
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
@@ -87,15 +87,15 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
 
         StringBuilder code = new StringBuilder();
         code.append(
-                " /* in statement */ List<var> in = (List<var>)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE)" +
+                " /* in statement */ List<Value> in = (List<Value>)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE)" +
                         "; \n");
         code.append(
                 " /* scope statement */ Scope scope = (Scope)context.getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
-        code.append(" /* out statement */ var out = $void();\n");
+        code.append(" /* out statement */ Value out = $void();\n");
         code.append(script).append(" /* return statement */ \nreturn out;\n");
 
         log.debug(code.toString());
-        var result = null;
+        Value result = null;
         try {
             result = DollarStatic.$(scriptEngine.eval(code.toString(), bindings));
         } catch (ScriptException e) {

@@ -69,7 +69,7 @@ public interface Configuration {
     boolean wrapForGuards();
 
     /**
-     * True if {@link var} objects are being wrapped for monitoring. This includes metrics and trace
+     * True if {@link Value} objects are being wrapped for monitoring. This includes metrics and trace
      * analysis.
      *
      * @return true if

@@ -16,14 +16,14 @@
 
 package dollar;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$list;
 
 public class DollarErrorTest {
-    private static var list;
+    private static Value list;
 
     @BeforeAll
     public static void setUp() {

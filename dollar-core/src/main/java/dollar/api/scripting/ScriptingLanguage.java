@@ -17,13 +17,13 @@
 package dollar.api.scripting;
 
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.plugin.ExtensionPoint;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public interface ScriptingLanguage extends ExtensionPoint {
 
-    @NotNull var compile(@NotNull String java, @NotNull Scope scope);
+    @NotNull Value compile(@NotNull String java, @NotNull Scope scope);
 
     boolean provides(@NotNull String language);
 }

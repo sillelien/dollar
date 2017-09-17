@@ -16,7 +16,7 @@
 
 package dollar.api.guard;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ public class AllVarCollectionGuard implements Guard {
     @Override
     public void postCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args, @NotNull Object result) {
         if (result instanceof Collection) {
-            ((Collection) result).forEach((i) -> assertTrue(i instanceof var, method));
+            ((Collection) result).forEach((i) -> assertTrue(i instanceof Value, method));
         }
     }
 
@@ -43,7 +43,7 @@ public class AllVarCollectionGuard implements Guard {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Collection) {
-                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof var, method));
+                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof Value, method));
                 }
             }
         }

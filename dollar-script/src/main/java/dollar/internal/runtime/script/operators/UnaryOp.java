@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.Value;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.api.Operator;
 import dollar.internal.runtime.script.parser.Op;
@@ -30,11 +30,11 @@ import java.util.function.UnaryOperator;
 
 import static java.util.Collections.singletonList;
 
-public class UnaryOp implements UnaryOperator<var>, Operator {
+public class UnaryOp implements UnaryOperator<Value>, Operator {
     @NotNull
     protected final Op operation;
     @NotNull
-    private final BiFunction<var, Source, var> function;
+    private final BiFunction<Value, Source, Value> function;
     private final boolean immediate;
     private final boolean pure;
     @NotNull
@@ -44,7 +44,7 @@ public class UnaryOp implements UnaryOperator<var>, Operator {
 
     public UnaryOp(@NotNull DollarParser parser,
                    @NotNull Op operation,
-                   @NotNull BiFunction<var, Source, var> function,
+                   @NotNull BiFunction<Value, Source, Value> function,
                    boolean pure) {
         this.operation = operation;
         this.function = function;
@@ -55,7 +55,7 @@ public class UnaryOp implements UnaryOperator<var>, Operator {
     }
 
     public UnaryOp(boolean immediate,
-                   @NotNull BiFunction<var, Source, var> function,
+                   @NotNull BiFunction<Value, Source, Value> function,
                    @NotNull Op operation,
                    @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
@@ -68,7 +68,7 @@ public class UnaryOp implements UnaryOperator<var>, Operator {
 
     @NotNull
     @Override
-    public var apply(@NotNull var from) {
+    public Value apply(@NotNull Value from) {
 
         if (immediate) {
             return DollarUtilFactory.util().node(operation, pure, parser, source, singletonList(from),

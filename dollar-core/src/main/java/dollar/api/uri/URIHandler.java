@@ -18,7 +18,7 @@ package dollar.api.uri;
 
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -26,45 +26,47 @@ import java.io.IOException;
 public interface URIHandler {
 
     @NotNull
-    default var all() {return DollarStatic.$void();}
+    default Value all() {return DollarStatic.$void();}
 
     @NotNull
-    default var append(@NotNull var value) {return write(value, true, true);}
-
-    @NotNull
-    default var write(@NotNull var value, boolean blocking, boolean mutating) {return DollarStatic.$void();}
+    default Value append(@NotNull Value value) {return write(value, true, true);}
 
     default void destroy() {}
 
     @NotNull
-    default var drain() {return DollarStatic.$void();}
+    default Value drain() {return DollarStatic.$void();}
 
     @NotNull
-    default var get(@NotNull var key) {return DollarStatic.$void();}
+    default Value get(@NotNull Value key) {return DollarStatic.$void();}
 
     default void init() {}
+
+    @NotNull
+    default Value insert(@NotNull Value $) {
+        return DollarStatic.$void();
+    }
 
     default void pause() {}
 
     @NotNull
-    default var prepend(@NotNull var value) {return DollarStatic.$void();}
+    default Value prepend(@NotNull Value value) {return DollarStatic.$void();}
 
     @NotNull
-    default var publish(@NotNull var value) {
+    default Value publish(@NotNull Value value) {
         return write(value, false, false);
     }
 
     @NotNull
-    default var read(boolean blocking, boolean mutating) {return DollarStatic.$void();}
+    default Value read(boolean blocking, boolean mutating) {return DollarStatic.$void();}
 
     @NotNull
-    default var remove(@NotNull var v) {return DollarStatic.$void();}
+    default Value remove(@NotNull Value v) {return DollarStatic.$void();}
 
     @NotNull
-    default var removeValue(@NotNull var v) {return DollarStatic.$void();}
+    default Value removeValue(@NotNull Value v) {return DollarStatic.$void();}
 
     @NotNull
-    default var set(@NotNull var key, @NotNull var value) {return DollarStatic.$void();}
+    default Value set(@NotNull Value key, @NotNull Value value) {return DollarStatic.$void();}
 
     default int size() { return 0;}
 
@@ -79,7 +81,5 @@ public interface URIHandler {
     default void unsubscribe(@NotNull String subId) {}
 
     @NotNull
-    default var insert(@NotNull var $) {
-        return DollarStatic.$void();
-    }
+    default Value write(@NotNull Value value, boolean blocking, boolean mutating) {return DollarStatic.$void();}
 }

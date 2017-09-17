@@ -41,7 +41,7 @@ import java.io.Serializable;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public interface var extends Serializable, Comparable<var>, StateAware<var> {
+public interface Value extends Serializable, Comparable<Value>, StateAware<Value> {
 
 
     /**
@@ -54,7 +54,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $(@NotNull String key, @Nullable Object value) {
+    default Value $(@NotNull String key, @Nullable Object value) {
         return $set(DollarStatic.$(key), DollarStatic.$(value));
     }
 
@@ -79,15 +79,15 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $abs();
+    Value $abs();
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $all();
+    Value $all();
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    var $append(@NotNull var value);
+    Value $append(@NotNull Value value);
 
     /**
      * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with {@link
@@ -97,60 +97,60 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return this casted
      */
     @NotNull
-    var $as(@NotNull Type type);
+    Value $as(@NotNull Type type);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $avg(boolean parallel);
+    Value $avg(boolean parallel);
 
     @NotNull
-    default var $cancel(@NotNull var id) {return DollarStatic.$void();}
+    default Value $cancel(@NotNull Value id) {return DollarStatic.$void();}
 
     /**
      * Select a value from map based upon the current value and return that.
      *
      * @param map the map
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $choose(@NotNull var map);
+    Value $choose(@NotNull Value map);
 
-    var $constrain(@NotNull var constraint, @Nullable SubType label);
+    Value $constrain(@NotNull Value constraint, @Nullable SubType label);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $contains(@NotNull var value) {
+    default Value $contains(@NotNull Value value) {
         return $containsValue(value);
     }
 
     @Guarded(ChainGuard.class)
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    var $containsKey(@NotNull var value);
+    Value $containsKey(@NotNull Value value);
 
     @Guarded(ChainGuard.class)
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    var $containsValue(@NotNull var value);
+    Value $containsValue(@NotNull Value value);
 
     /**
      * Returns a deep copy of this object. You should never need to use this operation as all {@link
-     * var} objects are immutable. Therefore they can freely be shared between threads.
+     * Value} objects are immutable. Therefore they can freely be shared between threads.
      *
      * @return a deep copy of this object
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var $copy();
+    Value $copy();
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     @Guarded(NotNullCollectionGuard.class)
     @NotNull
-    var $copy(@NotNull ImmutableList<Throwable> errors);
+    Value $copy(@NotNull ImmutableList<Throwable> errors);
 
     /**
      * Decrements this value, decrementing is the same as  {@code $minus($(1))} for numeric values but may be
@@ -161,7 +161,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @NotNull
-    default var $dec() {
+    default Value $dec() {
         return $minus(DollarStatic.$(1));
     }
 
@@ -175,12 +175,12 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    var $default(@NotNull var v);
+    Value $default(@NotNull Value v);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $dispatch(@NotNull var lhs) {
+    default Value $dispatch(@NotNull Value lhs) {
         return $write(lhs, false, false);
     }
 
@@ -193,26 +193,26 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $divide(@NotNull var rhs);
+    Value $divide(@NotNull Value rhs);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $drain();
+    Value $drain();
 
     /**
      * $ each.
      *
      * @param pipe the pipe
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $each(@NotNull Pipeable pipe);
+    Value $each(@NotNull Pipeable pipe);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $equals(@Nullable var other) {
+    default Value $equals(@Nullable Value other) {
         return DollarFactory.fromValue(equals(other));
     }
 
@@ -221,29 +221,29 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var $fix(boolean parallel);
+    Value $fix(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $fix(int depth, boolean parallel);
+    Value $fix(int depth, boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $fixDeep() { return $fixDeep(false);}
+    default Value $fixDeep() { return $fixDeep(false);}
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $fixDeep(boolean parallel);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $get(@NotNull var rhs);
+    Value $fixDeep(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $give(@NotNull var lhs) {
+    Value $get(@NotNull Value rhs);
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default Value $give(@NotNull Value lhs) {
         return $write(lhs, false, true);
     }
 
@@ -255,7 +255,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    default var $has(@NotNull String key) {
+    default Value $has(@NotNull String key) {
         return $has(DollarStatic.$(key));
     }
 
@@ -267,7 +267,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    var $has(@NotNull var key);
+    Value $has(@NotNull Value key);
 
     /**
      * Incrementing is the same as {@code $plus($(1))} for numerical values, it has type dependent behaviour for
@@ -278,22 +278,22 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    default var $inc() {
+    default Value $inc() {
         return $plus(DollarStatic.$(1));
     }
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    var $insert(@NotNull var value, int position);
+    Value $insert(@NotNull Value value, int position);
 
     /**
-     * Returns a boolean var which is true if this is empty.
+     * Returns a boolean Value which is true if this is empty.
      *
-     * @return a true var if it is empty.
+     * @return a true Value if it is empty.
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $isEmpty() {
+    default Value $isEmpty() {
         return DollarStatic.$($size().toInteger() == 0);
     }
 
@@ -305,7 +305,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
     @NotNull
-    default var $list() {
+    default Value $list() {
         return DollarFactory.fromList(toVarList());
     }
 
@@ -315,7 +315,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @param pipeable action
      */
     @NotNull
-    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
+    default Value $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
 
     /**
      * For Lambdas and reactive programming, do not use.
@@ -325,7 +325,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return
      */
     @NotNull
-    default var $listen(@NotNull Pipeable pipeable, @NotNull String id) {return DollarStatic.$void();}
+    default Value $listen(@NotNull Pipeable pipeable, @NotNull String id) {return DollarStatic.$void();}
 
     /**
      * $ map.
@@ -334,31 +334,31 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(NotNullGuard.class)
-    default var $map() {
+    default Value $map() {
         return DollarFactory.fromMap(toVarMap());
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $max(boolean parallel);
+    Value $max(boolean parallel);
 
     /**
-     * Returns the mime type of this {@link var} object. By default this will be 'application/json'
+     * Returns the mime type of this {@link Value} object. By default this will be 'application/json'
      *
      * @return the mime type associated with this object.
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $mimeType() {
+    default Value $mimeType() {
         return DollarStatic.$("application/json");
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $min(boolean parallel);
+    Value $min(boolean parallel);
 
     /**
-     * Deducts from var, for toStrings this means remove all occurrence of and for collections it means remove the value
+     * Deducts from Value, for toStrings this means remove all occurrence of and for collections it means remove the value
      * from the collection. For numbers it is standard numeric arithmetic.
      *
      * @param rhs the value to deduct from this
@@ -367,7 +367,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     default @Guarded(ChainGuard.class)
-    var $minus(@NotNull var rhs) {
+    Value $minus(@NotNull Value rhs) {
         return $plus(rhs.$negate());
     }
 
@@ -380,18 +380,18 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $modulus(@NotNull var rhs);
+    Value $modulus(@NotNull Value rhs);
 
     /**
      * $ multiply.
      *
      * @param v the v
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $multiply(@NotNull var v);
+    Value $multiply(@NotNull Value v);
 
     /**
      * Negate the value, for lists, toStrings and maps this means reversing the elements. For numbers it is the usual
@@ -402,18 +402,18 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $negate();
+    Value $negate();
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $notEquals(@Nullable var other) {
+    default Value $notEquals(@Nullable Value other) {
         return DollarFactory.fromValue(!equals(other));
     }
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $notify();
+    Value $notify();
 
     /**
      * Gets pair key.
@@ -422,7 +422,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(NotNullGuard.class)
-    default var $pairKey() {
+    default Value $pairKey() {
         return toVarMap().keySet().iterator().next();
     }
 
@@ -433,18 +433,18 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(NotNullGuard.class)
-    default var $pairValue() {
+    default Value $pairValue() {
         return toVarMap().values().iterator().next();
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $peek() {
+    default Value $peek() {
         return $read(false, false);
     }
 
     /**
-     * Returns a new {@link var} with this value added to it. Like {@link #$minus(var)} the actual behaviour varies with
+     * Returns a new {@link Value} with this value added to it. Like {@link #$minus(Value)} the actual behaviour varies with
      * types. So for toStrings this is concatenation for collections it is adding a new element.
      *
      * @param rhs the value to add
@@ -453,37 +453,37 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $plus(@NotNull var rhs);
+    Value $plus(@NotNull Value rhs);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $poll() {
+    default Value $poll() {
         return $read(false, true);
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $pop() {
+    default Value $pop() {
         return $read(true, true);
     }
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    var $prepend(@NotNull var value);
+    Value $prepend(@NotNull Value value);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $product(boolean parallel);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $publish(@NotNull var lhs);
+    Value $product(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $push(@NotNull var lhs) {
+    Value $publish(@NotNull Value lhs);
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default Value $push(@NotNull Value lhs) {
         return $write(lhs, true, true);
     }
 
@@ -493,7 +493,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $read(boolean blocking, boolean mutating);
+    Value $read(boolean blocking, boolean mutating);
 
     /**
      * Receive (from this) synchronously.
@@ -501,7 +501,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    default var $read() {
+    default Value $read() {
         return $read(true, true);
     }
 
@@ -513,20 +513,20 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var $remove(@NotNull var valueToRemove);
+    Value $remove(@NotNull Value valueToRemove);
 
     /**
      * Remove by key. (Map like data only).
      *
      * @param key the key of the key/value pair to remove
-     * @return the modified var
+     * @return the modified Value
      */
     @NotNull
-    var $removeByKey(@NotNull String key);
+    Value $removeByKey(@NotNull String key);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $reverse(boolean parallel);
+    Value $reverse(boolean parallel);
 
     @NotNull
     default String $serialized() {
@@ -538,29 +538,29 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * object. If it doesn't an exception will be thrown.
      *
      * @param key   a String key for the value to be stored in this value.
-     * @param value the {@link var} to add.
+     * @param value the {@link Value} to add.
      * @return the updated copy.
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var $set(@NotNull var key, @NotNull Object value);
+    Value $set(@NotNull Value key, @NotNull Object value);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $size();
+    Value $size();
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $sort(boolean parallel);
+    Value $sort(boolean parallel);
 
     /**
      * Convert this object into a list of objects, basically the same as casting to a List.
      *
-     * @return a list type var.
+     * @return a list type Value.
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var $split() {
+    default Value $split() {
         return DollarFactory.fromValue(toVarList());
     }
 
@@ -571,25 +571,25 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return a stream of values.
      */
     @NotNull
-    Stream<var> $stream(boolean parallel);
+    Stream<Value> $stream(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $subscribe(@NotNull Pipeable subscription) {
+    default Value $subscribe(@NotNull Pipeable subscription) {
         return $subscribe(subscription, UUID.randomUUID().toString());
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $subscribe(@NotNull Pipeable subscription, @NotNull String key) {
+    default Value $subscribe(@NotNull Pipeable subscription, @NotNull String key) {
         throw new DollarFailureException(ErrorType.INVALID_OPERATION);
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $sum(boolean parallel);
+    Value $sum(boolean parallel);
 
     /**
      * Remove whitespace before and after the first and last non-whitespace characters.
@@ -597,7 +597,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return
      */
     @NotNull
-    default var $trim() {
+    default Value $trim() {
         return DollarFactory.fromStringValue(toString().trim());
     }
 
@@ -611,7 +611,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $unique(boolean parallel);
+    Value $unique(boolean parallel);
 
     /**
      * Unwraps any wrapper classes around the actual type class.
@@ -620,12 +620,12 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      */
     @Guarded(ChainGuard.class)
     @Nullable
-    var $unwrap();
+    Value $unwrap();
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $write(@NotNull var value, boolean blocking, boolean mutating);
+    Value $write(@NotNull Value value, boolean blocking, boolean mutating);
 
     /**
      * Send (to this) synchronously.
@@ -633,7 +633,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    default var $write(@NotNull var value) {
+    default Value $write(@NotNull Value value) {
         return $write(value, true, true);
     }
 
@@ -650,36 +650,36 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     SubType constraintLabel();
 
     /**
-     * Debug var.
+     * Debug Value.
      *
      * @param message the message
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var debug(@NotNull Object message);
+    Value debug(@NotNull Object message);
 
     /**
-     * Debug var.
+     * Debug Value.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var debug();
+    Value debug();
 
     /**
-     * Debugf var.
+     * Debugf Value.
      *
      * @param message the message
      * @param values  the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var debugf(@NotNull String message, Object... values);
+    Value debugf(@NotNull String message, Object... values);
 
     /**
      * Is decimal.
@@ -704,59 +704,59 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     /**
-     * Prints the toHumanString() value of this {@link var} to standard error.
+     * Prints the toHumanString() value of this {@link Value} to standard error.
      *
      * @return this
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var err() {
+    default Value err() {
         System.err.println(toString());
         return this;
     }
 
     /**
-     * Error var.
+     * Error Value.
      *
      * @param exception the exception
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var error(@NotNull Throwable exception);
+    Value error(@NotNull Throwable exception);
 
     /**
-     * Error var.
+     * Error Value.
      *
      * @param message the message
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var error(@NotNull Object message);
+    Value error(@NotNull Object message);
 
     /**
-     * Error var.
+     * Error Value.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var error();
+    Value error();
 
     /**
-     * Errorf var.
+     * Errorf Value.
      *
      * @param message the message
      * @param values  the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var errorf(@NotNull String message, Object... values);
+    Value errorf(@NotNull String message, Object... values);
 
     /**
      * Is infinite.
@@ -768,36 +768,36 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     /**
-     * Info var.
+     * Info Value.
      *
      * @param message the message
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var info(@NotNull Object message);
+    Value info(@NotNull Object message);
 
     /**
-     * Info var.
+     * Info Value.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var info();
+    Value info();
 
     /**
-     * Infof var.
+     * Infof Value.
      *
      * @param message the message
      * @param values  the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var infof(@NotNull String message, Object... values);
+    Value infof(@NotNull String message, Object... values);
 
     /**
      * Is integer.
@@ -962,11 +962,11 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     /**
-     * Prints the toHumanString() value of this {@link var} to standard out.
+     * Prints the toHumanString() value of this {@link Value} to standard out.
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    default var out() {
+    default Value out() {
         System.out.println(toString());
         return this;
     }
@@ -991,7 +991,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
 
     /**
      * Attempt to predict what type this object is. For static types this will predict the the same value as returned by
-     * {@link var#$type()}
+     * {@link Value#$type()}
      *
      * @return a prediction of what type this object may be.
      */
@@ -1012,7 +1012,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     /**
-     * Convenience version of {@link #$remove(var)} for the Java API.
+     * Convenience version of {@link #$remove(Value)} for the Java API.
      *
      * @param valueToRemove the value to be removed.
      * @return a new object with the value removed.
@@ -1089,7 +1089,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     int toInteger();
 
     /**
-     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
+     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'Value' objects.
      *
      * @param <K> the type parameter
      * @param <V> the type parameter
@@ -1205,7 +1205,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
     @NotNull
-    ImmutableList<var> toVarList();
+    ImmutableList<Value> toVarList();
 
     /**
      * $ map.
@@ -1215,7 +1215,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(AllVarMapGuard.class)
-    ImmutableMap<var, var> toVarMap();
+    ImmutableMap<Value, Value> toVarMap();
 
     /**
      * $ map.

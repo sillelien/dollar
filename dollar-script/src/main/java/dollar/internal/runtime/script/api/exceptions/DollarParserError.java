@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarParserError extends Error {
@@ -32,7 +32,7 @@ public class DollarParserError extends Error {
         super(message, cause, true, true);
     }
 
-    public DollarParserError(@NotNull String s, @NotNull var rhs) {
+    public DollarParserError(@NotNull String s, @NotNull Value rhs) {
         super(s + ":\n" + rhs.source().getSourceMessage());
     }
 }

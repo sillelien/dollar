@@ -17,7 +17,7 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DollarLambdaTest {
-    private static var list;
+    private static Value list;
 
     @BeforeAll
     public static void setUp() {
@@ -35,7 +35,7 @@ public class DollarLambdaTest {
 
     @Test
     public void testBasics() throws InterruptedException {
-        var lambda = $((v) -> DollarStatic.$(System.currentTimeMillis()));
+        Value lambda = $((v) -> DollarStatic.$(System.currentTimeMillis()));
         long time = System.currentTimeMillis();
         System.out.println(time);
         Thread.sleep(50);
@@ -47,7 +47,7 @@ public class DollarLambdaTest {
 
     @Test
     public void testIdentityEqualsHashCode() {
-        var lambda = $((v) -> DollarStatic.$("Hello World"));
+        Value lambda = $((v) -> DollarStatic.$("Hello World"));
         assertEquals("Hello World".hashCode(), lambda.hashCode());
         assertEquals(lambda, "Hello World");
     }

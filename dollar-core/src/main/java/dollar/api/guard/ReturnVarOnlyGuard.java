@@ -16,7 +16,7 @@
 
 package dollar.api.guard;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
@@ -30,7 +30,7 @@ public class ReturnVarOnlyGuard implements Guard {
 
     @Override
     public void postCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args, @NotNull Object result) {
-        assertTrue(result instanceof var, method);
+        assertTrue(result instanceof Value, method);
     }
 
     @Override

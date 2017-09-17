@@ -18,9 +18,9 @@ package dollar.internal.runtime.script.operators;
 
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +42,7 @@ import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;
 import static java.util.Collections.singletonList;
 
-public class CollectOperator implements Function<Token, var> {
+public class CollectOperator implements Function<Token, Value> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("CollectOperator");
     @NotNull
@@ -59,10 +59,10 @@ public class CollectOperator implements Function<Token, var> {
     @NotNull
     @Override
 
-    public var apply(@NotNull Token token) {
+    public Value apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
 
-        var variable = (var) objects[0];
+        Value variable = (Value) objects[0];
         Object until = objects[1];
         Object unless = objects[2];
         Object loop = objects[3];
@@ -80,7 +80,8 @@ public class CollectOperator implements Function<Token, var> {
                                    throw new VariableNotFoundException(VarKey.of(varName), util().scope());
                                }
 
-                               scopeForVar.listen(VarKey.of(varName), id, new VarListener((var) unless, (var) until, (var) loop));
+                               scopeForVar.listen(VarKey.of(varName), id,
+                                                  new VarListener((Value) unless, (Value) until, (Value) loop));
                                return $void();
 
                            });
@@ -91,17 +92,17 @@ public class CollectOperator implements Function<Token, var> {
 
     private final class VarListener implements Pipeable {
         @NotNull
-        final ArrayList<var> collected = new ArrayList<>();
+        final ArrayList<Value> collected = new ArrayList<>();
         @NotNull
         final AtomicLong count = new AtomicLong(-1);
         @NotNull
-        private final var loop;
+        private final Value loop;
         @Nullable
-        private final var unless;
+        private final Value unless;
         @Nullable
-        private final var until;
+        private final Value until;
 
-        private VarListener(@Nullable var unless, @Nullable var until, @NotNull var loop) {
+        private VarListener(@Nullable Value unless, @Nullable Value until, @NotNull Value loop) {
             this.unless = unless;
             this.until = until;
             this.loop = loop;
@@ -109,8 +110,8 @@ public class CollectOperator implements Function<Token, var> {
 
         @NotNull
         @Override
-        public var pipe(var... in2) {
-            var value = in2[1].$fixDeep();
+        public Value pipe(Value... in2) {
+            Value value = in2[1].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {}", count.get(), value);
             util().inSubScope(true, pure, "collect-body",
@@ -124,7 +125,7 @@ public class CollectOperator implements Function<Token, var> {
                                       log.debug("Adding {}", value);
                                       collected.add(value);
                                   }
-                                  var returnValue = $void();
+                                  Value returnValue = $void();
                                   ns.parameter(VarKey.COLLECTED, fromList(collected));
                                   log.debug("Collected {}", fromList(collected));
                                   final boolean endValue = (until != null) && until.isTrue();

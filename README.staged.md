@@ -33,11 +33,11 @@ Find out your local air quality:
 
 ```dollar
 //First we get the Geo Location of our IP address
-var geo= read http://freegeoip.net/json/
-var lat= geo.latitude
-var lon= geo.longitude
+Value geo= read http://freegeoip.net/json/
+Value lat= geo.latitude
+Value lon= geo.longitude
 
-var quality= read ("https://api.openaq.org/v1/measurements?radius=10000&limit=1&coordinates="+ lat + "," + lon) as URI;
+Value quality= read ("https://api.openaq.org/v1/measurements?radius=10000&limit=1&coordinates="+ lat + "," + lon) as URI;
 
 //Now output the quality from each result
 quality.results each {

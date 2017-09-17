@@ -22,9 +22,9 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
 import dollar.api.uri.URI;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 class SocketIOSubscription implements DataListener<String>, ConnectListener, DisconnectListener {
@@ -47,19 +47,21 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
         destroyed = true;
     }
 
-    @Override public void onConnect(@NotNull SocketIOClient client) {
+    @NotNull
+    private String getPath() {return uri.path().substring(1);}
+
+    @Override
+    public void onConnect(@NotNull SocketIOClient client) {
         if (!destroyed) {
             client.joinRoom(getPath());
         }
     }
 
-    @NotNull private String getPath() {return uri.path().substring(1);}
-
     @Override
     public void onData(@NotNull SocketIOClient client, @NotNull String data, @NotNull AckRequest ackSender) throws
-                                                                                                             Exception {
+            Exception {
         if (!destroyed) {
-            final var result = consumer.pipe(DollarFactory.fromStringValue(data));
+            final Value result = consumer.pipe(DollarFactory.fromStringValue(data));
             if (ackSender.isAckRequested()) {
                 ackSender.sendAckData(result.toHumanString());
             }
@@ -67,7 +69,8 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
 
     }
 
-    @Override public void onDisconnect(@NotNull SocketIOClient client) {
+    @Override
+    public void onDisconnect(@NotNull SocketIOClient client) {
         client.leaveRoom(getPath());
     }
 

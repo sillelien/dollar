@@ -28,7 +28,7 @@ import org.jparsec.Token;
 
 import java.util.Objects;
 
-public class SourceCode implements Source {
+public class SourceImpl implements Source {
     private final int length;
     @NotNull
     private final Scope scope;
@@ -41,17 +41,17 @@ public class SourceCode implements Source {
     private final int start;
 
 
-    public SourceCode(@NotNull Token t) {
+    public SourceImpl(@NotNull Token t) {
         this(DollarUtilFactory.util().scope(), t);
     }
 
-    public SourceCode(@NotNull Scope scope, @NotNull Token t) {
+    public SourceImpl(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
         sourceFile = scope.file();
         length = t.length();
         start = t.index();
         if (scope.source() == null) {
-            throw new DollarParserError("Cannot create a SourceCode from a scope with no source: " + scope);
+            throw new DollarParserError("Cannot create a SourceImpl from a scope with no source: " + scope);
         }
         source = scope.source();
         if (source != null) {
@@ -156,7 +156,7 @@ public class SourceCode implements Source {
     public boolean equals(Object o) {
         if (this == o) return true;
         if ((o == null) || (getClass() != o.getClass())) return false;
-        SourceCode that = (SourceCode) o;
+        SourceImpl that = (SourceImpl) o;
         return (length == that.length) &&
                        (start == that.start) &&
                        Objects.equals(scope, that.scope) &&

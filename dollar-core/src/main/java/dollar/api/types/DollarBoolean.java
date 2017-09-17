@@ -18,8 +18,8 @@ package dollar.api.types;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -32,13 +32,13 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._BOOLEAN)) {
             return this;
         } else if (type.is(Type._STRING)) {
@@ -60,33 +60,33 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $divide(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(value == rhsFix.truthy());
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $minus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(value ^ rhsFix.truthy());
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
+    public Value $multiply(@NotNull Value v) {
         throw new DollarFailureException(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         return DollarFactory.fromValue(!value);
     }
 
@@ -168,8 +168,8 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $plus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.list()) {
             rhsFix.$prepend(this);
         } else if (rhsFix.list()) {
@@ -183,7 +183,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         return toInteger() - o.toInteger();
     }
 

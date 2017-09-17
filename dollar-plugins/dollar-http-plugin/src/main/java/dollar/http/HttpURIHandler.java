@@ -20,11 +20,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.SerializedType;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -77,15 +77,9 @@ public class HttpURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var all() {
+    public Value all() {
         //TODO: decide better implementation
         return read(false, false);
-    }
-
-    @NotNull
-    @Override
-    public var write(@NotNull var value, boolean blocking, boolean mutating) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -95,13 +89,13 @@ public class HttpURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var drain() {
+    public Value drain() {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var get(@NotNull var key) {
+    public Value get(@NotNull Value key) {
         throw new UnsupportedOperationException();
     }
 
@@ -117,7 +111,7 @@ public class HttpURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var read(boolean blocking, boolean mutating) {
+    public Value read(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
                                                                          .header("Accept", "application/json")
@@ -129,19 +123,19 @@ public class HttpURIHandler implements URIHandler {
 
     @NotNull
     @Override
-    public var remove(@NotNull var key) {
+    public Value remove(@NotNull Value key) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var removeValue(@NotNull var v) {
+    public Value removeValue(@NotNull Value v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     @NotNull
-    public var set(@NotNull var key, @NotNull var value) {
+    public Value set(@NotNull Value key, @NotNull Value value) {
         throw new UnsupportedOperationException();
     }
 
@@ -176,6 +170,12 @@ public class HttpURIHandler implements URIHandler {
     @Override
     public void unsubscribe(@NotNull String subId) {
         httpd.remove(subscriptions.get(subId));
+    }
+
+    @NotNull
+    @Override
+    public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
+        throw new UnsupportedOperationException();
     }
 
     public static class RouteableNanoHttpd extends NanoHttpdServer {
@@ -220,16 +220,16 @@ public class HttpURIHandler implements URIHandler {
         @NotNull
         public NanoHttpdServer.Response invoke(@NotNull NanoHttpdServer.IHTTPSession session) {
             try {
-                var in = $()
-                                 .$set($("headers"), session.getHeaders())
-                                 .$set($("params"), session.getParms())
-                                 .$set($("uri"), session.getUri())
-                                 .$set($("query"), session.getQueryParameterString())
-                                 .$set($("method"), session.getMethod().name())
-                                 .$set($("body"), "");
+                Value in = $()
+                                   .$set($("headers"), session.getHeaders())
+                                   .$set($("params"), session.getParms())
+                                   .$set($("uri"), session.getUri())
+                                   .$set($("query"), session.getQueryParameterString())
+                                   .$set($("method"), session.getMethod().name())
+                                   .$set($("body"), "");
 //                session.getInputStream().close();
-                var out = consumer.pipe(in);
-                var body = out.$get($("body"));
+                Value out = consumer.pipe(in);
+                Value body = out.$get($("body"));
                 NanoHttpdServer.Response
                         response =
                         new NanoHttpdServer.Response(new NanoHttpdServer.Response.IStatus() {

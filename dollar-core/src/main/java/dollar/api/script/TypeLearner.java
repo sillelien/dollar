@@ -18,8 +18,8 @@ package dollar.api.script;
 
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.plugin.ExtensionPoint;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
 public interface TypeLearner extends ExtensionPoint<TypeLearner> {
 
     @NotNull
-    static ArrayList<String> perms(@NotNull List<var> inputs) {
+    static ArrayList<String> perms(@NotNull List<Value> inputs) {
         ArrayList<String> perms = new ArrayList<>();
         boolean first = true;
-        for (var input : inputs) {
+        for (Value input : inputs) {
             if (input != null) {
                 TypePrediction inputPrediction = input.predictType();
                 final Set<String> types;
@@ -60,9 +60,9 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         return perms;
     }
 
-    void learn(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs, @NotNull Type type);
+    void learn(@NotNull String name, @NotNull Source source, @NotNull List<Value> inputs, @NotNull Type type);
 
     @NotNull
-    TypePrediction predict(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs);
+    TypePrediction predict(@NotNull String name, @NotNull Source source, @NotNull List<Value> inputs);
 
 }

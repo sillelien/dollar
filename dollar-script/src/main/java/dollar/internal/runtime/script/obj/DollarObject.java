@@ -23,13 +23,13 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.scope.ScriptScope;
@@ -56,7 +56,7 @@ public class DollarObject extends AbstractDollar {
 
 
     @NotNull
-    private final var constructor;
+    private final Value constructor;
     @NotNull
     private final Map<VarKey, Variable> fields = new ConcurrentHashMap<>();
     private final boolean mutable;
@@ -65,13 +65,13 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     private final Type type;
 
-    public DollarObject(@NotNull String name, @NotNull var constructor,
+    public DollarObject(@NotNull String name, @NotNull Value constructor,
                         @NotNull Map<VarKey, Variable> fields) {
 
         this(name, constructor, fields, false);
     }
 
-    public DollarObject(@NotNull String name, @NotNull var constructor,
+    public DollarObject(@NotNull String name, @NotNull Value constructor,
                         @NotNull Map<VarKey, Variable> fields, boolean mutable) {
         super();
         this.name = name;
@@ -84,51 +84,51 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(toVarMap());
+    public Value $append(@NotNull Value value) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>(toVarMap());
         newMap.put(value.$pairKey(), value.$pairValue());
         return DollarFactory.fromValue(newMap);
     }
 
     @Override
     public @NotNull
-    var $as(@NotNull Type type) {
+    Value $as(@NotNull Type type) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         return DollarStatic.$(fields.containsKey(VarKey.of(value)));
     }
 
     @Override
     @NotNull
-    public var $containsValue(@NotNull var value) {
+    public Value $containsValue(@NotNull Value value) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
+    public Value $divide(@NotNull Value rhs) {
         throw new DollarScriptException("Cannot divide instance of class " + name + " all fields are fixed.");
     }
 
     @Override
     public @NotNull
-    var $equals(@Nullable var other) {
+    Value $equals(@Nullable Value other) {
         return (other == this) ? TRUE : FALSE;
     }
 
     @Override
     public @NotNull
-    var $get(@NotNull var key) {
+    Value $get(@NotNull Value key) {
         return inThisScope(s -> {
             Variable variable = fields.get(VarKey.of(key));
             if (variable == null) {
@@ -140,16 +140,16 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         return DollarStatic.$(fields.containsKey(VarKey.of(key)));
     }
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>();
+    public Value $insert(@NotNull Value value, int position) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>();
         int count = 0;
-        for (Map.Entry<var, var> entry : newMap.entrySet()) {
+        for (Map.Entry<Value, Value> entry : newMap.entrySet()) {
             if (count == position) {
                 newMap.put(value.$pairKey(), value.$pairValue());
             }
@@ -162,7 +162,7 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe) {
+    public Value $listen(@NotNull Pipeable pipe) {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return DollarStatic.$(key);
@@ -170,7 +170,7 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
+    public Value $listen(@NotNull Pipeable pipe, @NotNull String key) {
         for (Variable v : fields.values()) {
             //Join the children to this, so if the children change
             //listeners to this get the latest value of this.
@@ -181,19 +181,19 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $map() {
+    public Value $map() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $mimeType() {
+    public Value $mimeType() {
         return DollarStatic.$("application/json");
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
+    public Value $minus(@NotNull Value rhs) {
         throw new DollarScriptException("Cannot remove field (using minus) " + rhs + " in class " + name + " no fields are " +
                                                 "removeable.");
 
@@ -202,33 +202,33 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         throw new DollarScriptException("Cannot modulus instance of class " + name + " all fields are fixed.");
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
+    public Value $multiply(@NotNull Value v) {
         throw new DollarScriptException("Cannot multiply instance of class " + name + " all fields are fixed.");
     }
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         throw new DollarScriptException("Cannot negate instance of class " + name + " all fields are fixed.");
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
+    public Value $plus(@NotNull Value rhs) {
         throw new DollarScriptException("Cannot remove add " + rhs + " to class " + name + " all fields are fixed.");
 
     }
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
-        final LinkedHashMap<var, var> newMap = new LinkedHashMap<>();
+    public Value $prepend(@NotNull Value value) {
+        final LinkedHashMap<Value, Value> newMap = new LinkedHashMap<>();
         newMap.put(value.$pairKey(), value.$pairValue());
         newMap.putAll(toVarMap());
         return DollarFactory.fromValue(newMap);
@@ -236,19 +236,19 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(@NotNull var key) {
+    public Value $remove(@NotNull Value key) {
         throw new DollarScriptException("Cannot remove field " + key + " in class " + name + " no fields are removeable.");
     }
 
     @NotNull
     @Override
-    public var $removeByKey(@NotNull String key) {
+    public Value $removeByKey(@NotNull String key) {
         throw new DollarScriptException("Cannot remove field " + key + " in class " + name + " no fields are removeable.");
     }
 
     @Override
     public @NotNull
-    var $set(@NotNull var key, @NotNull Object value) {
+    Value $set(@NotNull Value key, @NotNull Object value) {
         if (mutable) {
 
             Variable variable = fields.get(VarKey.of(key));
@@ -268,7 +268,7 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         return DollarStatic.$(toJavaMap().size());
     }
 
@@ -330,7 +330,7 @@ public class DollarObject extends AbstractDollar {
 //            if (entry.getValue().isReadonly()) {
 //                builder.append("const");
 //            } else {
-//                builder.append("var");
+//                builder.append("Value");
 //            }
 //            builder.append(" ");
 //            builder.append("<").append(entry.getValue().getValue().$type()).append("> ");
@@ -402,8 +402,8 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
-        final List<var> entries =
+    public ImmutableList<Value> toVarList() {
+        final List<Value> entries =
                 fields.entrySet()
                         .stream()
                         .map(entry -> DollarStatic.$(entry.getKey(), entry.getValue()))
@@ -413,9 +413,9 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> toVarMap() {
+    public ImmutableMap<Value, Value> toVarMap() {
 
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
         for (Map.Entry<VarKey, Variable> entry : fields.entrySet()) {
             result.put(DollarFactory.fromStringValue(entry.getKey().asString()), entry.getValue().getValue().$fix(false));
         }
@@ -436,26 +436,26 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $copy() {
+    public Value $copy() {
         return DollarFactory.wrap(new DollarObject(name, constructor, fields));
     }
 
     @NotNull
     @Override
-    public var $fix(int depth, boolean parallel) {
+    public Value $fix(int depth, boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $notify() {
+    public Value $notify() {
         fields.values().forEach(v -> v.getValue().$notify());
         return this;
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
+    public Stream<Value> $stream(boolean parallel) {
         return split().values().stream();
     }
 
@@ -492,21 +492,21 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<var>naturalOrder().<var>compare(this, o);
+    public int compareTo(@NotNull Value o) {
+        return Comparator.<Value>naturalOrder().<Value>compare(this, o);
     }
 
     @NotNull
-    private LinkedHashMap<var, var> deepClone(@NotNull LinkedHashMap<var, var> o) {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : o.entrySet()) {
+    private LinkedHashMap<Value, Value> deepClone(@NotNull LinkedHashMap<Value, Value> o) {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
+        for (Map.Entry<Value, Value> entry : o.entrySet()) {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
 
     @NotNull
-    private var inThisScope(@NotNull ScopeExecutable<var> exe) {
+    private Value inThisScope(@NotNull ScopeExecutable<Value> exe) {
         ScriptScope subScope = new ScriptScope(util().scope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
@@ -515,8 +515,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @NotNull
-    private LinkedHashMap<var, var> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
+    private LinkedHashMap<Value, Value> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
+        LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : stringObjectMap.entrySet()) {
             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
         }
@@ -524,14 +524,14 @@ public class DollarObject extends AbstractDollar {
     }
 
     @NotNull
-    Map<var, var> split() {
+    Map<Value, Value> split() {
         return varMapToMap();
     }
 
     @NotNull
     private <K extends Comparable<K>, V> Map<K, V> varMapToMap() {
         Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : toVarMap().entrySet()) {
+        for (Map.Entry<Value, Value> entry : toVarMap().entrySet()) {
             result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
         }
         return result;

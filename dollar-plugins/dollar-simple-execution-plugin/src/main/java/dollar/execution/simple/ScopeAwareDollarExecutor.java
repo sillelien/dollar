@@ -18,13 +18,13 @@ package dollar.execution.simple;
 
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -108,8 +108,8 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
-        Future<var> varFuture = submit(() -> call.apply(in));
+    public Value fork(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call) {
+        Future<Value> varFuture = submit(() -> call.apply(in));
         return util().node(FORK, false, DollarStatic.context().parser(), source,
                            Arrays.asList(in),
                            j -> {
@@ -121,8 +121,8 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var forkAndReturnId(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
-        Future<var> varFuture = submit(() -> call.apply(in));
+    public Value forkAndReturnId(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call) {
+        Future<Value> varFuture = submit(() -> call.apply(in));
         VarKey id = VarKey.random();
         log.debug("Future obtained, returning future node");
         util().scope().set(id,

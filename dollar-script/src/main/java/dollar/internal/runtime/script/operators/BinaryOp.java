@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.Value;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.Operator;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.parser.Op;
@@ -31,9 +31,9 @@ import java.util.function.BinaryOperator;
 
 import static dollar.internal.runtime.script.DollarUtilFactory.util;
 
-public class BinaryOp implements BinaryOperator<var>, Operator {
+public class BinaryOp implements BinaryOperator<Value>, Operator {
     @NotNull
-    private final BiFunction<var, var, var> function;
+    private final BiFunction<Value, Value, Value> function;
     private final boolean immediate;
     @NotNull
     private final Op operation;
@@ -46,7 +46,7 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
 
     public BinaryOp(@NotNull DollarParser parser,
                     @NotNull Op operation,
-                    @NotNull BiFunction<var, var, var> function, boolean pure) {
+                    @NotNull BiFunction<Value, Value, Value> function, boolean pure) {
         this.parser = parser;
         this.operation = operation;
         this.function = function;
@@ -58,7 +58,7 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
     public BinaryOp(boolean immediate,
                     @NotNull Op operation,
                     @NotNull DollarParser parser,
-                    @NotNull BiFunction<var, var, var> function, boolean pure) {
+                    @NotNull BiFunction<Value, Value, Value> function, boolean pure) {
         this.immediate = immediate;
         this.function = function;
         this.operation = operation;
@@ -69,7 +69,7 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
 
     @NotNull
     @Override
-    public var apply(@NotNull var lhs, @NotNull var rhs) {
+    public Value apply(@NotNull Value lhs, @NotNull Value rhs) {
         if (immediate) {
             return util().node(operation, pure, parser, source, Arrays.asList(lhs, rhs),
                                vars -> function.apply(lhs, rhs));

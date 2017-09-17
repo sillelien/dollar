@@ -21,7 +21,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.io.CharStreams;
 import com.vdurmont.emoji.EmojiParser;
 import dollar.api.Type;
-import dollar.api.var;
+import dollar.api.Value;
 import dollar.internal.runtime.script.api.HasKeyword;
 import dollar.internal.runtime.script.api.HasSymbol;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
     @NotNull
     private final OpType type;
     @NotNull
-    private final Function<var[], Type> typeFunction;
+    private final Function<Value[], Type> typeFunction;
     @Nullable
     private String bnf;
     @Nullable
@@ -72,7 +72,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
               @Nullable Boolean pure,
               @NotNull SourceNodeOptions nodeOptions,
               @Nullable String emoji,
-              @NotNull Function<var[], Type> typeFunction) {
+              @NotNull Function<Value[], Type> typeFunction) {
         this.type = type;
         this.typeFunction = typeFunction;
         if (emoji != null) {
@@ -335,12 +335,12 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
     }
 
     @NotNull
-    public Type typeFor(@NotNull var... vars) {
+    public Type typeFor(@NotNull Value... Values) {
         if (typeFunction == null) {
             return null;
         }
         try {
-            return typeFunction.apply(vars);
+            return typeFunction.apply(Values);
         } catch (Exception e) {
             log.error(type + ":" + e.getMessage(), e);
             throw e;

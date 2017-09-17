@@ -20,11 +20,11 @@ import dollar.api.DollarStatic;
 import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.SubType;
+import dollar.api.Value;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.types.meta.MetaConstants;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     protected final ConcurrentHashMap<MetaKey, Object> meta = new ConcurrentHashMap<>();
     private final boolean fixable;
     @NotNull
-    private final var in;
+    private final Value in;
     @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
@@ -73,7 +73,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
 
     @NotNull
-    public var _constrain(@NotNull var source, @Nullable var constraint, @Nullable SubType constraintSource) {
+    public Value _constrain(@NotNull Value source, @Nullable Value constraint, @Nullable SubType constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
@@ -87,7 +87,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
+    public Value execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
 
     @Nullable
     @Override
@@ -142,7 +142,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     return proxy;
                 }
             } else if ("$constrain".equals(method.getName())) {
-                return _constrain((var) proxy, (var) args[0], (SubType) args[1]);
+                return _constrain((Value) proxy, (Value) args[0], (SubType) args[1]);
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(MetaConstants.CONSTRAINT_FINGERPRINT);
             } else if ("metaAttribute".equals(method.getName()) && (args.length == 1)) {
@@ -179,7 +179,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     return proxy;
                 }
                 notifyStack.get().add(this);
-                final var value = execute();
+                final Value value = execute();
                 for (Pipeable listener : listeners.values()) {
                     listener.pipe(value);
                 }
@@ -195,7 +195,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else {
 //            System.err.println(method);
 
-                var out = execute();
+                Value out = execute();
                 if (out == null) {
                     return null;
                 }

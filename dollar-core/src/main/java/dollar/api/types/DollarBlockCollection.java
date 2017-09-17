@@ -25,6 +25,7 @@ import dollar.api.Signal;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.guard.AllVarCollectionGuard;
 import dollar.api.guard.AllVarMapGuard;
 import dollar.api.guard.ChainGuard;
@@ -35,7 +36,6 @@ import dollar.api.guard.NotNullParametersGuard;
 import dollar.api.guard.ReturnVarOnlyGuard;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonArray;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,12 +45,12 @@ import java.util.stream.Stream;
 
 
 //Created by BlockOperator directly now
-public class DollarBlockCollection implements var {
+public class DollarBlockCollection implements Value {
     @NotNull
-    private final var value;
+    private final Value value;
 
 
-    public DollarBlockCollection(@NotNull List<var> value) {
+    public DollarBlockCollection(@NotNull List<Value> value) {
         for (int i = 0; i < (value.size() - 1); i++) {
             value.get(i).$fixDeep(false);
         }
@@ -60,7 +60,7 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $(@NotNull String key, @Nullable Object value) {
+    public Value $(@NotNull String key, @Nullable Object value) {
         return getValue().$(key, value);
     }
 
@@ -73,26 +73,26 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $abs() {return getValue().$abs();}
+    public Value $abs() {return getValue().$abs();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $all() {return getValue().$all();}
+    public Value $all() {return getValue().$all();}
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
+    public Value $append(@NotNull Value value) {
         return getValue().$append(value);
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {return getValue().$as(type);}
+    public Value $as(@NotNull Type type) {return getValue().$as(type);}
 
     @NotNull
     @Override
-    public var $avg(boolean parallel) {
+    public Value $avg(boolean parallel) {
         return getValue().$avg(parallel);
     }
 
@@ -100,12 +100,12 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $choose(@NotNull var map) {
+    public Value $choose(@NotNull Value map) {
         return getValue().$choose(map);
     }
 
     @Override
-    public var $constrain(@NotNull var constraint, SubType source) {
+    public Value $constrain(@NotNull Value constraint, SubType source) {
         return getValue().$constrain(constraint, source);
     }
 
@@ -113,8 +113,8 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $contains(
-                                @NotNull var value) {
+    public Value $contains(
+                                  @NotNull Value value) {
         return getValue().$contains(value);
     }
 
@@ -122,7 +122,7 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         return getValue().$containsKey(value);
     }
 
@@ -130,28 +130,28 @@ public class DollarBlockCollection implements var {
     @Guarded(ChainGuard.class)
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    public var $containsValue(
-                                     @NotNull var value) {
+    public Value $containsValue(
+                                       @NotNull Value value) {
         return getValue().$containsValue(value);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $copy() {return getValue().$copy();}
+    public Value $copy() {return getValue().$copy();}
 
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     @Guarded(NotNullCollectionGuard.class)
     @NotNull
-    public var $copy(@NotNull ImmutableList<Throwable> errors) {return getValue().$copy(errors);}
+    public Value $copy(@NotNull ImmutableList<Throwable> errors) {return getValue().$copy(errors);}
 
     @Override
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @NotNull
-    public var $dec() {return getValue().$dec();}
+    public Value $dec() {return getValue().$dec();}
 
     @Override
     @NotNull
@@ -159,14 +159,14 @@ public class DollarBlockCollection implements var {
     @Guarded(ReturnVarOnlyGuard.class)
     @Guarded(NotNullParametersGuard
                      .class)
-    public var $default(@NotNull var v) {return getValue().$default(v);}
+    public Value $default(@NotNull Value v) {return getValue().$default(v);}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $dispatch(
-                                @NotNull var lhs) {
+    public Value $dispatch(
+                                  @NotNull Value lhs) {
         return getValue().$dispatch(lhs);
     }
 
@@ -174,33 +174,33 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $divide(
-                              @NotNull var rhs) {
+    public Value $divide(
+                                @NotNull Value rhs) {
         return getValue().$divide(rhs);
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $drain() {return getValue().$drain();}
+    public Value $drain() {return getValue().$drain();}
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $each(
-                            @NotNull Pipeable pipe) {
+    public Value $each(
+                              @NotNull Pipeable pipe) {
         return getValue().$each(pipe);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $fix(boolean parallel) {return $fix(1, parallel);}
+    public Value $fix(boolean parallel) {return $fix(1, parallel);}
 
     @NotNull
     @Override
-    public var $fix(int depth, boolean parallel) {
+    public Value $fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
@@ -211,7 +211,7 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $fixDeep(boolean parallel) {
+    public Value $fixDeep(boolean parallel) {
         return $fix(Integer.MAX_VALUE, parallel);
     }
 
@@ -219,8 +219,8 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $get(
-                           @NotNull var rhs) {
+    public Value $get(
+                             @NotNull Value rhs) {
         return getValue().$get(rhs);
     }
 
@@ -228,15 +228,15 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $give(
-                            @NotNull var lhs) {
+    public Value $give(
+                              @NotNull Value lhs) {
         return getValue().$give(lhs);
     }
 
     @Override
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         return getValue().$has(key);
     }
 
@@ -244,41 +244,41 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $inc() {return getValue().$inc();}
+    public Value $inc() {return getValue().$inc();}
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
+    public Value $insert(@NotNull Value value, int position) {
         return getValue().$insert(value, position);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $isEmpty() {return getValue().$isEmpty();}
+    public Value $isEmpty() {return getValue().$isEmpty();}
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipeable) {return getValue().$listen(pipeable);}
+    public Value $listen(@NotNull Pipeable pipeable) {return getValue().$listen(pipeable);}
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipeable, @NotNull String id) {return getValue().$listen(pipeable, id);}
+    public Value $listen(@NotNull Pipeable pipeable, @NotNull String id) {return getValue().$listen(pipeable, id);}
 
     @NotNull
     @Override
-    public var $max(boolean parallel) {
+    public Value $max(boolean parallel) {
         return getValue().$max(parallel);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $mimeType() {return getValue().$mimeType();}
+    public Value $mimeType() {return getValue().$mimeType();}
 
     @NotNull
     @Override
-    public var $min(boolean parallel) {
+    public Value $min(boolean parallel) {
         return getValue().$min(parallel);
     }
 
@@ -286,8 +286,8 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $minus(
-                             @NotNull var rhs) {
+    public Value $minus(
+                               @NotNull Value rhs) {
         return getValue().$minus(rhs);
     }
 
@@ -295,8 +295,8 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $modulus(
-                               @NotNull var rhs) {
+    public Value $modulus(
+                                 @NotNull Value rhs) {
         return getValue().$modulus(rhs);
     }
 
@@ -304,8 +304,8 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $multiply(
-                                @NotNull var v) {
+    public Value $multiply(
+                                  @NotNull Value v) {
         return getValue().$multiply(v);
     }
 
@@ -313,45 +313,45 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    public var $negate() {return getValue().$negate();}
+    public Value $negate() {return getValue().$negate();}
 
     @NotNull
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $notify() {return getValue().$notify();}
+    public Value $notify() {return getValue().$notify();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $peek() {return getValue().$peek();}
+    public Value $peek() {return getValue().$peek();}
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $plus(@NotNull var rhs) {
+    public Value $plus(@NotNull Value rhs) {
         return getValue().$plus(rhs);
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $poll() {return getValue().$poll();}
+    public Value $poll() {return getValue().$poll();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var $pop() {return getValue().$pop();}
+    public Value $pop() {return getValue().$pop();}
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
+    public Value $prepend(@NotNull Value value) {
         return getValue().$prepend(value);
     }
 
     @NotNull
     @Override
-    public var $product(boolean parallel) {
+    public Value $product(boolean parallel) {
         return null;
     }
 
@@ -359,8 +359,8 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $publish(
-                               @NotNull var lhs) {
+    public Value $publish(
+                                 @NotNull Value lhs) {
         return getValue().$publish(lhs);
     }
 
@@ -368,8 +368,8 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $push(
-                            @NotNull var lhs) {
+    public Value $push(
+                              @NotNull Value lhs) {
         return getValue().$push(lhs);
     }
 
@@ -377,8 +377,8 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $read(boolean blocking,
-                     boolean mutating) {
+    public Value $read(boolean blocking,
+                       boolean mutating) {
         return getValue().$read(blocking, mutating);
     }
 
@@ -386,21 +386,21 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $read() {return getValue().$read();}
+    public Value $read() {return getValue().$read();}
 
     @NotNull
     @Override
-    public var $remove(@NotNull var value) {
+    public Value $remove(@NotNull Value value) {
         return getValue().$remove(value);
     }
 
     @Override
     @NotNull
-    public var $removeByKey(@NotNull String key) {return getValue().$removeByKey(key);}
+    public Value $removeByKey(@NotNull String key) {return getValue().$removeByKey(key);}
 
     @NotNull
     @Override
-    public var $reverse(boolean parallel) {
+    public Value $reverse(boolean parallel) {
         return getValue().$reverse(parallel);
 
     }
@@ -408,36 +408,36 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $set(@NotNull var key, @NotNull Object value) {
+    public Value $set(@NotNull Value key, @NotNull Object value) {
         return getValue().$set(key, value);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $size() {return getValue().$size();}
+    public Value $size() {return getValue().$size();}
 
     @NotNull
     @Override
-    public var $sort(boolean parallel) {
+    public Value $sort(boolean parallel) {
         return getValue().$sort(parallel);
     }
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var $split() {return getValue().$split();}
+    public Value $split() {return getValue().$split();}
 
     @Override
     @NotNull
-    public Stream<var> $stream(boolean parallel) {return getValue().$stream(parallel);}
+    public Stream<Value> $stream(boolean parallel) {return getValue().$stream(parallel);}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $subscribe(
-                                 @NotNull Pipeable subscription) {
+    public Value $subscribe(
+                                   @NotNull Pipeable subscription) {
         return getValue().$subscribe(subscription);
     }
 
@@ -445,14 +445,14 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $subscribe(
-                                 @NotNull Pipeable subscription, @NotNull String key) {
+    public Value $subscribe(
+                                   @NotNull Pipeable subscription, @NotNull String key) {
         return getValue().$subscribe(subscription, key);
     }
 
     @NotNull
     @Override
-    public var $sum(boolean parallel) {
+    public Value $sum(boolean parallel) {
         return getValue().$sum(parallel);
     }
 
@@ -464,22 +464,22 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public var $unique(boolean parallel) {
+    public Value $unique(boolean parallel) {
         return getValue().$unique(parallel);
     }
 
     @Override
     @Guarded(ChainGuard.class)
     @NotNull
-    public var $unwrap() {return getValue().$unwrap();}
+    public Value $unwrap() {return getValue().$unwrap();}
 
     @NotNull
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $write(@NotNull var value,
-                      boolean blocking,
-                      boolean mutating) {
+    public Value $write(@NotNull Value value,
+                        boolean blocking,
+                        boolean mutating) {
         return getValue().$write(value, blocking, mutating);
     }
 
@@ -487,8 +487,8 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $write(
-                             @NotNull var value) {
+    public Value $write(
+                               @NotNull Value value) {
         return getValue().$write(value);
     }
 
@@ -505,22 +505,22 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var debug(
-                            @NotNull Object message) {
+    public Value debug(
+                              @NotNull Object message) {
         return getValue().debug(message);
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var debug() {return getValue().debug();}
+    public Value debug() {return getValue().debug();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var debugf(@NotNull String message,
-                      Object... values) {
+    public Value debugf(@NotNull String message,
+                        Object... values) {
         return getValue().debugf(message, values);
     }
 
@@ -533,14 +533,14 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var err() {return getValue().err();}
+    public Value err() {return getValue().err();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var error(
-                            @NotNull Throwable exception) {
+    public Value error(
+                              @NotNull Throwable exception) {
         return getValue().error(exception);
     }
 
@@ -548,22 +548,22 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var error(
-                            @NotNull Object message) {
+    public Value error(
+                              @NotNull Object message) {
         return getValue().error(message);
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var error() {return getValue().error();}
+    public Value error() {return getValue().error();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var errorf(@NotNull String message,
-                      Object... values) {
+    public Value errorf(@NotNull String message,
+                        Object... values) {
         return getValue().errorf(message, values);
     }
 
@@ -571,22 +571,22 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var info(
-                           @NotNull Object message) {
+    public Value info(
+                             @NotNull Object message) {
         return getValue().info(message);
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var info() {return getValue().info();}
+    public Value info() {return getValue().info();}
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    public var infof(@NotNull String message,
-                     Object... values) {
+    public Value infof(@NotNull String message,
+                       Object... values) {
         return getValue().infof(message, values);
     }
 
@@ -647,7 +647,7 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var out() {return getValue().out();}
+    public Value out() {return getValue().out();}
 
     @Override
     public boolean pair() {return getValue().pair();}
@@ -684,7 +684,7 @@ public class DollarBlockCollection implements var {
     @Override
     public String toDollarScript() {
         StringBuilder builder = new StringBuilder("{");
-        for (var v : toVarList()) {
+        for (Value v : toVarList()) {
             builder.append(v.toDollarScript()).append("\n");
         }
         builder.append("}");
@@ -745,7 +745,7 @@ public class DollarBlockCollection implements var {
     @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
     @NotNull
-    public ImmutableList<var> toVarList() {
+    public ImmutableList<Value> toVarList() {
         return getValue().toVarList();
     }
 
@@ -753,7 +753,7 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(AllVarMapGuard.class)
-    public ImmutableMap<var, var> toVarMap() {
+    public ImmutableMap<Value, Value> toVarMap() {
         return getValue().toVarMap();
     }
 
@@ -772,17 +772,17 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $create() {return getValue().$create();}
+    public Value $create() {return getValue().$create();}
 
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $destroy() {return getValue().$destroy();}
+    public Value $destroy() {return getValue().$destroy();}
 
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $pause() {return getValue().$pause();}
+    public Value $pause() {return getValue().$pause();}
 
     @Override
     @Guarded(NotNullGuard.class)
@@ -791,22 +791,22 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $start() {return getValue().$start();}
+    public Value $start() {return getValue().$start();}
 
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $state() {return getValue().$state();}
+    public Value $state() {return getValue().$state();}
 
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $stop() {return getValue().$stop();}
+    public Value $stop() {return getValue().$stop();}
 
     @Override
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var $unpause() {return getValue().$unpause();}
+    public Value $unpause() {return getValue().$unpause();}
 
     @Override
     @NotNull
@@ -814,22 +814,22 @@ public class DollarBlockCollection implements var {
     public StateMachine<ResourceState, Signal> getStateMachine() {return getValue().getStateMachine();}
 
     @Override
-    public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
+    public int compareTo(@NotNull Value o) {return getValue().compareTo(o);}
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var getPairKey() {
+    public Value getPairKey() {
         return getValue().$pairKey();
     }
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    public var getPairValue() {
+    public Value getPairValue() {
         return getValue().$pairValue();
     }
 
     @NotNull
-    var getValue() {
+    Value getValue() {
         return value;
     }
 

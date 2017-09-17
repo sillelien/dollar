@@ -18,7 +18,7 @@ package dollar.api.scripting;
 
 import dollar.api.DollarException;
 import dollar.api.Scope;
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +34,9 @@ public final class ScriptingSupport {
     private static final Logger log = LoggerFactory.getLogger("ScriptingSupport");
 
     @NotNull
-    public static var compile(@NotNull String language,
-                              @NotNull String script,
-                              @NotNull Scope scope) {
+    public static Value compile(@NotNull String language,
+                                @NotNull String script,
+                                @NotNull Scope scope) {
         ScriptingLanguage scriptingLanguage = resolveScriptProvider(language);
         return scriptingLanguage.compile(script, scope);
     }

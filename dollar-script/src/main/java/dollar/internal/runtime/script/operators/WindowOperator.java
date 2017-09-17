@@ -20,12 +20,12 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
-import dollar.api.var;
 import dollar.internal.runtime.script.parser.Func;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +46,7 @@ import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.WINDOW_OP;
 import static java.util.Collections.singletonList;
 
-public class WindowOperator implements Function<Token, var> {
+public class WindowOperator implements Function<Token, Value> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(WindowOperator.class);
     @NotNull
@@ -63,15 +63,15 @@ public class WindowOperator implements Function<Token, var> {
     @NotNull
     @Override
 
-    public var apply(@NotNull Token token) {
+    public Value apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
 
-        var expression = (var) objects[0];
-        var over = (var) objects[1];
-        var period = (objects[2] == null) ? over : (var) objects[2];
-        var unless = (var) objects[3];
-        var until = (var) objects[4];
-        var block = (var) objects[5];
+        Value expression = (Value) objects[0];
+        Value over = (Value) objects[1];
+        Value period = (objects[2] == null) ? over : (Value) objects[2];
+        Value unless = (Value) objects[3];
+        Value until = (Value) objects[4];
+        Value block = (Value) objects[5];
 
 //        log.debug("Listening to {}", expression.metaAttribute(OPERATION_NAME));
 //        String varName = expression.metaAttribute(VARIABLE);
@@ -90,9 +90,9 @@ public class WindowOperator implements Function<Token, var> {
                                                                                                                     .ONE_DAY));
                                log.info("Before expression listen");
                                expression.$fixDeep(false);
-                               var listenerId = expression.$listen(notifyListener,
-                                                                   "window-expression-listener-" + expression.meta(
-                                                                           MetaConstants.OPERATION_NAME) + "-" + id);
+                               Value listenerId = expression.$listen(notifyListener,
+                                                                     "window-expression-listener-" + expression.meta(
+                                                                             MetaConstants.OPERATION_NAME) + "-" + id);
                                expression.$notify();
                                log.info("After expression listen");
                                Scheduler.schedule(
@@ -131,18 +131,18 @@ public class WindowOperator implements Function<Token, var> {
         @NotNull
         final AtomicLong count = new AtomicLong(-1);
         @NotNull
-        private final Cache<Long, var> collected;
+        private final Cache<Long, Value> collected;
         @NotNull
         private final AtomicLong collectedId = new AtomicLong();
         @NotNull
-        private final var loop;
+        private final Value loop;
         @Nullable
-        private final var unless;
+        private final Value unless;
         @Nullable
-        private final var until;
+        private final Value until;
         private boolean finished;
 
-        private NotifyListener(@Nullable var unless, @Nullable var until, @NotNull var loop, long windowLength) {
+        private NotifyListener(@Nullable Value unless, @Nullable Value until, @NotNull Value loop, long windowLength) {
             this.unless = unless;
             this.until = until;
             this.loop = loop;
@@ -152,8 +152,8 @@ public class WindowOperator implements Function<Token, var> {
 
         @NotNull
         @Override
-        public var pipe(var... in2) {
-            var value = in2[0].$fixDeep();
+        public Value pipe(Value... in2) {
+            Value value = in2[0].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {} size is {}", count.get(), value, collected.size());
 

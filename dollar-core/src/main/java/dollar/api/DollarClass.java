@@ -21,5 +21,5 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface DollarClass {
-    @NotNull var instance(@NotNull List<var> object);
+    @NotNull Value instance(@NotNull List<Value> object);
 }

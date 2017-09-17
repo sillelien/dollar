@@ -17,7 +17,7 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -35,11 +35,11 @@ public class DollarYamlTest {
 
     @Test
     public void testBasics() {
-        var yamlList = DollarStatic.$yaml(yamlString1);
+        Value yamlList = DollarStatic.$yaml(yamlString1);
         assertEquals(4, yamlList.size());
 
 
-        var yamlMap = DollarStatic.$yaml(yamlString2);
+        Value yamlMap = DollarStatic.$yaml(yamlString2);
         assertEquals(1L, (long) yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("red")).toInteger());
         assertEquals(2L, (long) yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("blue")).toInteger());
         assertEquals("leaves", yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("green")).toString());

@@ -16,7 +16,7 @@
 
 package dollar.api.guard;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,14 +31,14 @@ public class VarOnlyGuard implements Guard {
 
     @Override
     public void postCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args, @NotNull Object result) {
-        assertTrue(result instanceof var, method);
+        assertTrue(result instanceof Value, method);
     }
 
     @Override
     public void preCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args) {
         if (args != null) {
             for (Object arg : args) {
-                assertTrue(arg instanceof var, method);
+                assertTrue(arg instanceof Value, method);
             }
         }
     }

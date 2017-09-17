@@ -20,17 +20,18 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import dollar.api.ClassName;
 import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.SubType;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -73,9 +74,9 @@ public class ScriptScope implements Scope {
     final String id;
     private final boolean classScope;
     @NotNull
-    private final ConcurrentHashMap<String, DollarClass> classes = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<ClassName, DollarClass> classes = new ConcurrentHashMap<>();
     @NotNull
-    private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+    private final List<Value> errorHandlers = new CopyOnWriteArrayList<>();
     @NotNull
     private final Multimap<VarKey, Listener> listeners = ArrayListMultimap.create();
     private final boolean root;
@@ -90,7 +91,7 @@ public class ScriptScope implements Scope {
     private boolean destroyed;
     private boolean parameterScope;
     @Nullable
-    private Parser<var> parser;
+    private Parser<Value> parser;
 
     public ScriptScope(@NotNull String name, boolean root, boolean classScope) {
         this.root = root;
@@ -142,10 +143,10 @@ public class ScriptScope implements Scope {
                         @NotNull String id,
                         boolean parameterScope,
                         @NotNull ConcurrentHashMap<VarKey, Variable> variables,
-                        @NotNull List<var> errorHandlers,
+                        @NotNull List<Value> errorHandlers,
                         @NotNull Multimap<VarKey, Listener> listeners,
                         @NotNull String source,
-                        @NotNull Parser<var> parser, boolean root, boolean classScope) {
+                        @NotNull Parser<Value> parser, boolean root, boolean classScope) {
         this.parent = parent;
         this.id = id;
         this.parameterScope = parameterScope;
@@ -164,7 +165,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var addErrorHandler(@NotNull var handler) {
+    public Value addErrorHandler(@NotNull Value handler) {
         checkDestroyed();
 
         errorHandlers.add(handler);
@@ -190,7 +191,7 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var constraintOf(@NotNull VarKey key) {
+    public Value constraintOf(@NotNull VarKey key) {
         checkDestroyed();
 
 
@@ -226,7 +227,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public DollarClass dollarClassByName(@NotNull String name) {
+    public DollarClass dollarClassByName(@NotNull ClassName name) {
         DollarClass clazz = classes.get(name);
         if (clazz != null) {
             return clazz;
@@ -248,7 +249,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var get(@NotNull VarKey key, boolean mustFind) {
+    public Value get(@NotNull VarKey key, boolean mustFind) {
         checkDestroyed();
         if (key.isNumeric()) {
             throw new DollarAssertionException("Cannot get numerical keys, use parameter");
@@ -279,13 +280,13 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var get(@NotNull VarKey key) {
+    public Value get(@NotNull VarKey key) {
         return get(key, false);
     }
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t) {
+    public Value handleError(@NotNull Throwable t) {
         Throwable unravelled = unravel(t);
         if (!(unravelled instanceof DollarException)) {
             if (unravelled.getCause() instanceof DollarException) {
@@ -336,7 +337,7 @@ public class ScriptScope implements Scope {
                 parameter(VarKey.of("type"), $(unravelled.getClass().getName()));
                 parameter(VarKey.of("msg"), $(unravelled.getMessage()));
                 try {
-                    for (var handler : errorHandlers) {
+                    for (Value handler : errorHandlers) {
                         handler.$fixDeep(false);
                     }
                 } finally {
@@ -352,13 +353,13 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t, @NotNull var context) {
+    public Value handleError(@NotNull Throwable t, @NotNull Value context) {
         return handleError(new DollarScriptException(t, context));
     }
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t, @NotNull Source source) {
+    public Value handleError(@NotNull Throwable t, @NotNull Source source) {
         if (t instanceof LambdaRecursionException) {
             return handleError(new DollarParserError(
                                                             "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -419,7 +420,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull VarKey key, @NotNull String id, @NotNull var listener) {
+    public void listen(@NotNull VarKey key, @NotNull String id, @NotNull Value listener) {
         checkDestroyed();
 
         listen(key, id, in -> {
@@ -451,7 +452,7 @@ public class ScriptScope implements Scope {
 
             @NotNull
             @Override
-            public var pipe(var... vars) throws Exception {
+            public Value pipe(Value... vars) throws Exception {
                 if (getConfig().debugEvents()) {
                     log.info("Listener triggered on scope {} for key {} and value {}", ScriptScope.this, vars[0], vars[1]
                                                                                                                           .dynamic() ? vars[1].source() : vars[1]);
@@ -491,15 +492,15 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var notify(@NotNull VarKey key) {
+    public Value notify(@NotNull VarKey key) {
         checkDestroyed();
-        var value = get(key);
+        Value value = get(key);
         notifyScope((key), value);
         return value;
     }
 
     @Override
-    public void notifyScope(@NotNull VarKey key, @NotNull var value) {
+    public void notifyScope(@NotNull VarKey key, @NotNull Value value) {
         checkDestroyed();
 
 
@@ -550,7 +551,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Variable parameter(@NotNull VarKey key, @NotNull var value) {
+    public Variable parameter(@NotNull VarKey key, @NotNull Value value) {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
@@ -568,7 +569,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public List<var> parametersAsVars() {
+    public List<Value> parametersAsVars() {
         return variables.entrySet().stream()
                        .filter(i -> i.getValue().isParameter())
                        .filter(i -> i.getKey().isNumeric())
@@ -589,7 +590,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
+    public void registerClass(@NotNull ClassName name, @NotNull DollarClass dollarClass) {
         log.info("Registering class {} in {}", name, this);
         classes.put(name, dollarClass);
     }
@@ -614,8 +615,8 @@ public class ScriptScope implements Scope {
     @NotNull
     @Override
     public Variable set(@NotNull VarKey key,
-                        @NotNull var value,
-                        @Nullable var constraint, SubType constraintSource, @NotNull VarFlags varFlags) {
+                        @NotNull Value value,
+                        @Nullable Value constraint, SubType constraintSource, @NotNull VarFlags varFlags) {
 
         if ((parent != null) && parent.isClassScope()) {
             return parent.set(key, value, constraint, constraintSource, varFlags);
@@ -725,9 +726,9 @@ public class ScriptScope implements Scope {
     }
 
 // --Commented out by Inspection START (10/09/2017, 14:29):
-//    private boolean checkConstraint(@NotNull var value,
+//    private boolean checkConstraint(@NotNull Value value,
 //                                    @Nullable Variable oldValue,
-//                                    @NotNull var constraint) {
+//                                    @NotNull Value constraint) {
 //        checkDestroyed();
 //
 //        parameter("it", value);
@@ -786,14 +787,14 @@ public class ScriptScope implements Scope {
 // --Commented out by Inspection STOP (10/09/2017, 14:29)
 
 // --Commented out by Inspection START (10/09/2017, 14:29):
-//    public void parser(@NotNull Parser<var> parser) {
+//    public void parser(@NotNull Parser<Value> parser) {
 //        this.parser = parser;
 //    }
 // --Commented out by Inspection STOP (10/09/2017, 14:29)
 
 // --Commented out by Inspection START (10/09/2017, 14:29):
 //    @NotNull
-//    public Parser<var> parser() {
+//    public Parser<Value> parser() {
 //        return parser;
 //    }
 // --Commented out by Inspection STOP (10/09/2017, 14:29)

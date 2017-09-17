@@ -16,7 +16,7 @@
 
 package dollar;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +36,7 @@ public class DollarQueueTest {
 
     @Test
     public void testBasics() {
-        var queue = $blockingQueue();
+        Value queue = $blockingQueue();
         assertTrue(queue.queue());
         queue.$push($("Hello World"));
         assertEquals(1, queue.size());
@@ -52,14 +52,14 @@ public class DollarQueueTest {
         queue.$push($(1));
         queue.$push($(2));
         queue.$push($(3));
-        var drain = queue.$drain();
+        Value drain = queue.$drain();
         assertEquals(3, drain.size());
         assertEquals(0, queue.size());
     }
 
     @Test
     public void testSubscribe() {
-        var queue = $blockingQueue();
+        Value queue = $blockingQueue();
         AtomicInteger integer = new AtomicInteger();
         queue.$subscribe(in -> {
             integer.incrementAndGet();

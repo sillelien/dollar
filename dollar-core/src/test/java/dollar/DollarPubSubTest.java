@@ -17,14 +17,14 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Date;
 
 class DollarPubSubTest {
 
-    private static var profile;
+    private static Value profile;
 
     @BeforeAll
     public static void setUp() {

@@ -18,9 +18,9 @@ package dollar.internal.runtime.script;
 
 import dollar.api.StateAware;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.Builtin;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -45,9 +45,9 @@ public final class Builtins {
 
         addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -> {
             String message = args.get(0).$S();
-            ArrayList<var> values = new ArrayList<>(args);
+            ArrayList<Value> values = new ArrayList<>(args);
             values.remove(0);
-            return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
+            return $(String.format(message, values.stream().map(Value::toJavaObject).toArray()));
         }, true, Type._STRING, "FORMAT");
 
         addDollarSingleNoScope(false, StateAware::$start, Type._VOID, "START");
@@ -100,11 +100,11 @@ public final class Builtins {
         //todo: this will be used to provide libraries
     }
 
-    private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
+    private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<Value, Value> lambda,
                                                @NotNull Type type, @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, (Builtin<var>) (pure, args, scope) -> {
-                var v = args.get(0);
+            map.put(name, new Builtin.BuiltinImpl(name, (Builtin<Value>) (pure, args, scope) -> {
+                Value v = args.get(0);
                 return lambda.apply(v);
             }, 1, 1, isPure, type));
         }
@@ -125,8 +125,8 @@ public final class Builtins {
     }
 
     @NotNull
-    public static var execute(@NotNull String name, @NotNull List<var> parameters, boolean pure) {
-        final Builtin<var> builtin = (Builtin<var>) map.get(name);
+    public static Value execute(@NotNull String name, @NotNull List<Value> parameters, boolean pure) {
+        final Builtin<Value> builtin = (Builtin<Value>) map.get(name);
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }

@@ -17,12 +17,12 @@
 package dollar.resources.std;
 
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
 import dollar.api.uri.URIHandlerFactory;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,11 +35,12 @@ import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 
 public class RandomResourceFactory implements URIHandlerFactory {
-    @NotNull
-    private static final Logger log = LoggerFactory.getLogger(RandomResourceFactory.class);
-    @Nullable private static final DollarExecutor
+    @Nullable
+    private static final DollarExecutor
             executor =
             Plugins.sharedInstance(DollarExecutor.class);
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(RandomResourceFactory.class);
     @NotNull
     private final HashMap<String, Pipeable> consumers = new HashMap<>();
 
@@ -56,7 +57,9 @@ public class RandomResourceFactory implements URIHandlerFactory {
         });
     }
 
-    @NotNull @Override public URIHandlerFactory copy() {
+    @NotNull
+    @Override
+    public URIHandlerFactory copy() {
         return this;
     }
 
@@ -66,56 +69,66 @@ public class RandomResourceFactory implements URIHandlerFactory {
 
         return new URIHandler() {
 
-            @NotNull @Override public var all() {
+            @NotNull
+            @Override
+            public Value all() {
                 return $(Math.random());
             }
 
-            @NotNull @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
-                return $(Math.random() % value.toDouble());
-            }
+            @Override
+            public void destroy() { }
 
-            @Override public void destroy() { }
+            @NotNull
+            @Override
+            public Value drain() { return $(Math.random()); }
 
-            @NotNull @Override public var drain() { return $(Math.random()); }
-
-            @NotNull @Override public var get(@NotNull var key) {
+            @NotNull
+            @Override
+            public Value get(@NotNull Value key) {
                 return $(Math.random() % key.toDouble());
             }
 
-            @Override public void init() { }
+            @Override
+            public void init() { }
 
-            @Override public void pause() { }
+            @Override
+            public void pause() { }
 
-            @NotNull @Override public var read(boolean blocking, boolean mutating) {
+            @NotNull
+            @Override
+            public Value read(boolean blocking, boolean mutating) {
                 return $(Math.random());
             }
 
             @NotNull
             @Override
-            public var remove(@NotNull var v) {
+            public Value remove(@NotNull Value v) {
                 return $void();
             }
 
             @NotNull
             @Override
-            public var removeValue(@NotNull var v) {
+            public Value removeValue(@NotNull Value v) {
                 return $void();
             }
 
             @NotNull
             @Override
-            public var set(@NotNull var key, @NotNull var value) {
+            public Value set(@NotNull Value key, @NotNull Value value) {
                 return $void();
             }
 
-            @Override public int size() {
+            @Override
+            public int size() {
                 return 1;
             }
 
-            @Override public void start() {
+            @Override
+            public void start() {
             }
 
-            @Override public void stop() {
+            @Override
+            public void stop() {
             }
 
             @Override
@@ -123,17 +136,25 @@ public class RandomResourceFactory implements URIHandlerFactory {
                 consumers.put(id, consumer);
             }
 
-            @Override public void unpause() {
+            @Override
+            public void unpause() {
             }
 
             @Override
             public void unsubscribe(@NotNull String subId) {
                 consumers.remove(subId);
             }
+
+            @NotNull
+            @Override
+            public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
+                return $(Math.random() % value.toDouble());
+            }
         };
     }
 
-    @Override public boolean handlesScheme(@NotNull String scheme) {
+    @Override
+    public boolean handlesScheme(@NotNull String scheme) {
         return "random".equals(scheme);
     }
 }

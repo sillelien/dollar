@@ -25,11 +25,11 @@ import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.plugin.Plugins;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,19 +69,19 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
+    public Value $append(@NotNull Value value) {
         return handler.append(DollarStatic.$(value));
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._STRING)) {
             return DollarStatic.$(toHumanString());
         } else if (type.is(Type._LIST)) {
@@ -99,45 +99,45 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         return DollarStatic.$(false);
     }
 
     @Override
     @NotNull
-    public var $containsValue(@NotNull var value) {
+    public Value $containsValue(@NotNull Value value) {
         return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
+    public Value $divide(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $get(@NotNull var key) {
+    public Value $get(@NotNull Value key) {
         ensureRunning();
         return handler.get(key);
     }
 
     @NotNull
     @Override
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         ensureRunning();
         return DollarStatic.$(!handler.get(key).isVoid());
     }
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
+    public Value $insert(@NotNull Value value, int position) {
         return handler.insert(DollarStatic.$(value));
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
+    public Value $minus(@NotNull Value rhs) {
         ensureRunning();
         return handler.removeValue(DollarStatic.$(rhs));
 
@@ -145,45 +145,45 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
+    public Value $multiply(@NotNull Value v) {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
+    public Value $plus(@NotNull Value rhs) {
         ensureRunning();
         return handler.append(rhs);
     }
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
+    public Value $prepend(@NotNull Value value) {
         return handler.prepend(DollarStatic.$(value));
     }
 
     @NotNull
     @Override
-    public var $remove(@NotNull var key) {
+    public Value $remove(@NotNull Value key) {
         throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
 
     }
 
     @NotNull
     @Override
-    public var $removeByKey(@NotNull String key) {
+    public Value $removeByKey(@NotNull String key) {
         ensureRunning();
         return handler.remove(DollarStatic.$(key));
 
@@ -191,7 +191,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @NotNull Object value) {
+    public Value $set(@NotNull Value key, @NotNull Object value) {
         ensureRunning();
 
         return handler.set(DollarStatic.$(key), DollarStatic.$(value));
@@ -200,20 +200,20 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         ensureRunning();
         return DollarStatic.$(handler.size());
     }
 
     @NotNull
     @Override
-    public var $subscribe(@NotNull Pipeable pipe) {
+    public Value $subscribe(@NotNull Pipeable pipe) {
         return $subscribe(pipe, null);
     }
 
     @NotNull
     @Override
-    public var $subscribe(@NotNull Pipeable pipe, @Nullable String id) {
+    public Value $subscribe(@NotNull Pipeable pipe, @Nullable String id) {
         ensureRunning();
         final String subId = (id == null) ? UUID.randomUUID().toString() : id;
         try {
@@ -342,14 +342,14 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
+    public ImmutableList<Value> toVarList() {
         ensureRunning();
         return ImmutableList.copyOf(handler.all().toVarList());
     }
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> toVarMap() {
+    public ImmutableMap<Value, Value> toVarMap() {
         return ImmutableMap.of();
     }
 
@@ -367,48 +367,48 @@ public class DollarURI extends AbstractDollar {
     @NotNull
 
     @Override
-    public var $all() {
+    public Value $all() {
         ensureRunning();
         return handler.all();
     }
 
     @NotNull
     @Override
-    public var $drain() {
+    public Value $drain() {
         ensureRunning();
         return handler.drain();
     }
 
     @NotNull
     @Override
-    public var $each(@NotNull Pipeable pipe) {
+    public Value $each(@NotNull Pipeable pipe) {
         return super.$each(pipe);
     }
 
     @NotNull
     @Override
-    public var $notify() {
+    public Value $notify() {
         ensureRunning();
         return handler.write(this, false, false);
     }
 
     @NotNull
     @Override
-    public var $publish(@NotNull var lhs) {
+    public Value $publish(@NotNull Value lhs) {
         ensureRunning();
         return handler.publish(lhs);
     }
 
     @NotNull
     @Override
-    public var $read(boolean blocking, boolean mutating) {
+    public Value $read(boolean blocking, boolean mutating) {
         ensureRunning();
         return handler.read(blocking, mutating);
     }
 
     @NotNull
     @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+    public Value $write(@NotNull Value value, boolean blocking, boolean mutating) {
         ensureRunning();
         return handler.write(value, blocking, mutating);
     }
@@ -439,7 +439,7 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
     }
 

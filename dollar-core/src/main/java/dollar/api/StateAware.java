@@ -75,7 +75,7 @@ public interface StateAware<R extends StateAware<R>> {
      */
     @NotNull
     @Guarded(NotNullGuard.class)
-    var $state();
+    Value $state();
 
     /**
      * Stop the underlying resource.

@@ -1,18 +1,8 @@
 const variableA="Hello World"
 
 
-//In this example we are accessing the scope from within Java to directly access variables in Dollar.
-//Note that the script has scope closure
-const javaTest = java`
-out=scope.get(VarKey.of("variableA"));
-if(staticImportTestMethod() != 42) throw new AssertionError("Not 42");
-//remove this when we have dollar.lang classes set up.
-Dummy dummy= new Dummy();
-`
 
-javaTest <=> "Hello World"
-
-//Now we paramaterize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
+//We paramaterize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
 
 const javaWithParam = java`
 out=in.get(0).$multiply(in.get(1)).$multiply(in.get(2));

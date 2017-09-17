@@ -18,10 +18,10 @@ package dollar.api.monitor;
 
 import dollar.api.DollarStatic;
 import dollar.api.StateTracer;
+import dollar.api.Value;
 import dollar.api.types.DollarList;
 import dollar.api.types.DollarMap;
 import dollar.api.types.DollarVoid;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleLogStateTracer implements StateTracer {
@@ -29,13 +29,13 @@ public class SimpleLogStateTracer implements StateTracer {
     private String format(@NotNull Object value) {
         Object unwrapped;
         String formatted;
-        if (value instanceof var) {
-            unwrapped = ((var) value).$unwrap();
+        if (value instanceof Value) {
+            unwrapped = ((Value) value).$unwrap();
         } else {
             unwrapped = value;
         }
-        if ((value instanceof var) &&
-                    (((var) unwrapped).dynamic() || (unwrapped instanceof DollarList) || (unwrapped instanceof DollarMap))) {
+        if ((value instanceof Value) &&
+                    (((Value) unwrapped).dynamic() || (unwrapped instanceof DollarList) || (unwrapped instanceof DollarMap))) {
             formatted = "<" + unwrapped.getClass().getSimpleName() + ">";
         } else {
             formatted = String.valueOf(value);
@@ -63,14 +63,14 @@ public class SimpleLogStateTracer implements StateTracer {
         String afterStr = "";
         String afterNotes = "";
         String beforeNotes = "";
-        if (after instanceof var) {
+        if (after instanceof Value) {
             afterStr = format(after);
         } else {
             if (after != null) {
                 afterStr = String.format("%s(%s)", after.toString(), after.getClass().getName());
             }
         }
-        if (before instanceof var) {
+        if (before instanceof Value) {
             beforeStr = format(before);
         } else {
             if (before != null) {

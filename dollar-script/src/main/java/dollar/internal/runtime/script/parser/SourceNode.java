@@ -23,6 +23,7 @@ import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
@@ -33,7 +34,6 @@ import dollar.api.types.ConstraintViolation;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.types.prediction.SingleValueTypePrediction;
-import dollar.api.var;
 import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -78,7 +78,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
     private final String id;
     @NotNull
-    private final List<var> inputs;
+    private final List<Value> inputs;
     @NotNull
 
     private final Pipeable lambda;
@@ -113,7 +113,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
     public SourceNode(@NotNull Pipeable lambda,
                       @NotNull Source source,
-                      @NotNull List<var> inputs,
+                      @NotNull List<Value> inputs,
                       @NotNull String name,
                       @NotNull DollarParser parser,
                       @NotNull SourceNodeOptions sourceNodeOptions,
@@ -161,7 +161,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             meta.put(IMPURE, "true");
         }
         meta.put(ID, id);
-        Type opType = operation.typeFor(inputs.toArray(new var[inputs.size()]));
+        Type opType = operation.typeFor(inputs.toArray(new Value[inputs.size()]));
         if (opType != null) {
             log.debug(name + ":" + opType);
             meta.put(MetaConstants.TYPE_HINT, opType);
@@ -169,7 +169,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable SubType constraintSource) {
+    private Value _constrain(@NotNull Value source, @Nullable Value constraint, @Nullable SubType constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
@@ -183,11 +183,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
+    public Value execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
 
     @NotNull
-    private var executePipe(@NotNull var var) throws Exception {
-        return lambda.pipe(var);
+    private Value executePipe(@NotNull Value Value) throws Exception {
+        return lambda.pipe(Value);
     }
 
     @Nullable
@@ -204,7 +204,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             if (Objects.equals(method.getName(), "$constrain")) {
                 if (args != null) {
-                    return _constrain((var) proxy, (var) args[0], (SubType) args[1]);
+                    return _constrain((Value) proxy, (Value) args[0], (SubType) args[1]);
                 }
             }
 
@@ -232,8 +232,8 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             //Some operations do not require a valid scope
             if ((!method.getName().startsWith("$fix") && (nonScopeOperations.contains(
                     method.getName()) || method.getDeclaringClass().equals(
-                    var.class) || method.getDeclaringClass().equals(
-                    var.class)))) {
+                    Value.class) || method.getDeclaringClass().equals(
+                    Value.class)))) {
                 //This method does not require a valid scope for execution
                 try {
                     result = invokeMain(proxy, method, args);
@@ -303,20 +303,20 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             }
 
-            boolean dynamicVarResult = (result instanceof var) && ((var) result).dynamic();
+            boolean dynamicVarResult = (result instanceof Value) && ((Value) result).dynamic();
             if (dynamicVarResult && (meta.get(SCOPES) != null)) {
-                if (((var) result).meta(SCOPES) == null) {
-                    ((var) result).meta(SCOPES, meta.get(SCOPES));
+                if (((Value) result).meta(SCOPES) == null) {
+                    ((Value) result).meta(SCOPES, meta.get(SCOPES));
                 } else {
                     ArrayList<Scope> newScopes = new ArrayList<>((Collection<? extends Scope>) meta.get(SCOPES));
-                    newScopes.addAll(((var) result).meta(SCOPES));
-                    ((var) result).meta(SCOPES, newScopes);
+                    newScopes.addAll(((Value) result).meta(SCOPES));
+                    ((Value) result).meta(SCOPES, newScopes);
                 }
             }
 
-            if (method.getName().startsWith("$fixDeep") && (result instanceof var)) {
+            if (method.getName().startsWith("$fixDeep") && (result instanceof Value)) {
 
-                typeLearner.learn(name, source, inputs, ((var) result).$type());
+                typeLearner.learn(name, source, inputs, ((Value) result).$type());
             }
             return result;
         } catch (Exception e) {
@@ -406,7 +406,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
 
                     for (Pipeable listener : listeners.values()) {
-                        listener.pipe((var) proxy);
+                        listener.pipe((Value) proxy);
                     }
                 } finally {
                     notifyStack.get().remove(this);
@@ -422,7 +422,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else {
 //            System.err.println(method);
 
-                var out = execute(false);
+                Value out = execute(false);
                 if (out == null) {
                     return null;
                 }

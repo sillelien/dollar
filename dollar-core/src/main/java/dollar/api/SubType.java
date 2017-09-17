@@ -19,6 +19,7 @@ package dollar.api;
 import org.jetbrains.annotations.NotNull;
 
 public interface SubType {
+
     @NotNull String asString();
 
     boolean isEmpty();

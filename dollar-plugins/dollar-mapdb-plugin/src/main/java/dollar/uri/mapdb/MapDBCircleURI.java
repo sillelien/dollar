@@ -18,11 +18,11 @@ package dollar.uri.mapdb;
 
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.types.DollarFactory;
 import dollar.api.uri.URI;
-import dollar.api.var;
 import dollar.internal.mapdb.BTreeMap;
 import dollar.internal.mapdb.MapModificationListener;
 import org.jetbrains.annotations.NotNull;
@@ -38,20 +38,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
+public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationListener<Value, Value> {
+    @Nullable
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(MapDBCircleURI.class);
-
     @NotNull
     private static final ConcurrentHashMap<String, Future> subscribers = new ConcurrentHashMap<>();
-    @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     @NotNull
-    private final ArrayBlockingQueue<var> queue;
+    private final ArrayBlockingQueue<Value> queue;
 
 
     public MapDBCircleURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
-        try (BTreeMap<var, var> bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(
+        try (BTreeMap<Value, Value> bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(
                 this).createOrOpen()) {
 
         }
@@ -59,17 +59,101 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         queue = new ArrayBlockingQueue<>(size);
     }
 
-    @NotNull @Override public var all() {
-        final BlockingQueue<var> queue = getQueue();
-        final ArrayList<var> objects = new ArrayList<>();
+    @NotNull
+    @Override
+    public Value all() {
+        final BlockingQueue<Value> queue = getQueue();
+        final ArrayList<Value> objects = new ArrayList<>();
         queue.drainTo(objects);
-        final var result = DollarFactory.fromValue(objects);
+        final Value result = DollarFactory.fromValue(objects);
         return result;
 
     }
 
     @NotNull
-    @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
+    @Override
+    public Value drain() {
+        final BlockingQueue<Value> queue = getQueue();
+        final ArrayList<Value> objects = new ArrayList<>();
+        queue.drainTo(objects);
+        return DollarFactory.fromValue(objects);
+    }
+
+    @NotNull
+    @Override
+    public Value get(@NotNull Value key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Value read(boolean blocking, boolean mutating) {
+        try {
+            if (blocking && mutating) {
+                return getQueue().take();
+            } else if (blocking) {
+                return getQueue().poll(60, TimeUnit.SECONDS);
+            } else if (mutating) {
+                return getQueue().poll();
+            } else {
+                return getQueue().peek();
+            }
+        } catch (InterruptedException e) {
+            log.debug(e.getMessage(), e);
+            return DollarStatic.$void();
+        }
+    }
+
+    @NotNull
+    @Override
+    public Value remove(@NotNull Value v) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public Value removeValue(@NotNull Value v) {
+        Value unwrapped = v.$unwrap();
+        if (getQueue().remove(unwrapped)) {
+            return unwrapped;
+        } else {
+            return DollarStatic.$void();
+        }
+    }
+
+    @NotNull
+    @Override
+    public Value set(@NotNull Value key, @NotNull Value value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int size() {
+        return getQueue().size();
+    }
+
+    @Override
+    public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
+        final Future schedule = executor.scheduleEvery(1000, () -> {
+            Object o = getQueue().poll();
+            if (o != null) {
+                try {
+                    consumer.pipe(DollarStatic.$(o));
+                } catch (Exception e) {
+                    log.debug(e.getMessage(), e);
+                }
+            }
+        });
+        subscribers.put(id, schedule);
+    }
+
+    @Override
+    public void unsubscribe(@NotNull String subId) {
+        subscribers.get(subId).cancel(false);
+    }
+
+    @NotNull
+    @Override
+    public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
         if (value.isVoid()) {
             return DollarStatic.$(false);
         }
@@ -88,88 +172,13 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
     }
 
     @NotNull
-    @Override public var drain() {
-        final BlockingQueue<var> queue = getQueue();
-        final ArrayList<var> objects = new ArrayList<>();
-        queue.drainTo(objects);
-        return DollarFactory.fromValue(objects);
-    }
-
-    @NotNull
-    @Override
-    public var get(@NotNull var key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override public var read(boolean blocking, boolean mutating) {
-            try {
-                if (blocking && mutating) {
-                    return getQueue().take();
-                } else if (blocking) {
-                    return getQueue().poll(60, TimeUnit.SECONDS);
-                } else if (mutating) {
-                    return getQueue().poll();
-                } else {
-                    return getQueue().peek();
-                }
-            } catch (InterruptedException e) {
-                log.debug(e.getMessage(), e);
-                return DollarStatic.$void();
-            }
-    }
-
-    @NotNull
-    @Override
-    public var remove(@NotNull var v) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override public var removeValue(@NotNull var v) {
-        var unwrapped = v.$unwrap();
-        if(getQueue().remove(unwrapped)) {
-            return unwrapped;
-        } else {
-            return DollarStatic.$void();
-        }
-    }
-
-    @NotNull
-    @Override
-    public var set(@NotNull var key, @NotNull var value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override public int size() {
-        return getQueue().size();
-    }
-
-    @Override public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
-        final Future schedule = executor.scheduleEvery(1000, () ->{
-            Object o = getQueue().poll();
-            if (o != null) {
-                try {
-                    consumer.pipe(DollarStatic.$(o));
-                } catch (Exception e) {
-                    log.debug(e.getMessage(), e);
-                }
-            }
-        });
-        subscribers.put(id, schedule);
-    }
-
-    @Override public void unsubscribe(@NotNull String subId) {
-        subscribers.get(subId).cancel(false);
-    }
-
-    @NotNull
-    private BlockingQueue<var> getQueue() {
+    private BlockingQueue<Value> getQueue() {
         return queue;
     }
 
     @Override
-    public void modify(@NotNull var key, @Nullable var oldValue, @Nullable var newValue, boolean triggered) {
-        if(newValue != null) {
+    public void modify(@NotNull Value key, @Nullable Value oldValue, @Nullable Value newValue, boolean triggered) {
+        if (newValue != null) {
             queue.offer(newValue.$fixDeep());
         }
     }

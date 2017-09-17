@@ -24,11 +24,11 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
 import dollar.api.script.ModuleResolver;
-import dollar.api.var;
 import dollar.deps.DependencyRetriever;
 import dollar.internal.runtime.script.parser.DollarParserImpl;
 import dollar.internal.runtime.script.parser.scope.FileScope;
@@ -179,7 +179,7 @@ public class GithubModuleResolver implements ModuleResolver {
         } else {
 
             final File moduleFile = new File(dir, "module.json");
-            final var module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
+            final Value module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
             mainFile = new File(dir, module.$get(DollarStatic.$("main")).$S());
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
@@ -192,8 +192,8 @@ public class GithubModuleResolver implements ModuleResolver {
         }
         return (params) -> util().inSubScope(false, false, "github-module", newScope -> {
 
-            final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
-            for (Map.Entry<var, var> entry : paramMap.entrySet()) {
+            final ImmutableMap<Value, Value> paramMap = params[0].$map().toVarMap();
+            for (Map.Entry<Value, Value> entry : paramMap.entrySet()) {
                 newScope.set(VarKey.of(entry.getKey()), entry.getValue(), null, null,
                              new VarFlags(true, false, false, false, false, false));
             }

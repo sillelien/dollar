@@ -16,7 +16,7 @@
 
 package dollar;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +25,8 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DollarMapTest {
-    private static var list;
-    private static var map;
+    private static Value list;
+    private static Value map;
 
     @BeforeAll
     public static void setUp() {

@@ -17,8 +17,8 @@
 package dollar.internal.runtime.script.parser;
 
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.HasKeyword;
 import dollar.internal.runtime.script.api.HasSymbol;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -54,24 +54,24 @@ import static org.jparsec.pattern.Patterns.*;
 @SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 final class DollarLexer {
     @NotNull
-    static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
-        var v = $(s);
+    static final Parser<Value> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
+        Value v = $(s);
         v.metaAttribute(IS_BUILTIN, s);
         return v;
     });
     @NotNull
-    static final Parser<var>
+    static final Parser<Value>
             DECIMAL_LITERAL =
             Terminals.DecimalLiteral.PARSER.map(s -> s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
             );
     @NotNull
-    static final Parser<var> IDENTIFIER = identifier();
+    static final Parser<Value> IDENTIFIER = identifier();
     @NotNull
     static final Parser<Void> IGNORED =
             or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
                Scanners.lineComment("#!")).skipMany();
     @NotNull
-    static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(
+    static final Parser<Value> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(
             s -> {
                 if ((new BigDecimal(s).compareTo(new BigDecimal(Long.MAX_VALUE)) > 0)
                             || (new BigDecimal(s).compareTo(new BigDecimal(-Long.MAX_VALUE)) < 0)) {
@@ -83,7 +83,7 @@ final class DollarLexer {
     @NotNull
     static final Terminals KEYWORDS = Terminals.operators(Symbols.KEYWORD_STRINGS);
     @NotNull
-    static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
+    static final Parser<Value> IDENTIFIER_KEYWORD = identifierKeyword();
     @NotNull
     static final Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
     @NotNull
@@ -93,15 +93,15 @@ final class DollarLexer {
     @NotNull
     static final Parser<?> SEMICOLON_TERMINATOR = or(OP(SEMI_COLON).followedBy(OP(NEWLINE).many()), OP(NEWLINE).many1());
     @NotNull
-    static final Parser<var>
+    static final Parser<Value>
             STRING_LITERAL =
             Terminals.StringLiteral.PARSER.map(DollarFactory::fromStringValue);
     @NotNull
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP(NEWLINE), OP(SEMI_COLON)).many1();
     @NotNull
-    static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
+    static final Parser<Value> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
     @NotNull
-    private static final Function<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Function<String, Tokens.Fragment>() {
+    private static final Function<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Function<>() {
         @Override
         public Tokens.Fragment apply(@NotNull String text) {
             return fragment(tokenizeBackTick(text), "backtick");
@@ -241,7 +241,7 @@ final class DollarLexer {
                         });
     }
 
-    static Parser<var> identifier() {
+    static Parser<Value> identifier() {
         return Terminals.Identifier.PARSER.map(i -> {
             switch (i) {
                 case "true":
@@ -265,7 +265,7 @@ final class DollarLexer {
         });
     }
 
-    private static Parser<var> identifierKeyword() {
+    private static Parser<Value> identifierKeyword() {
         return or(KEYWORD(TRUE), KEYWORD(FALSE), KEYWORD(YES), KEYWORD(NO), KEYWORD(NULL), KEYWORD(VOID),
                   KEYWORD(INFINITY))
                        .map(i -> {

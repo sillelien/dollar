@@ -62,70 +62,70 @@ public class DollarStatic {
     private static Configuration config = new SystemPropertyConfiguration();
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param o the o
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@Nullable Object o) {
+    public static Value $(@Nullable Object o) {
         return $(o, false);
     }
 
     @NotNull
-    private static var $(@Nullable Object o, boolean parallel) {
+    private static Value $(@Nullable Object o, boolean parallel) {
         return DollarFactory.fromValue(o);
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param values the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@NotNull var... values) {
+    public static Value $(@NotNull Value... values) {
         return $map(values);
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $() {
+    public static Value $() {
         return DollarFactory.fromValue();
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param name   the name
      * @param values the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@NotNull String name, @NotNull var... values) {
-        var v = $();
-        for (var value : values) {
+    public static Value $(@NotNull String name, @NotNull Value... values) {
+        Value v = $();
+        for (Value value : values) {
             v = v.$plus(value);
         }
         return $(name, v);
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param name the name
      * @param o    the o
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@NotNull Object name, @NotNull Object o) {
-        if ((name instanceof var) && (o instanceof var)) {
-            if (((var) name).map()) {
-                return ((var) name).$plus((var) o);
+    public static Value $(@NotNull Object name, @NotNull Object o) {
+        if ((name instanceof Value) && (o instanceof Value)) {
+            if (((Value) name).map()) {
+                return ((Value) name).$plus((Value) o);
 
             }
         }
@@ -133,33 +133,33 @@ public class DollarStatic {
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param json the json
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@NotNull JsonObject json) {
+    public static Value $(@NotNull JsonObject json) {
         return DollarFactory.fromValue(json);
     }
 
     /**
-     * $ var.
+     * $ Value.
      *
      * @param lambda the lambda
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $(@NotNull Pipeable lambda) {
+    public static Value $(@NotNull Pipeable lambda) {
         return DollarFactory.fromValue(lambda);
     }
 
     @NotNull
-    public static var $and(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $and(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.isTrue() && rhs.isTrue());
     }
 
-    public static var $blockingQueue() {
+    public static Value $blockingQueue() {
         return DollarFactory.fromQueue(new LinkedBlockingDeque<>());
     }
 
@@ -169,10 +169,10 @@ public class DollarStatic {
      *
      * @param context the current thread context
      * @param call    the lambda to run.
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $call(@NotNull DollarThreadContext context, @NotNull Callable<var> call) {
+    public static Value $call(@NotNull DollarThreadContext context, @NotNull Callable<Value> call) {
         threadContext.set(context.child());
         try {
             return call.call();
@@ -187,10 +187,10 @@ public class DollarStatic {
      * $ date.
      *
      * @param date the date
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $date(@NotNull Date date) {
+    public static Value $date(@NotNull Date date) {
         return DollarFactory.fromValue(date);
     }
 
@@ -198,15 +198,15 @@ public class DollarStatic {
      * $ date.
      *
      * @param date the date
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $date(@NotNull LocalDateTime date) {
+    public static Value $date(@NotNull LocalDateTime date) {
         return DollarFactory.fromValue(date);
     }
 
     @NotNull
-    public static var $debug(@NotNull var v) {
+    public static Value $debug(@NotNull Value v) {
         v.debug();
         return $void();
     }
@@ -235,7 +235,7 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static var $err(@NotNull var v) {
+    public static Value $err(@NotNull Value v) {
         v.err();
         return $void();
     }
@@ -245,25 +245,25 @@ public class DollarStatic {
      *
      * @param source
      * @param in
-     * @param call   the call  @return the var
+     * @param call   the call  @return the Value
      */
     @NotNull
-    public static var $fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
+    public static Value $fork(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call) {
         return executor.fork(source, in, call);
     }
 
     @NotNull
-    public static var $gt(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $gt(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.compareTo(rhs) > 0);
     }
 
     @NotNull
-    public static var $gte(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $gte(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.compareTo(rhs) >= 0);
     }
 
     @NotNull
-    public static var $json(@NotNull String json) {
+    public static Value $json(@NotNull String json) {
         if (json.matches("^\\s*\\{.*")) {
             return $(new JsonObject(json));
         } else if (json.matches("^\\s*\\[.*")) {
@@ -294,50 +294,50 @@ public class DollarStatic {
      * $ list.
      *
      * @param values the values
-     * @return the var
+     * @return the Value
      */
     @NotNull
 
-    public static var $list(@NotNull Object... values) {
+    public static Value $list(@NotNull Object... values) {
         return DollarFactory.fromValue(values);
     }
 
     @NotNull
-    public static var $lt(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $lt(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.compareTo(rhs) < 0);
     }
 
     @NotNull
-    public static var $lte(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $lte(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.compareTo(rhs) <= 0);
     }
 
     @NotNull
-    public static var $map(@NotNull var... values) {
-        var v = $();
-        for (var value : values) {
+    public static Value $map(@NotNull Value... values) {
+        Value v = $();
+        for (Value value : values) {
             v = v.$plus(value);
         }
         return v;
     }
 
     @NotNull
-    public static var $not(@NotNull var v) {
+    public static Value $not(@NotNull Value v) {
         return $(!v.isTrue());
     }
 
     @NotNull
-    public static var $null(@NotNull Type type) {
+    public static Value $null(@NotNull Type type) {
         return DollarFactory.newNull(type);
     }
 
     @NotNull
-    public static var $or(@NotNull var lhs, @NotNull var rhs) {
+    public static Value $or(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.isTrue() || rhs.isTrue());
     }
 
     @NotNull
-    public static var $out(@NotNull var v) {
+    public static Value $out(@NotNull Value v) {
         v.out();
         return $void();
     }
@@ -347,10 +347,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(@NotNull var from, @NotNull var to) {
+    public static Value $range(@NotNull Value from, @NotNull Value to) {
         return DollarFactory.fromRange(from, to);
     }
 
@@ -359,10 +359,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(long from, long to) {
+    public static Value $range(long from, long to) {
         return DollarFactory.fromRange(DollarStatic.$(from), DollarStatic.$(to));
     }
 
@@ -371,10 +371,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(double from, double to) {
+    public static Value $range(double from, double to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -383,10 +383,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(@NotNull String from, @NotNull String to) {
+    public static Value $range(@NotNull String from, @NotNull String to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -395,10 +395,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(@NotNull Date from, @NotNull Date to) {
+    public static Value $range(@NotNull Date from, @NotNull Date to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -407,10 +407,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(@NotNull LocalDateTime from, @NotNull LocalDateTime to) {
+    public static Value $range(@NotNull LocalDateTime from, @NotNull LocalDateTime to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -419,10 +419,10 @@ public class DollarStatic {
      *
      * @param from the from
      * @param to   the to
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $range(@NotNull Instant from, @NotNull Instant to) {
+    public static Value $range(@NotNull Instant from, @NotNull Instant to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -456,12 +456,12 @@ public class DollarStatic {
         }
     }
 
-    public static var $string(@NotNull String s) {
+    public static Value $string(@NotNull String s) {
         return DollarFactory.fromStringValue(s);
     }
 
     @NotNull
-    public static var $truthy(@NotNull var v) {
+    public static Value $truthy(@NotNull Value v) {
         return $(v.truthy());
     }
 
@@ -469,10 +469,10 @@ public class DollarStatic {
      * $ uri.
      *
      * @param uri the uri
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $uri(@NotNull URI uri) {
+    public static Value $uri(@NotNull URI uri) {
         return DollarFactory.fromValue(uri);
     }
 
@@ -480,53 +480,53 @@ public class DollarStatic {
      * $ uri.
      *
      * @param uri the uri
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $uri(@NotNull String uri) {
+    public static Value $uri(@NotNull String uri) {
         return DollarFactory.fromValue(URI.parse(uri));
     }
 
     /**
      * $ void.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var $void() {
+    public static Value $void() {
         return DollarFactory.newVoid();
     }
 
     /**
-     * Creates a var from a YAML formatted string as a var
+     * Creates a Value from a YAML formatted string as a Value
      *
      * @param yaml the YAML
-     * @return a var
+     * @return a Value
      */
     @NotNull
-    public static var $yaml(@NotNull var yaml) {
+    public static Value $yaml(@NotNull Value yaml) {
         return DollarFactory.fromYaml(yaml.toString());
     }
 
     /**
-     * Creates a var from a YAML file
+     * Creates a Value from a YAML file
      *
      * @param yamlFile the YAML as a file
-     * @return a var
+     * @return a Value
      */
     @NotNull
-    public static var $yaml(@NotNull File yamlFile) {
+    public static Value $yaml(@NotNull File yamlFile) {
         return DollarFactory.fromYaml(yamlFile);
     }
 
     /**
-     * Creates a var from YAML
+     * Creates a Value from YAML
      *
      * @param yaml the YAML
-     * @return a var
+     * @return a Value
      */
     @NotNull
-    public static var $yaml(@NotNull String yaml) {
+    public static Value $yaml(@NotNull String yaml) {
         return DollarFactory.fromYaml(yaml);
     }
 
@@ -562,35 +562,35 @@ public class DollarStatic {
     }
 
     /**
-     * Create var.
+     * Create Value.
      *
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var create() {
+    public static Value create() {
         return $();
     }
 
     /**
-     * Create var.
+     * Create Value.
      *
      * @param value the value
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var create(@NotNull Object value) {
+    public static Value create(@NotNull Object value) {
         return $(value);
     }
 
     /**
-     * Fix var.
+     * Fix Value.
      *
      * @param v        the v
      * @param parallel the parallel
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var fix(@Nullable var v, boolean parallel) {
+    public static Value fix(@Nullable Value v, boolean parallel) {
         return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
     }
 
@@ -601,21 +601,21 @@ public class DollarStatic {
      * @param depth    the depth at which to stop evaluation, 1 means do not penetrate any layers of maps/blocks, 2
      *                 means penetrate one layer of maps.
      * @param parallel if true parallel evaluation if fine
-     * @return the 'fixed' var
+     * @return the 'fixed' Value
      */
     @NotNull
-    public static var fix(@Nullable var v, int depth, boolean parallel) {
+    public static Value fix(@Nullable Value v, int depth, boolean parallel) {
         return (v != null) ? DollarFactory.wrap(v.$fix(depth, parallel)) : $void();
     }
 
     /**
-     * Fix var.
+     * Fix Value.
      *
      * @param v the v
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var fix(@Nullable var v) {
+    public static Value fix(@Nullable Value v) {
         return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
     }
 
@@ -623,10 +623,10 @@ public class DollarStatic {
      * Fix deep.
      *
      * @param v the v
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var fixDeep(@Nullable var v) {
+    public static Value fixDeep(@Nullable Value v) {
         return (v != null) ? DollarFactory.wrap(v.$fixDeep(false)) : $void();
     }
 
@@ -635,10 +635,10 @@ public class DollarStatic {
      *
      * @param v        the v
      * @param parallel the parallel
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var fixDeep(@Nullable var v, boolean parallel) {
+    public static Value fixDeep(@Nullable Value v, boolean parallel) {
         return (v != null) ? DollarFactory.wrap(v.$fixDeep(parallel)) : $void();
     }
 
@@ -659,10 +659,10 @@ public class DollarStatic {
      *
      * @param throwable the throwable
      * @param failee    the failee
-     * @return the var
+     * @return the Value
      */
     @NotNull
-    public static var handleError(@NotNull Throwable throwable, @Nullable var failee) {
+    public static Value handleError(@NotNull Throwable throwable, @Nullable Value failee) {
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }

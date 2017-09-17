@@ -166,13 +166,13 @@ public final class Type {
     }
 
     /**
-     * Create a Type from a var
+     * Create a Type from a Value
      *
      * @param name the name of the Type
      * @return the Type
      */
     @NotNull
-    public static Type of(@NotNull var name) {
+    public static Type of(@NotNull Value name) {
         String[] split = name.$S().split(":");
         if (split.length == 2) {
             return new Type(split[0], split[1]);

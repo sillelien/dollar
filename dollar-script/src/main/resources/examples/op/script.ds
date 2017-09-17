@@ -1,16 +1,5 @@
 const variableA="Hello World"
 
-
-//In this example we are accessing the scope from within Java to directly access variables in Dollar.
-//Note that the script has scope closure so all variables in both the lexical and runtime scope
-//are available.
-
-const javaTest = java`
-out=scope.get(VarKey.of("variableA"));
-`
-
-javaTest <=> "Hello World"
-
 //Now we parametrize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
 
 const javaWithParam = java`

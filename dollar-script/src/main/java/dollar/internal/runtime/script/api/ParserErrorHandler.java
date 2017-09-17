@@ -18,8 +18,8 @@ package dollar.internal.runtime.script.api;
 
 import dollar.api.DollarException;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,12 +29,12 @@ import java.io.File;
 public interface ParserErrorHandler {
 
     @NotNull
-    var handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarAssertionException e);
+    Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarAssertionException e);
 
-    @NotNull var handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarException e);
+    @NotNull Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarException e);
 
     @NotNull
-    var handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e);
+    Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e);
 
     <T extends Throwable> void handleTopLevel(@NotNull T t, @NotNull String name, @NotNull File file) throws T;
 

@@ -57,7 +57,7 @@ public class VarKey {
         return new VarKey(String.valueOf(i));
     }
 
-    public static VarKey of(@NotNull var variableName) {
+    public static VarKey of(@NotNull Value variableName) {
         return VarKey.of(variableName.toString());
     }
 

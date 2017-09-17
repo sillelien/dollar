@@ -18,8 +18,8 @@ package dollar.internal.runtime.script.api;
 
 import dollar.api.Scope;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,24 +27,24 @@ import java.util.List;
 
 public interface Builtin<T> {
 
-    interface DollarStyle extends Builtin<var> {
+    interface DollarStyle extends Builtin<Value> {
         @Override
         @NotNull
-        var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
+        Value execute(boolean pure, @NotNull List<Value> args, @NotNull Scope scope);
     }
 
 
     interface JavaStyle<T> extends Builtin<T> {
         @Override
         @NotNull
-        T execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
+        T execute(boolean pure, @NotNull List<Value> args, @NotNull Scope scope);
     }
 
     @NotNull
-    T execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
+    T execute(boolean pure, @NotNull List<Value> args, @NotNull Scope scope);
 
 
-    class BuiltinImpl<R> implements Builtin<var> {
+    class BuiltinImpl<R> implements Builtin<Value> {
 
         @NotNull
         private final Builtin function;
@@ -81,7 +81,7 @@ public interface Builtin<T> {
 
         @NotNull
         @Override
-        public var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope) {
+        public Value execute(boolean pure, @NotNull List<Value> args, @NotNull Scope scope) {
             if (!this.pure && pure) {
                 throw new DollarScriptException("Cannot use an impure function '" + name + "' in a pure expression");
             }
@@ -93,8 +93,8 @@ public interface Builtin<T> {
                 throw new IllegalArgumentException("Maximum number of arguments for '" + name + "' is " + maxargs);
             }
             Object result = function.execute(pure, args, scope);
-            if (result instanceof var) {
-                return (var) result;
+            if (result instanceof Value) {
+                return (Value) result;
             }
             return DollarFactory.fromValue(result);
         }

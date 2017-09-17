@@ -18,8 +18,8 @@ package dollar.api.types;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -39,13 +39,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return DollarFactory.fromValue(abs(value));
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
 
         if (type.is(Type._BOOLEAN)) {
             return DollarStatic.$(value != 0);
@@ -68,8 +68,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $divide(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.fromValue(0);
         } else if (rhsFix.decimal() && (rhsFix.toDouble() != 0.0)) {
@@ -83,8 +83,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $modulus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.infinity(positive());
         }
@@ -100,7 +100,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var newValue) {
+    public Value $multiply(@NotNull Value newValue) {
         if (newValue.infinite()) {
             return newValue.$multiply(this);
         }
@@ -117,7 +117,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         return DollarFactory.fromValue(-value);
     }
 
@@ -198,8 +198,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $plus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return rhsFix;
         }
@@ -226,7 +226,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         if (equals(o)) {
             return 0;
         }
@@ -269,8 +269,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj).$unwrap();
+        if (obj instanceof Value) {
+            Value unwrapped = ((Value) obj).$unwrap();
             if (unwrapped instanceof DollarInteger) {
                 return value.equals(unwrapped.toLong());
             } else {

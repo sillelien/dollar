@@ -18,8 +18,8 @@ package dollar.uri.mapdb;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import dollar.internal.mapdb.DataInput2;
 import dollar.internal.mapdb.DataOutput2;
 import dollar.internal.mapdb.serializer.GroupSerializerObjectArray;
@@ -29,8 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class VarSerializer extends GroupSerializerObjectArray<var> implements Serializable {
-    @Override public void serialize(@NotNull DataOutput2 out, @Nullable var value) throws IOException {
+public class VarSerializer extends GroupSerializerObjectArray<Value> implements Serializable {
+    @Override
+    public void serialize(@NotNull DataOutput2 out, @Nullable Value value) throws IOException {
         if ((value != null) && !value.isVoid()) {
             out.writeUTF(value.$type().name());
             out.writeUTF(DollarFactory.serialize(value));
@@ -40,7 +41,9 @@ public class VarSerializer extends GroupSerializerObjectArray<var> implements Se
         }
     }
 
-    @NotNull @Override public var deserialize(@NotNull DataInput2 in, int available) throws IOException {
+    @NotNull
+    @Override
+    public Value deserialize(@NotNull DataInput2 in, int available) throws IOException {
         final Type type = Type.of(in.readUTF());
         if (type.is(Type._VOID)) {
             in.readUTF();
@@ -52,8 +55,8 @@ public class VarSerializer extends GroupSerializerObjectArray<var> implements Se
     }
 
 
-
-    @Override public int fixedSize() {
+    @Override
+    public int fixedSize() {
         return -1;
     }
 }

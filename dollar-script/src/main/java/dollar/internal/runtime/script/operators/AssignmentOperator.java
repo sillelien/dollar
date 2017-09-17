@@ -20,14 +20,14 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -47,7 +47,7 @@ import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
 
-public class AssignmentOperator implements Function<Token, Function<? super var, ? extends var>> {
+public class AssignmentOperator implements Function<Token, Function<? super Value, ? extends Value>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("AssignmentOperator");
     @NotNull
@@ -61,14 +61,14 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
     @Override
     @Nullable
-    public Function<? super var, ? extends var> apply(@NotNull Token token) {
+    public Function<? super Value, ? extends Value> apply(@NotNull Token token) {
         @Nullable Type type;
         Object[] objects = (Object[]) token.value();
-        var constraint = null;
+        Value constraint = null;
         @Nullable final SubType constraintSource;
 
-        if (objects[3] instanceof var) {
-            SourceCode meta = ((var) objects[3]).meta(CONSTRAINT_SOURCE);
+        if (objects[3] instanceof Value) {
+            SourceImpl meta = ((Value) objects[3]).meta(CONSTRAINT_SOURCE);
             constraintSource = (meta == null) ? null : new SimpleSubType(meta);
         } else {
             constraintSource = null;
@@ -78,40 +78,40 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             type = Type.of(objects[2].toString());
             constraint = util().node(ASSIGNMENT_CONSTRAINT, "assignment-constraint",
                                      pure, NEW_SCOPE, parser,
-                                     new SourceCode(token), type, emptyList(),
+                                     new SourceImpl(token), type, emptyList(),
                                      i -> {
-                                         var it = util().scope().parameter(
+                                         Value it = util().scope().parameter(
                                                  VarKey.IT).getValue();
                                          return $(
-                                                 it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
+                                                 it.is(type) && ((objects[3] == null) || ((Value) objects[3]).isTrue()));
                                      });
         } else {
             type = null;
-            if (objects[3] instanceof var) constraint = (var) objects[3];
+            if (objects[3] instanceof Value) constraint = (Value) objects[3];
 
         }
 
         boolean constant;
         boolean isVolatile;
         final Object mutability = objects[1];
-        boolean declaration = (mutability != null) || (objects[2] instanceof var) || (objects[3] instanceof var);
+        boolean declaration = (mutability != null) || (objects[2] instanceof Value) || (objects[3] instanceof Value);
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
-        if (((var) objects[4]).metaAttribute(IS_BUILTIN) != null) {
+        if (((Value) objects[4]).metaAttribute(IS_BUILTIN) != null) {
             throw new DollarScriptException(String.format(
                     "The variable '%s' cannot be assigned as this name is the name of a builtin function.", objects[4]));
         }
-        final VarKey varName = VarKey.of((var) objects[4]);
+        final VarKey varName = VarKey.of((Value) objects[4]);
 
-        var finalConstraint = constraint;
-        return (Function<var, var>) rhs -> {
+        Value finalConstraint = constraint;
+        return (Function<Value, Value>) rhs -> {
             Scope scope = util().scope();
             util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
 
-            final String op = ((var) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
+            final String op = ((Value) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
             if ("when".equals(op) || "subscribe".equals(op)) {
                 final SubType useSource;
-                var useConstraint;
+                Value useConstraint;
                 if (finalConstraint != null) {
                     useConstraint = finalConstraint;
                     useSource = constraintSource;
@@ -119,14 +119,14 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useConstraint = scope.constraintOf(varName);
                     useSource = scope.subTypeOf(varName);
                 }
-                List<var> inputs = Arrays.asList(rhs, util().constrain(scope, rhs, finalConstraint, useSource));
+                List<Value> inputs = Arrays.asList(rhs, util().constrain(scope, rhs, finalConstraint, useSource));
                 if ("when".equals(op)) {
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
                     return util().node(WHEN_ASSIGN, pure, parser, token, inputs,
                                        c -> {
-                                           var condition = (var) objects[5];
-                                           var initial = rhs.$fixDeep(false);
+                                           Value condition = (Value) objects[5];
+                                           Value initial = rhs.$fixDeep(false);
                                            scope.set(varName, condition.isTrue() ? initial : $void(), null,
                                                      useSource,
                                                      new VarFlags(false, isVolatile, false, pure, false,
@@ -134,7 +134,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                            return condition.$listen(
                                                    args -> {
                                                        if (condition.isTrue()) {
-                                                           var value = rhs.$fixDeep(false);
+                                                           Value value = rhs.$fixDeep(false);
                                                            util().setVariable(scope, varName,
                                                                               value, parser,
                                                                               token,
@@ -173,27 +173,27 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 }
             }
             return assign(rhs, objects, finalConstraint, new VarFlags(constant, isVolatile, declaration, pure),
-                          constraintSource, scope, token, type, new SourceCode(util().scope(), token));
+                          constraintSource, scope, token, type, new SourceImpl(util().scope(), token));
         };
     }
 
     @NotNull
-    private var assign(@NotNull var rhs,
-                       @NotNull Object[] objects,
-                       @Nullable var constraint,
-                       @NotNull VarFlags varFlags,
-                       @Nullable SubType constraintSource,
-                       @NotNull Scope scope,
-                       @NotNull Token token,
-                       @Nullable Type type,
-                       @NotNull Source source) {
+    private Value assign(@NotNull Value rhs,
+                         @NotNull Object[] objects,
+                         @Nullable Value constraint,
+                         @NotNull VarFlags varFlags,
+                         @Nullable SubType constraintSource,
+                         @NotNull Scope scope,
+                         @NotNull Token token,
+                         @Nullable Type type,
+                         @NotNull Source source) {
 
-        final VarKey varName = VarKey.of((var) objects[4]);
+        final VarKey varName = VarKey.of((Value) objects[4]);
 
         Pipeable pipeable = args -> {
 
             Scope currentScope = util().scope();
-            final var useConstraint;
+            final Value useConstraint;
             final SubType useSource;
             Scope varScope = util().getScopeForVar(pure, varName, false, util().scope());
             if ((constraint != null) || (varScope == null)) {
@@ -204,7 +204,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useSource = varScope.subTypeOf(varName);
             }
             //Don't change this value, 2 is the 'instinctive' depth a programmer would expect
-            final var rhsFixed = rhs.$fix(2, false);
+            final Value rhsFixed = rhs.$fix(2, false);
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {

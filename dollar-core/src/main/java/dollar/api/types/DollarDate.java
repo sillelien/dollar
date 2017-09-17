@@ -18,8 +18,8 @@ package dollar.api.types;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.DateTimeException;
@@ -49,13 +49,13 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._BOOLEAN)) {
             return DollarStatic.$(true);
         } else if (type.is(Type._STRING)) {
@@ -77,8 +77,8 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $divide(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.zero() || (rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(rhs.positive());
         }
@@ -87,19 +87,19 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
+    public Value $modulus(@NotNull Value rhs) {
         return DollarFactory.wrap(new DollarDecimal(asDecimal() % rhs.toDouble()));
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var rhs) {
+    public Value $multiply(@NotNull Value rhs) {
         return DollarFactory.wrap(new DollarDecimal(asDecimal() * rhs.toDouble()));
     }
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         return DollarFactory.fromValue(-asDecimal());
     }
 
@@ -181,15 +181,15 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $get(@NotNull var key) {
+    public Value $get(@NotNull Value key) {
         final LocalDateTime localDateTime = LocalDateTime.ofInstant(value, ZoneId.systemDefault());
         return DollarFactory.fromValue(localDateTime.get(ChronoField.valueOf(key.toHumanString().toUpperCase())));
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $plus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix);
         } else if (rhsFix.infinite()) {
@@ -214,7 +214,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @NotNull Object v) {
+    public Value $set(@NotNull Value key, @NotNull Object v) {
         return DollarFactory.fromValue(
                 LocalDateTime.ofInstant(value, ZoneId.systemDefault())
                         .with(ChronoField.valueOf(key.toHumanString().toUpperCase()),
@@ -241,7 +241,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         return $minus(o).toInteger();
     }
 
@@ -278,8 +278,8 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj).$unwrap();
+        if (obj instanceof Value) {
+            Value unwrapped = ((Value) obj).$unwrap();
             if (unwrapped instanceof DollarDate) {
                 return Objects.equals(toString(), unwrapped.toString());
             } else {

@@ -17,12 +17,12 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class DollarVoidTest {
-    private static var list;
+    private static Value list;
 
     @BeforeAll
     public static void setUp() {

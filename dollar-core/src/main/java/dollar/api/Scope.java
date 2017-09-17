@@ -33,11 +33,11 @@ public interface Scope {
     /**
      * Adds an error handler to the scope
      *
-     * @param handler the var to be {@link var#$fixDeep()} on error occuring
+     * @param handler the Value to be {@link Value#$fixDeep()} on error occuring
      * @return the handler
      */
     @NotNull
-    var addErrorHandler(@NotNull var handler);
+    Value addErrorHandler(@NotNull Value handler);
 
     /**
      * Add a value listener for a variable.
@@ -52,8 +52,14 @@ public interface Scope {
      */
     void clear();
 
+    /**
+     * Returns the constraint associated with the variable name if any
+     *
+     * @param key the key under which the variable is stored
+     * @return the constraint or null
+     */
     @Nullable
-    var constraintOf(@NotNull VarKey key);
+    Value constraintOf(@NotNull VarKey key);
 
     /**
      * Returns a deep copy of this scope
@@ -76,7 +82,7 @@ public interface Scope {
      * @return the {@link DollarClass} definition
      */
     @NotNull
-    DollarClass dollarClassByName(@NotNull String name);
+    DollarClass dollarClassByName(@NotNull ClassName name);
 
     /**
      * The file associated with this scope or one of it's ancestors.
@@ -93,7 +99,7 @@ public interface Scope {
      * @return the value of the variable or $void() unless mustFind is true, in which case a VariableNotFoundException is thrown
      */
     @NotNull
-    var get(@NotNull VarKey key, boolean mustFind);
+    Value get(@NotNull VarKey key, boolean mustFind);
 
     /**
      * Get a variable's value by name.
@@ -102,36 +108,36 @@ public interface Scope {
      * @return the value of the variable or $void()
      */
     @NotNull
-    var get(@NotNull VarKey key);
+    Value get(@NotNull VarKey key);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
      *
      * @param t the error
-     * @return an error var if the method returns.
+     * @return an error Value if the method returns.
      */
     @NotNull
-    var handleError(@NotNull Throwable t);
+    Value handleError(@NotNull Throwable t);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
      *
      * @param t       the error
-     * @param context a var which relates to the error
-     * @return an error var if the method returns.
+     * @param context a Value which relates to the error
+     * @return an error Value if the method returns.
      */
     @NotNull
-    var handleError(@NotNull Throwable t, @NotNull var context);
+    Value handleError(@NotNull Throwable t, @NotNull Value context);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
      *
      * @param t       the error
      * @param context the source code for the point at which the error occurs
-     * @return an error var if the method returns.
+     * @return an error Value if the method returns.
      */
     @NotNull
-    var handleError(@NotNull Throwable t, @NotNull Source context);
+    Value handleError(@NotNull Throwable t, @NotNull Source context);
 
     /**
      * Return's true if this scope contains a variable.
@@ -172,22 +178,22 @@ public interface Scope {
     boolean isRoot();
 
     /**
-     * Listen to a variable ('key') if the variable changes then {@link var#$notify()} will
+     * Listen to a variable ('key') if the variable changes then {@link Value#$notify()} will
      * be called.
      *
      * @param key      the name of the variable
      * @param id       an id to associate with this listener
-     * @param listener the var object to be notified
+     * @param listener the Value object to be notified
      */
-    void listen(@NotNull VarKey key, @NotNull String id, @NotNull var listener);
+    void listen(@NotNull VarKey key, @NotNull String id, @NotNull Value listener);
 
     /**
-     * Listen to a variable ('key') if the variable changes then {@link Pipeable#pipe(var...)}
+     * Listen to a variable ('key') if the variable changes then {@link Pipeable#pipe(Value...)}
      * be called.
      *
      * @param key      the name of the variable
      * @param id       an id to associate with this listener
-     * @param listener the var object to be notified
+     * @param listener the Value object to be notified
      */
     void listen(@NotNull VarKey key, @NotNull String id, @NotNull Pipeable listener);
 
@@ -198,7 +204,7 @@ public interface Scope {
      * @return its new value
      */
     @Nullable
-    var notify(@NotNull VarKey key);
+    Value notify(@NotNull VarKey key);
 
     /**
      * Notify all listeners that the value of a variable has changed
@@ -206,7 +212,7 @@ public interface Scope {
      * @param key   the name of the variable
      * @param value its new value
      */
-    void notifyScope(@NotNull VarKey key, @NotNull var value);
+    void notifyScope(@NotNull VarKey key, @NotNull Value value);
 
     /**
      * Gets the value of a parameter from this scope or it's ancestors.
@@ -225,7 +231,7 @@ public interface Scope {
      * @return the value
      */
     @NotNull
-    Variable parameter(@NotNull VarKey key, @NotNull var value);
+    Variable parameter(@NotNull VarKey key, @NotNull Value value);
 
     /**
      * Gets all the numeric parameters as a sorted List.
@@ -233,7 +239,7 @@ public interface Scope {
      * @return a sorted list of numeric parameters
      */
     @NotNull
-    List<var> parametersAsVars();
+    List<Value> parametersAsVars();
 
     /**
      * Return the parent scope or null if it does not have one.
@@ -256,7 +262,7 @@ public interface Scope {
      * @param name        the name of the class
      * @param dollarClass the class definition
      */
-    void registerClass(@NotNull String name, @NotNull DollarClass dollarClass);
+    void registerClass(@NotNull ClassName name, @NotNull DollarClass dollarClass);
 
     /**
      * Find which ancestor scope, or this scope, that contains a variable with the name.
@@ -279,8 +285,8 @@ public interface Scope {
      */
     @NotNull
     Variable set(@NotNull VarKey key,
-                 @NotNull var value,
-                 @Nullable var constraint,
+                 @NotNull Value value,
+                 @Nullable Value constraint,
                  @Nullable SubType subType,
                  @NotNull VarFlags varFlags);
 

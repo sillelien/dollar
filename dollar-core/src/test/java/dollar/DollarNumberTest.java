@@ -17,14 +17,14 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class DollarNumberTest {
-    private static var list;
+    private static Value list;
 
     @BeforeAll
     public static void setUp() {
@@ -33,7 +33,7 @@ public class DollarNumberTest {
 
     @Test
     public void testBasics() {
-        var map = DollarStatic.$("foo", 1).$("bar", 10);
+        Value map = DollarStatic.$("foo", 1).$("bar", 10);
         assertEquals(2, (long) DollarStatic.$(1).$inc().toInteger());
         assertEquals(4, (long) DollarStatic.$(1).$plus(DollarStatic.$(3)).toInteger());
         assertEquals(10, (long) map.$get(DollarStatic.$("bar")).toInteger());
@@ -45,16 +45,16 @@ public class DollarNumberTest {
     @Test
     public void testDivide() {
 
-        var lhs = DollarStatic.$(40.1);
-        var rhs = DollarStatic.$(5.3);
+        Value lhs = DollarStatic.$(40.1);
+        Value rhs = DollarStatic.$(5.3);
         assertEquals(7, (long) lhs.$divide(rhs).toInteger());
         assertEquals(0, (long) rhs.$divide(lhs).toInteger());
 
         assertEquals(5.3 / 40.1, rhs.$divide(lhs).toDouble(), 0.01);
         assertEquals(40.1 / 5.3, lhs.$divide(rhs).toDouble(), 0.01);
 
-        var intLhs = DollarStatic.$(30);
-        var intRhs = DollarStatic.$(2);
+        Value intLhs = DollarStatic.$(30);
+        Value intRhs = DollarStatic.$(2);
 
         assertEquals(5, (long) intLhs.$divide(rhs).toInteger());
         assertEquals(0, (long) rhs.$divide(intLhs).toInteger());
@@ -68,19 +68,19 @@ public class DollarNumberTest {
 
     @Test
     public void testMod() {
-        var lhs = DollarStatic.$(40.1);
-        var rhs = DollarStatic.$(5.3);
+        Value lhs = DollarStatic.$(40.1);
+        Value rhs = DollarStatic.$(5.3);
         assertEquals(3, (long) lhs.$modulus(rhs).toInteger());
         assertEquals(5, (long) rhs.$modulus(lhs).toInteger());
 
         assertEquals(5.3 % 40.1, rhs.$modulus(lhs).toDouble(), 0.01);
         assertEquals(40.1 % 5.3, lhs.$modulus(rhs).toDouble(), 0.01);
 
-        var intLhs = DollarStatic.$(30);
-        var intRhs = DollarStatic.$(2);
+        Value intLhs = DollarStatic.$(30);
+        Value intRhs = DollarStatic.$(2);
 
-        assertEquals(3, (long) intLhs.$modulus(rhs).toLong());
-        assertEquals(5, (long) rhs.$modulus(intLhs).toLong());
+        assertEquals(3, intLhs.$modulus(rhs).toLong());
+        assertEquals(5, rhs.$modulus(intLhs).toLong());
         assertEquals(0, (long) intLhs.$modulus(intRhs).toInteger());
 
         assertEquals(5.3, rhs.$modulus(intLhs).toDouble(), 0.01);
@@ -92,15 +92,15 @@ public class DollarNumberTest {
 
     @Test
     public void testMultiply() {
-        var lhs = DollarStatic.$(4.1);
-        var rhs = DollarStatic.$(5.3);
+        Value lhs = DollarStatic.$(4.1);
+        Value rhs = DollarStatic.$(5.3);
         assertEquals(21, (long) lhs.$multiply(rhs).toInteger());
         assertEquals(21, (long) rhs.$multiply(lhs).toInteger());
         assertEquals(4.1 * 5.3, rhs.$multiply(lhs).toDouble(), 0.01);
         assertEquals(4.1 * 5.3, lhs.$multiply(rhs).toDouble(), 0.01);
 
-        var intRhs = DollarStatic.$(2);
-        var intLhs = DollarStatic.$(3);
+        Value intRhs = DollarStatic.$(2);
+        Value intLhs = DollarStatic.$(3);
 
         assertEquals(15, (long) intLhs.$multiply(rhs).toInteger());
         assertEquals(15, (long) rhs.$multiply(intLhs).toInteger());

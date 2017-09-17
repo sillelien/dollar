@@ -18,14 +18,14 @@ package dollar;
 
 import com.jayway.restassured.RestAssured;
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Date;
 
 class DollarHttpTest {
 
-    private static var profile;
+    private static Value profile;
 
     static {
         RestAssured.port = 4567;

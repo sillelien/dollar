@@ -18,9 +18,9 @@ package dollar.internal.runtime.script.parser.scope;
 
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.Variable;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public class PureScope extends ScriptScope {
 
     @NotNull
     @Override
-    public var get(@NotNull VarKey key, boolean mustFind) {
+    public Value get(@NotNull VarKey key, boolean mustFind) {
 
         if (DollarStatic.getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);

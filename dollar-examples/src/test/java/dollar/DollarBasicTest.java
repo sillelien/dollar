@@ -17,8 +17,8 @@
 package dollar;
 
 import dollar.api.DollarStatic;
+import dollar.api.Value;
 import dollar.api.json.ImmutableJsonObject;
-import dollar.api.var;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -30,15 +30,15 @@ import static org.junit.Assert.*;
 public class DollarBasicTest {
     @Test
     public void testBuild() {
-        var profile = DollarStatic.$("name", "Neil")
-                              .$("age", 44)
-                              .$("gender", "male")
-                              .$("projects", DollarStatic.$jsonArray("snapito", "dollar_vertx"))
-                              .$("location",
-                                 DollarStatic.$("city", "brighton")
-                                         .$("postcode", "bn1 6jj")
-                                         .$("number", 343)
-                              );
+        Value profile = DollarStatic.$("name", "Neil")
+                                .$("age", 44)
+                                .$("gender", "male")
+                                .$("projects", DollarStatic.$jsonArray("snapito", "dollar_vertx"))
+                                .$("location",
+                                   DollarStatic.$("city", "brighton")
+                                           .$("postcode", "bn1 6jj")
+                                           .$("number", 343)
+                                );
         assertEquals(
                 "{\"name\":\"Neil\",\"age\":44,\"gender\":\"male\",\"projects\":[\"snapito\",\"dollar_vertx\"],\"location\":{\"city\":\"brighton\",\"postcode\":\"bn1 6jj\",\"number\":343}}",
                 profile.toString());
@@ -47,7 +47,7 @@ public class DollarBasicTest {
 
     @Test
     public void testBuildAlt() {
-        var profile = DollarStatic.$(
+        Value profile = DollarStatic.$(
                 DollarStatic.$("name", "Neil"),
                 DollarStatic.$("age", 44),
                 DollarStatic.$("gender", "male"),
@@ -84,16 +84,16 @@ public class DollarBasicTest {
 
     @Test
     public void testLambda() {
-        var profile = DollarStatic.$("name", "Neil")
-                              .$("age", 1)
-                              .$("gender", "male")
-                              .$("projects", DollarStatic.$jsonArray("snapito", "dollar_vertx"))
-                              .$("location",
-                                 DollarStatic.$("city", "brighton")
-                                         .$("postcode", "bn1 6jj")
-                                         .$("number", 343)
-                              );
-//        var result = profile.$pipe(v -> v[0].$("weight", "none of your business"));
+        Value profile = DollarStatic.$("name", "Neil")
+                                .$("age", 1)
+                                .$("gender", "male")
+                                .$("projects", DollarStatic.$jsonArray("snapito", "dollar_vertx"))
+                                .$("location",
+                                   DollarStatic.$("city", "brighton")
+                                           .$("postcode", "bn1 6jj")
+                                           .$("number", 343)
+                                );
+//        Value result = profile.$pipe(v -> v[0].$("weight", "none of your business"));
 //        String weight = result.$("weight").toHumanString();
 //        assertEquals(weight, "none of your business");
 //        assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());

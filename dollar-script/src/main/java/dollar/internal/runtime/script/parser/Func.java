@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.parser;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.execution.DollarExecutor;
@@ -28,7 +29,6 @@ import dollar.api.script.ModuleResolver;
 import dollar.api.script.Source;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.Constants;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -65,9 +65,9 @@ public final class Func {
     static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
 
     @NotNull
-    static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep();
-        final var rhsFix = rhs.$fixDeep();
+    static Value assertEqualsFunc(@NotNull Value lhs, @NotNull Value rhs) {
+        final Value lhsFix = lhs.$fixDeep();
+        final Value rhsFix = rhs.$fixDeep();
         if (lhsFix.equals(rhsFix)) {
             return $(true);
         } else {
@@ -76,7 +76,7 @@ public final class Func {
     }
 
     @NotNull
-    static var assertFunc(@Nullable var message, @NotNull var condition) {
+    static Value assertFunc(@Nullable Value message, @NotNull Value condition) {
         if (!condition.isTrue()) {
             throw new DollarAssertionException("Assertion failed: " + (message != null ? message : ""), condition);
 
@@ -85,7 +85,7 @@ public final class Func {
     }
 
     @NotNull
-    static var blockFunc(int depth, @NotNull List<var> l) {
+    static Value blockFunc(int depth, @NotNull List<Value> l) {
         if (l.isEmpty()) {
             return $void();
         } else {
@@ -95,26 +95,26 @@ public final class Func {
     }
 
     @NotNull
-    static var castFunc(@NotNull var lhs, @NotNull String typeName) {
+    static Value castFunc(@NotNull Value lhs, @NotNull String typeName) {
         return lhs.$as(Type.of(typeName));
     }
 
     @NotNull
-    static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static Value causesFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
         lhs.$fixDeep(false);
         return lhs.$listen(vars -> rhs.$fix(1, false));
     }
 
     @NotNull
-    public static var definitionFunc(@NotNull Token token,
-                                     boolean export,
-                                     @NotNull var value,
-                                     @NotNull var variableName,
-                                     @Nullable var constraint,
-                                     @Nullable SubType constraintSource,
-                                     @NotNull DollarParser parser,
-                                     boolean pure,
-                                     boolean readonly) {
+    public static Value definitionFunc(@NotNull Token token,
+                                       boolean export,
+                                       @NotNull Value value,
+                                       @NotNull Value variableName,
+                                       @Nullable Value constraint,
+                                       @Nullable SubType constraintSource,
+                                       @NotNull DollarParser parser,
+                                       boolean pure,
+                                       boolean readonly) {
         VarKey key = VarKey.of(variableName);
 
         util().setVariable(util().scope(), key, value,
@@ -124,16 +124,16 @@ public final class Func {
         if (export) {
             parser.export(key, util().node(DEFINITION, "export-" + DEFINITION.name(),
                                            pure, SCOPE_WITH_CLOSURE, parser,
-                                           new SourceCode(util().scope(), token),
+                                           new SourceImpl(util().scope(), token),
                                            null, singletonList(value), exportArgs -> value.$fix(2, false)));
         }
         return $void();
     }
 
     @NotNull
-    static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static Value eachFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
         assert EACH.validForPure(pure);
-        return lhs.$each(i -> util().inSubScope(false, pure, EACH.name(),
+        return lhs.$each(i -> util().inSubScope(true, pure, EACH.name(),
                                                 newScope -> {
                                                     newScope.parameter(VarKey.ONE, i[0]);
                                                     return rhs.$fixDeep(false);
@@ -141,8 +141,8 @@ public final class Func {
     }
 
     @NotNull
-    static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var fixLhs = lhs.$fixDeep(false);
+    static Value elseFunc(@NotNull Value lhs, @NotNull Value rhs) {
+        final Value fixLhs = lhs.$fixDeep(false);
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
             return rhs.$fix(2, false);
         } else {
@@ -151,19 +151,18 @@ public final class Func {
     }
 
     @NotNull
-    static var errorFunc(@NotNull var v) {
+    static Value errorFunc(@NotNull Value v) {
         return util().scope().addErrorHandler(v);
     }
 
     @NotNull
-    static var everyFunc(@NotNull AtomicInteger count,
-                         @NotNull var durationVar,
-                         @Nullable var until,
-                         @Nullable var unless,
-                         var block) {
+    static Value everyFunc(@NotNull AtomicInteger count,
+                           @NotNull Value durationValue,
+                           @Nullable Value until,
+                           @Nullable Value unless,
+                           @NotNull Value block) {
         Scope scope = util().scope();
-        Double duration = durationVar.toDouble();
-        assert duration != null;
+        double duration = durationValue.toDouble();
         Scheduler.schedule(i -> {
             count.incrementAndGet();
             return util().inScope(true, scope, newScope -> {
@@ -185,12 +184,12 @@ public final class Func {
         return $void();
     }
 
-    public static var fixFunc(@NotNull var v) {
+    static Value fixFunc(@NotNull Value v) {
         return v.$fix(Integer.MAX_VALUE, false);
     }
 
     @NotNull
-    static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
+    static Value forFunc(boolean pure, @NotNull String varName, @NotNull Value iterable, @NotNull Value block) {
         assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> util().inSubScope(true, pure, "for-loop", newScope -> {
             util().scope()
@@ -203,40 +202,40 @@ public final class Func {
     }
 
     @NotNull
-    static Future<var> forkFunc(@NotNull var v) {
+    static Future<Value> forkFunc(@NotNull Value v) {
         return executor.executeInBackground(() -> util().fix(v));
     }
 
     @NotNull
-    static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep(false);
+    static Value ifFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
+        final Value lhsFix = lhs.$fixDeep(false);
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
         assert IF_OP.validForPure(pure);
         return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
     }
 
-    static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
+    static Value inFunc(@NotNull Value lhs, @NotNull Value rhs) {return rhs.$contains(lhs);}
 
     @NotNull
-    static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
+    static Value isFunc(@NotNull Value lhs, @NotNull List<Value> value) {
         return $(value.stream()
-                         .map(var::$S)
+                         .map(Value::$S)
                          .map(Type::of)
                          .filter(lhs::is).count() > 0);
     }
 
     @NotNull
-    static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value listenFunc(@NotNull Value lhs, @NotNull Value rhs) {
         lhs.$fixDeep();
         return lhs.$listen(var -> lhs.isTrue() ? util().fix(rhs) : $void());
     }
 
     @NotNull
-    static var mapFunc(boolean parallel, @NotNull List<var> entries) {
+    static Value mapFunc(boolean parallel, @NotNull List<Value> entries) {
         if (entries.size() == 1) {
             return blockFunc(2, entries);
         } else {
-            Stream<var> stream = parallel ? entries.stream().parallel() : entries.stream();
+            Stream<Value> stream = parallel ? entries.stream().parallel() : entries.stream();
             return $(stream.map(v -> v.$fix(2, parallel))
                              .collect(Collectors.toConcurrentMap(
                                      v -> v.pair() ? v.$pairKey() : v.$S(),
@@ -245,16 +244,16 @@ public final class Func {
     }
 
     @NotNull
-    static var moduleFunc(@NotNull DollarParserImpl parser,
-                          @NotNull String moduleName,
-                          @Nullable Iterable<var> params) throws Exception {
+    static Value moduleFunc(@NotNull DollarParserImpl parser,
+                            @NotNull String moduleName,
+                            @Nullable Iterable<Value> params) throws Exception {
         String[] parts = moduleName.split(":", 2);
         if (parts.length < 2) {
             throw new DollarScriptException("Module " + moduleName + " needs to have a scheme");
         }
-        Map<String, var> paramMap = new HashMap<>();
+        Map<String, Value> paramMap = new HashMap<>();
         if (params != null) {
-            for (var param1 : params) {
+            for (Value param1 : params) {
                 paramMap.put(param1.metaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param1);
             }
         }
@@ -269,10 +268,10 @@ public final class Func {
     }
 
     @NotNull
-    static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value multiplyFunc(@NotNull Value lhs, @NotNull Value rhs) {
         Op operation = lhs.meta(OPERATION);
-        if ((operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP))) {
-            var newValue = lhs.$fixDeep();
+        if (opIsCollection(operation)) {
+            Value newValue = lhs.$fixDeep();
             Long max = rhs.toLong();
             if (max > Constants.MAX_MULTIPLY) {
                 throw new DollarScriptException("Cannot multiply a block, map  or list by a factor larger than " +
@@ -284,20 +283,28 @@ public final class Func {
             }
             return newValue;
         } else {
-            final var lhsFix = lhs.$fix(1, false);
+            final Value lhsFix = lhs.$fix(1, false);
             return lhsFix.$multiply(rhs);
         }
     }
 
+    private static boolean opIsCollection(Op operation) {
+        return (operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP));
+    }
+
     @NotNull
-    static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value pairFunc(@NotNull Value lhs, @NotNull Value rhs) {
         return $(lhs.$S(), rhs);
     }
 
     @NotNull
-    static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
+    static Value pipeFunc(@NotNull DollarParser parser,
+                          boolean pure,
+                          @NotNull Token token,
+                          @NotNull Value rhs,
+                          @NotNull Value lhs) {
         util().scope().parameter(VarKey.ONE, lhs);
-        var rhsVal = rhs.$fix(false);
+        Value rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
@@ -308,12 +315,12 @@ public final class Func {
     }
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    static var printFunc(@NotNull DollarParser parser,
-                         @NotNull Source segment,
-                         @NotNull Op command,
-                         @NotNull List<var> vars) {
-        return util().node(command, false, parser, segment, vars, args -> {
-            String outStr = vars.stream().map(var::toString).collect(Collectors.joining(""));
+    static Value printFunc(@NotNull DollarParser parser,
+                           @NotNull Source segment,
+                           @NotNull Op command,
+                           @NotNull List<Value> Values) {
+        return util().node(command, false, parser, segment, Values, args -> {
+            String outStr = Values.stream().map(Value::toString).collect(Collectors.joining(""));
             if (command.equals(OUT)) {
                 System.out.println(outStr);
             } else if (command.equals(ERR)) {
@@ -328,17 +335,17 @@ public final class Func {
     }
 
     @NotNull
-    static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value publishFunc(@NotNull Value lhs, @NotNull Value rhs) {
         return rhs.$publish(lhs);
     }
 
     @NotNull
-    static var readFunc(@NotNull var from) {
+    static Value readFunc(@NotNull Value from) {
         return DollarFactory.fromURI(from).$read();
     }
 
     @NotNull
-    static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static Value reduceFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
         assert REDUCE.validForPure(pure);
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
@@ -354,11 +361,11 @@ public final class Func {
     }
 
     @NotNull
-    static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value subscribeFunc(@NotNull Value lhs, @NotNull Value rhs) {
         return lhs.$subscribe(
                 i -> util().inSubScope(true, false,
                                        "subscribe-param", newScope -> {
-                            final var it = util().fix(i[0]);
+                            final Value it = util().fix(i[0]);
                             util().scope().parameter(VarKey.ONE, it);
                             util().scope().parameter(VarKey.IT, it);
                             return util().fix(rhs);
@@ -366,7 +373,7 @@ public final class Func {
     }
 
     @NotNull
-    static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static Value whileFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
         assert WHILE_OP.validForPure(pure);
 
         while (lhs.isTrue()) {
@@ -376,7 +383,7 @@ public final class Func {
     }
 
     @NotNull
-    static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
+    static Value writeFunc(@NotNull Value lhs, @NotNull Value rhs) {
         return rhs.$write(lhs);
     }
 }

@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.api.DollarException;
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarAssertionException extends DollarException {
@@ -33,7 +33,7 @@ public class DollarAssertionException extends DollarException {
         super(t, s);
     }
 
-    public DollarAssertionException(@NotNull String s, @NotNull var rhs) {
+    public DollarAssertionException(@NotNull String s, @NotNull Value rhs) {
         super(s + ":\n" + rhs.source().getSourceMessage());
     }
 }

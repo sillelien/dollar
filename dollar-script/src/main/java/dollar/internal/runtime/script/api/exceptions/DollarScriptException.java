@@ -16,10 +16,10 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.script.Source;
 import dollar.api.types.ErrorType;
-import dollar.api.var;
 import dollar.internal.runtime.script.parser.Op;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +44,7 @@ public class DollarScriptException extends DollarFailureException {
         super(t, s);
     }
 
-    public DollarScriptException(@NotNull String s, @NotNull var rhs) {
+    public DollarScriptException(@NotNull String s, @NotNull Value rhs) {
         super(s + ":\n" + optionalSource(rhs.source()));
         rawMessage = s;
         source = rhs.source();
@@ -81,7 +81,7 @@ public class DollarScriptException extends DollarFailureException {
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull Throwable cause, @NotNull var context) {
+    public DollarScriptException(@NotNull Throwable cause, @NotNull Value context) {
         super(cause, context.source().getSourceMessage());
         source = context.source();
     }

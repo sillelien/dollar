@@ -17,8 +17,8 @@
 package dollar.api.script;
 
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.VarKey;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -27,27 +27,27 @@ import java.io.InputStream;
 public interface DollarParser {
 
 
-    void export(@NotNull VarKey name, @NotNull var export);
+    void export(@NotNull VarKey name, @NotNull Value export);
 
     @NotNull
     ParserOptions options();
 
     @NotNull
-    var parse(@NotNull Scope scope, @NotNull String source) throws Exception;
+    Value parse(@NotNull Scope scope, @NotNull String source) throws Exception;
 
     @NotNull
-    var parse(@NotNull File file, boolean parallel) throws Exception;
+    Value parse(@NotNull File file, boolean parallel) throws Exception;
 
     @NotNull
-    var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception;
+    Value parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception;
 
     @NotNull
-    var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception;
+    Value parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception;
 
     @NotNull
-    var parse(@NotNull String source, boolean parallel) throws Exception;
+    Value parse(@NotNull String source, boolean parallel) throws Exception;
 
     @NotNull
-    var parseMarkdown(@NotNull String source);
+    Value parseMarkdown(@NotNull String source);
 
 }

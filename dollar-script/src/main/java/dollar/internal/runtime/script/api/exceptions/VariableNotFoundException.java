@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.api.Scope;
 import dollar.api.VarKey;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class VariableNotFoundException extends DollarScriptException {
@@ -33,7 +33,7 @@ public class VariableNotFoundException extends DollarScriptException {
 
     public VariableNotFoundException(@NotNull VarKey variable,
                                      @NotNull Scope scope,
-                                     @NotNull SourceCode sourceCode) {
+                                     @NotNull SourceImpl sourceCode) {
         super("Variable not found '" + variable + "' in scope " + scope, sourceCode);
         this.variable = variable;
     }

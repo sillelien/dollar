@@ -24,8 +24,8 @@ import com.google.common.collect.Range;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,13 +39,13 @@ import static dollar.api.types.DollarFactory.wrap;
 public class DollarRange extends AbstractDollar {
 
     @NotNull
-    private final Range<var> range;
+    private final Range<Value> range;
     private boolean reversed;
 
-    public DollarRange(@NotNull var start, @NotNull var finish) {
+    public DollarRange(@NotNull Value start, @NotNull Value finish) {
         super();
-        var startUnwrap;
-        var finishUnwrap;
+        Value startUnwrap;
+        Value finishUnwrap;
 
         if (start.compareTo(finish) < 0) {
             startUnwrap = start.$unwrap();
@@ -66,10 +66,10 @@ public class DollarRange extends AbstractDollar {
     public DollarRange(boolean lowerBounds,
                        boolean upperBounds,
                        boolean closedLeft,
-                       boolean closedRight, @Nullable var lower, @Nullable var upper) {
+                       boolean closedRight, @Nullable Value lower, @Nullable Value upper) {
         super();
-        var lowerBound;
-        var upperBound;
+        Value lowerBound;
+        Value upperBound;
         if ((lower != null) && (upper != null) && (lower.compareTo(upper) > 0)) {
             lowerBound = upper;
             upperBound = lower;
@@ -117,7 +117,7 @@ public class DollarRange extends AbstractDollar {
         }
     }
 
-    public DollarRange(@NotNull Range<var> range, boolean reversed) {
+    public DollarRange(@NotNull Range<Value> range, boolean reversed) {
         super();
         this.range = range;
         this.reversed = reversed;
@@ -125,7 +125,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $abs() {
+    public Value $abs() {
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$abs()),
                                                        range.lowerBoundType(),
@@ -136,13 +136,13 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
+    public Value $append(@NotNull Value value) {
         return $plus(value);
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
+    public Value $as(@NotNull Type type) {
         if (type.is(Type._LIST)) {
             return DollarStatic.$(toVarList());
         } else if (type.is(Type._MAP)) {
@@ -158,20 +158,20 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $containsValue(@NotNull var value) {
+    public Value $containsValue(@NotNull Value value) {
         return DollarStatic.$(range.contains(value));
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $divide(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$divide(rhsFix)),
                                                        range.lowerBoundType(),
@@ -183,7 +183,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull var key) {
+    public Value $get(@NotNull Value key) {
         if (key.integer()) {
             long keyL;
             if (key.toLong() < 0) {
@@ -191,9 +191,9 @@ public class DollarRange extends AbstractDollar {
             } else {
                 keyL = key.toLong();
             }
-            var upper = range.upperEndpoint();
+            Value upper = range.upperEndpoint();
             assert upper != null;
-            var lower = range.lowerEndpoint();
+            Value lower = range.lowerEndpoint();
             assert lower != null;
 
             // (1..3) 2,2 [1..3] 1,3
@@ -233,13 +233,13 @@ public class DollarRange extends AbstractDollar {
                 return DollarFactory.fromValue(lower);
             }
             if (!reversed) {
-                var start = lower;
+                Value start = lower;
                 for (long i = 0; i < keyL; i++) {
                     start = start.$inc();
                 }
                 return start;
             } else {
-                var finish = upper;
+                Value finish = upper;
                 for (long i = 0; i < keyL; i++) {
                     finish = finish.$dec();
                 }
@@ -252,20 +252,20 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
+    public Value $insert(@NotNull Value value, int position) {
         return $get(DollarStatic.$(toVarList())).$insert(value, position);
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $minus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
                                                        range.lowerBoundType(),
@@ -276,8 +276,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $modulus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$modulus(rhsFix)),
                                                        range.lowerBoundType(),
@@ -289,8 +289,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $multiply(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$multiply(rhsFix)),
                                                        range.lowerBoundType(),
@@ -302,7 +302,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $negate() {
+    public Value $negate() {
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$negate()),
                                                        range.lowerBoundType(),
@@ -313,8 +313,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
+    public Value $plus(@NotNull Value rhs) {
+        Value rhsFix = rhs.$fixDeep();
 
         return wrap(new DollarRange(
                                            Range.range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
@@ -327,32 +327,32 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
+    public Value $prepend(@NotNull Value value) {
         return $get(DollarStatic.$(toVarList())).$prepend(value);
     }
 
     @NotNull
     @Override
-    public var $remove(@NotNull var value) {
+    public Value $remove(@NotNull Value value) {
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $removeByKey(@NotNull String value) {
+    public Value $removeByKey(@NotNull String value) {
         return $copy();
 
     }
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @NotNull Object value) {
+    public Value $set(@NotNull Value key, @NotNull Object value) {
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         return diff().$abs();
     }
 
@@ -404,7 +404,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(@NotNull Object value) {
+    public Value remove(@NotNull Object value) {
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
@@ -447,9 +447,9 @@ public class DollarRange extends AbstractDollar {
     @Override
     public ImmutableList<Object> toList() {
         List<Object> values = new ArrayList<>();
-        var start = lower();
-        var finish = upper();
-        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+        Value start = lower();
+        Value finish = upper();
+        for (Value i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
             values.add(i.toJavaObject());
         }
         return ImmutableList.copyOf(values);
@@ -462,16 +462,16 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
-        List<var> values = new ArrayList<>();
-        var start = lower();
-        var finish = upper();
+    public ImmutableList<Value> toVarList() {
+        List<Value> values = new ArrayList<>();
+        Value start = lower();
+        Value finish = upper();
         if (start.compareTo(finish) < 1) {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            for (Value i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
                 values.add(i);
             }
         } else {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
+            for (Value i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
                 values.add(i);
             }
         }
@@ -480,15 +480,15 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> toVarMap() {
-        @NotNull var result;
+    public ImmutableMap<Value, Value> toVarMap() {
+        @NotNull Value result;
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public String toYaml() {
-        @NotNull var result;
+        @NotNull Value result;
         throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
@@ -499,38 +499,38 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $avg(boolean parallel) {
+    public Value $avg(boolean parallel) {
         //TODO: can we calculate without iteration?
         return $sum(parallel).$divide($size());
     }
 
     @NotNull
     @Override
-    public var $max(boolean parallel) {
+    public Value $max(boolean parallel) {
         return upper();
     }
 
     @NotNull
     @Override
-    public var $min(boolean parallel) {
+    public Value $min(boolean parallel) {
         return lower();
     }
 
     @NotNull
     @Override
-    public var $reverse(boolean parallel) {
+    public Value $reverse(boolean parallel) {
         return wrap(new DollarRange(range, !reversed));
     }
 
     @NotNull
     @Override
-    public var $sort(boolean parallel) {
+    public Value $sort(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $unique(boolean parallel) {
+    public Value $unique(boolean parallel) {
         return this;
     }
 
@@ -555,8 +555,8 @@ public class DollarRange extends AbstractDollar {
         if (obj == null) {
             return false;
         }
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj).$fixDeep().$unwrap();
+        if (obj instanceof Value) {
+            Value unwrapped = ((Value) obj).$fixDeep().$unwrap();
             if (unwrapped instanceof DollarRange) {
                 return range.equals(((DollarRange) unwrapped).range);
             }
@@ -566,7 +566,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
+    public int compareTo(@NotNull Value o) {
         if ($containsValue(o).isTrue()) {
             return 0;
         }
@@ -580,10 +580,10 @@ public class DollarRange extends AbstractDollar {
     }
 
     @NotNull
-    private var diff() {
-        var upper = range.upperEndpoint();
+    private Value diff() {
+        Value upper = range.upperEndpoint();
         assert upper != null;
-        var lower = range.lowerEndpoint();
+        Value lower = range.lowerEndpoint();
         assert lower != null;
 
         // (1..3) 2,2 [1..3] 1,3
@@ -618,14 +618,14 @@ public class DollarRange extends AbstractDollar {
             return DollarFactory.fromValue(diff + Math.signum(diff));
         }
         int count = 0;
-        var start = lower;
-        var finish = upper;
+        Value start = lower;
+        Value finish = upper;
         if (start.compareTo(finish) < 1) {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            for (Value i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
                 count++;
             }
         } else {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
+            for (Value i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
                 count--;
             }
         }
@@ -634,7 +634,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @NotNull
-    private var lower() {
+    private Value lower() {
         if (reversed) {
             return range.upperEndpoint();
         } else {
@@ -643,7 +643,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @NotNull
-    private var upper() {
+    private Value upper() {
         if (reversed) {
             return range.lowerEndpoint();
         } else {

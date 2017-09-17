@@ -17,7 +17,7 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import dollar.api.var;
+import dollar.api.Value;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
 public class DollarRangeTest {
-    private static var range;
+    private static Value range;
 
     @BeforeAll
     public static void setUp() {
@@ -36,7 +36,7 @@ public class DollarRangeTest {
     @Test
     public void testBasics() {
         System.err.println(range.toVarList());
-        final var actual = DollarStatic.$list(1).$plus(DollarStatic.$(2)).$plus(DollarStatic.$(3)).$plus(DollarStatic.$(4));
+        final Value actual = DollarStatic.$list(1).$plus(DollarStatic.$(2)).$plus(DollarStatic.$(3)).$plus(DollarStatic.$(4));
         assertFalse(range.equals(actual));
         assertFalse(actual.equals(range));
         System.err.println(actual.$unwrap().getClass());

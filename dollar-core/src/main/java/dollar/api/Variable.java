@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class Variable {
     @Nullable
-    private final var constraint;
+    private final Value constraint;
     @Nullable
     private final SubType constraintSource;
     private final boolean fixed;
@@ -32,9 +32,9 @@ public final class Variable {
     private final long thread;
     private boolean isVolatile;
     @NotNull
-    private var value;
+    private Value value;
 
-    private Variable(@Nullable var constraint,
+    private Variable(@Nullable Value constraint,
                      @Nullable SubType constraintSource,
                      boolean fixed,
                      boolean numeric,
@@ -43,7 +43,7 @@ public final class Variable {
                      boolean readonly,
                      long thread,
                      boolean isVolatile,
-                     @NotNull var value) {
+                     @NotNull Value value) {
         this.constraint = constraint;
         this.constraintSource = constraintSource;
         this.fixed = fixed;
@@ -56,7 +56,7 @@ public final class Variable {
         this.value = value;
     }
 
-    public Variable(@NotNull var value, boolean pure, boolean numeric, boolean parameter) {
+    public Variable(@NotNull Value value, boolean pure, boolean numeric, boolean parameter) {
         this.parameter = parameter;
         if (!parameter) {
             throw new AssertionError("Wrong constructor for non parameters");
@@ -71,8 +71,8 @@ public final class Variable {
         thread = Thread.currentThread().getId();
     }
 
-    public Variable(@NotNull var value,
-                    @Nullable var constraint,
+    public Variable(@NotNull Value value,
+                    @Nullable Value constraint,
                     @Nullable SubType constraintSource,
                     boolean numeric,
                     boolean parameter) {
@@ -87,9 +87,9 @@ public final class Variable {
         thread = Thread.currentThread().getId();
     }
 
-    public Variable(@NotNull var value,
+    public Variable(@NotNull Value value,
                     @NotNull VarFlags varFlags,
-                    @Nullable var constraint,
+                    @Nullable Value constraint,
                     @Nullable SubType constraintSource,
                     boolean parameter) {
         numeric = varFlags.isNumeric();
@@ -104,12 +104,12 @@ public final class Variable {
         thread = Thread.currentThread().getId();
     }
 
-    public Variable copy(@NotNull var var) {
-        return new Variable(constraint, constraintSource, fixed, numeric, parameter, pure, readonly, thread, isVolatile, var);
+    public Variable copy(@NotNull Value Value) {
+        return new Variable(constraint, constraintSource, fixed, numeric, parameter, pure, readonly, thread, isVolatile, Value);
     }
 
     @Nullable
-    public var getConstraint() {
+    public Value getConstraint() {
         return constraint;
     }
 
@@ -123,11 +123,11 @@ public final class Variable {
     }
 
     @NotNull
-    public var getValue() {
+    public Value getValue() {
         return value;
     }
 
-    public void setValue(@NotNull var value) {
+    public void setValue(@NotNull Value value) {
         this.value = value;
     }
 

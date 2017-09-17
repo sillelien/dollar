@@ -18,8 +18,8 @@ package dollar.internal.runtime.script.parser.scope;
 
 import dollar.api.DollarClass;
 import dollar.api.Scope;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
-import dollar.api.var;
 import dollar.internal.runtime.script.obj.DollarObject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -34,13 +34,13 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(ClassScopeFactory.class);
     @NotNull
-    private final List<var> expression;
+    private final List<Value> expression;
     @NotNull
     private final String name;
 
     public ClassScopeFactory(@NotNull Scope parent,
                              @NotNull String name,
-                             @NotNull List<var> expression,
+                             @NotNull List<Value> expression,
                              boolean root,
                              boolean parallel) {
 
@@ -50,13 +50,13 @@ public class ClassScopeFactory implements DollarClass {
 
     @NotNull
     @Override
-    public var instance(List<var> params) {
+    public Value instance(List<Value> params) {
         ScriptScope subScope = new ScriptScope(util().scope(), "class-" + name, false, true);
         return util().inScope(true, subScope, scope -> {
             util().addParameterstoCurrentScope(scope, params);
-            var constructor = DollarFactory.fromList(expression.stream().map(var::$fixDeep).collect(Collectors.toList()));
+            Value constructor = DollarFactory.fromList(expression.stream().map(Value::$fixDeep).collect(Collectors.toList()));
 //            System.err.println(scope.variables());
-            return (var) new DollarObject(name, constructor, scope.variables());
+            return (Value) new DollarObject(name, constructor, scope.variables());
         }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
     }
 

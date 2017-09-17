@@ -19,10 +19,10 @@ package dollar.api.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
+import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonObject;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -40,25 +40,25 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $append(@NotNull var value) {
+    public Value $append(@NotNull Value value) {
         return DollarFactory.fromValue(Arrays.asList(this, value));
     }
 
     @NotNull
     @Override
-    public var $containsKey(@NotNull var value) {
+    public Value $containsKey(@NotNull Value value) {
         return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
-    public var $containsValue(@NotNull var value) {
+    public Value $containsValue(@NotNull Value value) {
         return DollarStatic.$(this.value.equals(value));
     }
 
     @NotNull
     @Override
-    public var $get(@NotNull var rhs) {
+    public Value $get(@NotNull Value rhs) {
         if (equals(rhs)) {
             return DollarFactory.wrap(this);
         } else if (rhs.integer() && (rhs.toInteger() == 0)) {
@@ -71,45 +71,45 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @Override
     @NotNull
-    public var $has(@NotNull var key) {
+    public Value $has(@NotNull Value key) {
         return DollarStatic.$(equals(key));
     }
 
     @NotNull
     @Override
-    public var $insert(@NotNull var value, int position) {
+    public Value $insert(@NotNull Value value, int position) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
     }
 
     @NotNull
     @Override
-    public var $isEmpty() {
+    public Value $isEmpty() {
         return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
+    public Value $plus(@NotNull Value rhs) {
         throw new DollarFailureException(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $prepend(@NotNull var value) {
+    public Value $prepend(@NotNull Value value) {
         return DollarFactory.fromValue(Arrays.asList(value, this));
     }
 
     @NotNull
     @Override
-    public var $remove(@NotNull var value) {
+    public Value $remove(@NotNull Value value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
     }
 
     @Override
     @NotNull
-    public var $removeByKey(@NotNull String value) {
+    public Value $removeByKey(@NotNull String value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
 
@@ -117,13 +117,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @Override
     @NotNull
-    public var $set(@NotNull var key, @NotNull Object value) {
+    public Value $set(@NotNull Value key, @NotNull Object value) {
         throw new DollarFailureException(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $size() {
+    public Value $size() {
         return DollarStatic.$(1);
     }
 
@@ -180,73 +180,73 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
+    public ImmutableList<Value> toVarList() {
         return ImmutableList.of(this);
     }
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> toVarMap() {
+    public ImmutableMap<Value, Value> toVarMap() {
         return ImmutableMap.of($get(DollarStatic.$("value")), this);
     }
 
     @NotNull
     @Override
-    public var $avg(boolean parallel) {
+    public Value $avg(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $copy() {
+    public Value $copy() {
         return DollarFactory.fromValue(value);
     }
 
     @NotNull
     @Override
-    public var $max(boolean parallel) {
+    public Value $max(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $min(boolean parallel) {
+    public Value $min(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $product(boolean parallel) {
+    public Value $product(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $reverse(boolean parallel) {
+    public Value $reverse(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $sort(boolean parallel) {
+    public Value $sort(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
+    public Stream<Value> $stream(boolean parallel) {
         return Stream.of(this);
     }
 
     @NotNull
     @Override
-    public var $sum(boolean parallel) {
+    public Value $sum(boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $unique(boolean parallel) {
+    public Value $unique(boolean parallel) {
         return this;
     }
 

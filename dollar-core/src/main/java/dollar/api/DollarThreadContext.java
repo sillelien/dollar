@@ -40,13 +40,13 @@ public class DollarThreadContext {
     @Nullable
     private DollarParser parser;
     @Nullable
-    private var passValue;
+    private Value passValue;
     @Nullable
     private Source source;
     @NotNull
     private String threadKey = UUID.randomUUID().toString();
 
-    private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @Nullable var passValue,
+    private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @Nullable Value passValue,
                                 @NotNull String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
@@ -109,11 +109,11 @@ public class DollarThreadContext {
 
 
     @Nullable
-    public var passValue() {
+    public Value passValue() {
         return passValue;
     }
 
-    public void passValue(@NotNull var passValue) {
+    public void passValue(@NotNull Value passValue) {
         this.passValue = passValue;
     }
 

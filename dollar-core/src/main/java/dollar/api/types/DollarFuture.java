@@ -16,7 +16,7 @@
 
 package dollar.api.types;
 
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,14 +27,14 @@ import java.util.concurrent.Future;
 public class DollarFuture implements java.lang.reflect.InvocationHandler {
 
     @NotNull
-    private Future<var> value = new CompletableFuture<>();
+    private Future<Value> value = new CompletableFuture<>();
 
     /**
      * Instantiates a new DollarFuture
      *
      * @param value the value
      */
-    public DollarFuture(@NotNull Future<var> value) {
+    public DollarFuture(@NotNull Future<Value> value) {
         this.value = value;
     }
 

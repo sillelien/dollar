@@ -18,10 +18,10 @@ package dollar.uri.mapdb;
 
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
+import dollar.api.Value;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import dollar.api.uri.URI;
-import dollar.api.var;
 import dollar.internal.mapdb.BTreeMap;
 import dollar.internal.mapdb.DB;
 import dollar.internal.mapdb.MapModificationListener;
@@ -34,14 +34,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static dollar.api.DollarStatic.$;
 
-public class MapDBMapURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
+public class MapDBMapURI extends AbstractMapDBURI implements MapModificationListener<Value, Value> {
 
     @NotNull
-    private static final ConcurrentHashMap<String, MapListener<var, var, var>>
+    private static final ConcurrentHashMap<String, MapListener<Value, Value, Value>>
             subscribers =
             new ConcurrentHashMap<>();
     @NotNull
-    private final BTreeMap<var, var> bTreeMap;
+    private final BTreeMap<Value, Value> bTreeMap;
 
     public MapDBMapURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
@@ -50,24 +50,15 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
 
     @NotNull
     @Override
-    public var all() {
-        HashMap<var, var> result = new HashMap<>(bTreeMap);
+    public Value all() {
+        HashMap<Value, Value> result = new HashMap<>(bTreeMap);
         return DollarFactory.fromValue(result);
-    }
-
-    @Override
-    public var write(@NotNull var value, boolean blocking, boolean mutating) {
-        if (value.pair()) {
-            return set($(value.$pairKey()), value.$pairValue());
-        } else {
-            throw new UnsupportedOperationException("Can only write pairs to a map");
-        }
     }
 
     @NotNull
     @Override
-    public var drain() {
-        HashMap<var, var> result = new HashMap<>(bTreeMap);
+    public Value drain() {
+        HashMap<Value, Value> result = new HashMap<>(bTreeMap);
         bTreeMap.clear();
         tx.commit();
         return DollarFactory.fromValue(result);
@@ -75,30 +66,30 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
     }
 
     @Override
-    public var get(@NotNull var key) {
+    public Value get(@NotNull Value key) {
         return bTreeMap.get(key.$fixDeep());
     }
 
     @NotNull
     @Override
-    public var read(boolean blocking, boolean mutating) {
+    public Value read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var remove(@NotNull var v) {
+    public Value remove(@NotNull Value v) {
         return bTreeMap.remove(v.$fixDeep());
 
     }
 
     @NotNull
     @Override
-    public var removeValue(@NotNull var v) {
+    public Value removeValue(@NotNull Value v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var set(@NotNull var key, @NotNull var value) {
+    public Value set(@NotNull Value key, @NotNull Value value) {
         if (!value.isVoid()) {
             return bTreeMap.put(key, value.$fixDeep());
         } else {
@@ -127,18 +118,27 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
 
     @Override
     public void unsubscribe(@NotNull String subId) {
-       subscribers.remove(subId);
+        subscribers.remove(subId);
+    }
+
+    @Override
+    public Value write(@NotNull Value value, boolean blocking, boolean mutating) {
+        if (value.pair()) {
+            return set($(value.$pairKey()), value.$pairValue());
+        } else {
+            throw new UnsupportedOperationException("Can only write pairs to a map");
+        }
     }
 
     @NotNull
-    private BTreeMap<var, var> getTreeMap(@NotNull DB d) {
+    private BTreeMap<Value, Value> getTreeMap(@NotNull DB d) {
         return bTreeMap;
     }
 
     @Override
-    public void modify(@NotNull var key, @Nullable var oldValue, @Nullable var newValue, boolean triggered) {
-        for (MapListener<var, var, var> listener : subscribers.values()) {
-            listener.apply(key,oldValue,newValue);
+    public void modify(@NotNull Value key, @Nullable Value oldValue, @Nullable Value newValue, boolean triggered) {
+        for (MapListener<Value, Value, Value> listener : subscribers.values()) {
+            listener.apply(key, oldValue, newValue);
         }
     }
 }

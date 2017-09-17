@@ -17,13 +17,13 @@
 package dollar;
 
 import dollar.api.Pipeable;
-import dollar.api.var;
+import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 public class TestPipe implements Pipeable {
     @NotNull
     @Override
-    public var pipe(var... in) throws Exception {
+    public Value pipe(Value... in) throws Exception {
         return in[0].$("hello", "world");
     }
 }

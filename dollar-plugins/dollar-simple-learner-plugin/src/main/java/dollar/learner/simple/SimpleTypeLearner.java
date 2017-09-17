@@ -20,12 +20,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.Source;
 import dollar.api.script.TypeLearner;
 import dollar.api.types.prediction.CountBasedTypePrediction;
-import dollar.api.var;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +68,7 @@ public class SimpleTypeLearner implements TypeLearner {
         return this;
     }
 
-    private String key(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs) {
+    private String key(@NotNull String name, @NotNull Source source, @NotNull List<Value> inputs) {
         return name + "(" + inputs.stream().limit(30).filter(Objects::nonNull).limit(10).map(
                 i -> (i.$type() != null) ? i.$type() : Type._ANY).map(
                 Type::toString).collect(
@@ -76,7 +76,7 @@ public class SimpleTypeLearner implements TypeLearner {
     }
 
     @Override
-    public void learn(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs, @NotNull Type type) {
+    public void learn(@NotNull String name, @NotNull Source source, @NotNull List<Value> inputs, @NotNull Type type) {
         String key = key(name, source, inputs);
         TypeScoreMap typeScoreMap = map.get(key);
         if (typeScoreMap == null) {
@@ -89,7 +89,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Nullable
     @Override
-    public TypePrediction predict(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs) {
+    public TypePrediction predict(@NotNull String name, @NotNull Source source, @NotNull List<Value> inputs) {
         String key = key(name, source, inputs);
         TypeScoreMap typeAtomicLongMap = map.get(key);
         if (typeAtomicLongMap == null) {

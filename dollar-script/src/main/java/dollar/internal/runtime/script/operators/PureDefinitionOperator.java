@@ -19,12 +19,12 @@ package dollar.internal.runtime.script.operators;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
+import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
-import dollar.api.var;
 import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.parser.Func;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -41,7 +41,7 @@ import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 import static java.util.Collections.singletonList;
 
-public class PureDefinitionOperator implements Function<Token, var> {
+public class PureDefinitionOperator implements Function<Token, Value> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DefinitionOperator");
     private final boolean def;
@@ -55,7 +55,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
 
     @Override
     @Nullable
-    public var apply(@NotNull Token token) {
+    public Value apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         if (objects == null) {
             return null;
@@ -64,28 +64,28 @@ public class PureDefinitionOperator implements Function<Token, var> {
         final Object exportObj = objects[0];
 
 
-        var value;
-        var varName;
-        final var typeConstraintObj;
+        Value value;
+        Value valueName;
+        final Value typeConstraintObj;
         if (def) {
-            varName = (var) objects[3];
-            value = (var) objects[4];
-            typeConstraintObj = (var) objects[1];
+            valueName = (Value) objects[3];
+            value = (Value) objects[4];
+            typeConstraintObj = (Value) objects[1];
 
         } else {
-            varName = (var) objects[4];
-            value = (var) objects[4];
-            typeConstraintObj = (var) objects[1];
+            valueName = (Value) objects[4];
+            value = (Value) objects[4];
+            typeConstraintObj = (Value) objects[1];
         }
 
-        @Nullable var constraint;
+        @Nullable Value constraint;
         @Nullable SubType constraintSource;
 
-        log.info("Creating pure variable {}", varName);
+        log.info("Creating pure variable {}", valueName);
         if (typeConstraintObj != null) {
             Type type = Type.of(typeConstraintObj);
             constraint = util().node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
-                                     new SourceCode(util().scope(), token), null, new ArrayList<>(),
+                                     new SourceImpl(util().scope(), token), null, new ArrayList<>(),
                                      i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
             constraintSource = new SimpleSubType(typeConstraintObj.source());
             util().checkLearntType(token, type, value, MIN_PROBABILITY);
@@ -95,14 +95,14 @@ public class PureDefinitionOperator implements Function<Token, var> {
             constraintSource = null;
         }
 
-        var node = util().node(DEFINITION, true, parser, token, singletonList(
+        Value node = util().node(DEFINITION, true, parser, token, singletonList(
                 util().constrain(scope, value, constraint, constraintSource)),
-                               i -> Func.definitionFunc(token, (exportObj != null), value, varName, constraint,
-                                                        constraintSource, parser,
-                                                        true, true)
+                                 i -> Func.definitionFunc(token, (exportObj != null), value, valueName, constraint,
+                                                          constraintSource, parser,
+                                                          true, true)
         );
 
-        node.$listen(i -> scope.notify(VarKey.of(varName)));
+        node.$listen(i -> scope.notify(VarKey.of(valueName)));
         return node;
 
     }

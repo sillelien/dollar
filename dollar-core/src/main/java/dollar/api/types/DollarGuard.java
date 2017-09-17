@@ -17,9 +17,9 @@
 package dollar.api.types;
 
 import dollar.api.DollarException;
+import dollar.api.Value;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.Guards;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,10 +31,10 @@ import java.util.Objects;
 public class DollarGuard implements java.lang.reflect.InvocationHandler {
 
     @NotNull
-    private final var in;
+    private final Value in;
 
 
-    public DollarGuard(@NotNull var in) {
+    public DollarGuard(@NotNull Value in) {
 
         this.in = in;
 

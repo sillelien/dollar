@@ -21,8 +21,8 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import dollar.api.DollarStatic;
+import dollar.api.Value;
 import dollar.api.json.JsonArray;
-import dollar.api.var;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
@@ -75,19 +75,19 @@ public class DollarOperatorsRegressionTest {
     public void regression(@NotNull String symbol,
                            @NotNull String operation,
                            @NotNull String variant,
-                           @NotNull List<List<var>> result) throws
+                           @NotNull List<List<Value>> result) throws
             IOException {
         String filename = operation + "." + variant + ".json";
         final JsonArray previous = new JsonArray(new String(ByteStreams.toByteArray(
                 getClass().getResourceAsStream("/" + filename))));
         //Use small to stop massive string creation
         final File file = new File("target", filename);
-        final var current = DollarStatic.$(result);
+        final Value current = DollarStatic.$(result);
         Files.write(current.jsonArray().encodePrettily(), file, Charset.forName("utf-8"));
         System.out.println(file.getAbsolutePath());
         SortedSet<String> typeComparison = new TreeSet<>();
         SortedSet<String> humanReadable = new TreeSet<>();
-        for (List<var> res : result) {
+        for (List<Value> res : result) {
             if (res.size() != 3) {
                 throw new IllegalStateException(res.toString());
             }
@@ -119,21 +119,21 @@ public class DollarOperatorsRegressionTest {
 
     @Test
     public void testDivide() throws IOException {
-        final Function<List<var>, var> operation = v -> v.get(0).$divide(v.get(1));
+        final Function<List<Value>, Value> operation = v -> v.get(0).$divide(v.get(1));
         regression("/", "divide", "all", testBinary(allValues(), noSmallDecimals(), operation));
         regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
     }
 
     @Test
     public void testMinus() throws IOException {
-        final Function<List<var>, var> operation = v -> v.get(0).$minus(v.get(1));
+        final Function<List<Value>, Value> operation = v -> v.get(0).$minus(v.get(1));
         regression("-", "minus", "small", testBinary(small(), small(), operation));
         regression("-", "minus", "minimal", testBinary(allValues(), allValues(), operation));
     }
 
     @Test
     public void testPlus() throws IOException {
-        final Function<List<var>, var> operation = v -> v.get(0).$plus(v.get(1));
+        final Function<List<Value>, Value> operation = v -> v.get(0).$plus(v.get(1));
         regression("+", "plus", "all", testBinary(allValues(), allValues(), operation));
         regression("+", "plus", "minimal", testBinary(minimal(), minimal(), operation));
     }

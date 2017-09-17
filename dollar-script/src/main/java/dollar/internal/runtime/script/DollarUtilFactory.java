@@ -22,12 +22,12 @@ import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.Value;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
-import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -35,7 +35,7 @@ import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import dollar.internal.runtime.script.parser.Op;
-import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceImpl;
 import dollar.internal.runtime.script.parser.SourceNode;
 import dollar.internal.runtime.script.parser.SourceNodeOptions;
 import dollar.internal.runtime.script.parser.scope.PureScope;
@@ -81,12 +81,12 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
-    public void addParameterstoCurrentScope(@NotNull Scope scope, @NotNull List<var> parameters) {
+    public void addParameterstoCurrentScope(@NotNull Scope scope, @NotNull List<Value> parameters) {
         //Add the special $* value for all the parameters
         int count = 0;
-        List<var> fixedParams = new ArrayList<>();
-        for (var parameter : parameters) {
-            var fixedParam = parameter.$fix(1, false);
+        List<Value> fixedParams = new ArrayList<>();
+        for (Value parameter : parameters) {
+            Value fixedParam = parameter.$fix(1, false);
             fixedParams.add(fixedParam);
             scope.parameter(VarKey.of(++count), fixedParam);
 
@@ -110,17 +110,17 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
-    public void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull var rhs, @NotNull Double threshold) {
+    public void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull Value rhs, @NotNull Double threshold) {
         final TypePrediction prediction = rhs.predictType();
         if ((type != null) && (prediction != null)) {
             final Double probability = prediction.probability(type);
-            log.info("Predicted {} at {}", prediction.probableType(), (new SourceCode(scope(),
+            log.info("Predicted {} at {}", prediction.probableType(), (new SourceImpl(scope(),
                                                                                       token)).getShortSourceMessage());
             if ((probability < threshold) && !prediction.empty()) {
                 log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
                          prediction.probableType(),
                          (int) (prediction.probability(prediction.probableType()) * 100),
-                         new SourceCode(scope(), token).getSourceMessage()
+                         new SourceImpl(scope(), token).getSourceMessage()
                 );
                 if (getConfig().failFast()) {
                     throw new DollarScriptException(format(
@@ -133,10 +133,10 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @NotNull
     @Override
-    public var constrain(@NotNull Scope scope,
-                         @NotNull var value,
-                         @Nullable var constraint,
-                         @Nullable SubType label) {
+    public Value constrain(@NotNull Scope scope,
+                           @NotNull Value value,
+                           @Nullable Value constraint,
+                           @Nullable SubType label) {
         SubType valueLabel = value.constraintLabel();
         if (!Objects.equals(valueLabel, label)) {
             if ((label != null) && (valueLabel != null) && !valueLabel.isEmpty()) {
@@ -172,27 +172,27 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     /**
-     * Fix var.
+     * Fix Value.
      *
      * @param v        the v
      * @param parallel Should execution be in parallel?
-     * @return the var
+     * @return the Value
      */
     @Override
     @NotNull
-    public var fix(@Nullable var v, boolean parallel) {
+    public Value fix(@Nullable Value v, boolean parallel) {
         return (v != null) ? wrap(v.$fix(parallel)) : $void();
     }
 
     /**
-     * Fix var.
+     * Fix Value.
      *
      * @param v the v
-     * @return the var
+     * @return the Value
      */
     @Override
     @NotNull
-    public var fix(@Nullable var v) {
+    public Value fix(@Nullable Value v) {
         return (v != null) ? wrap(v.$fix(false)) : $void();
     }
 
@@ -256,12 +256,12 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var getVar(@NotNull VarKey key,
-                      @NotNull UUID id,
-                      @NotNull Scope scopeForKey,
-                      @NotNull Source sourceCode,
-                      boolean pure,
-                      @NotNull var node) {
+    public Value getVar(@NotNull VarKey key,
+                        @NotNull UUID id,
+                        @NotNull Scope scopeForKey,
+                        @NotNull Source sourceCode,
+                        boolean pure,
+                        @NotNull Value node) {
         log.debug("Listening to scope {} for key {}", scopeForKey, key);
         scopeForKey.listen(key, id.toString(), node);
         Variable v = scopeForKey.variable(key);
@@ -375,18 +375,18 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @NotNull
     @Override
-    public var node(@NotNull Op operation,
-                    @NotNull String name,
-                    boolean pure,
-                    @NotNull SourceNodeOptions sourceNodeOptions,
-                    @NotNull DollarParser parser,
-                    @NotNull Source source,
-                    @Nullable Type suggestedType, @NotNull List<var> inputs,
-                    @NotNull Pipeable pipeable) {
+    public Value node(@NotNull Op operation,
+                      @NotNull String name,
+                      boolean pure,
+                      @NotNull SourceNodeOptions sourceNodeOptions,
+                      @NotNull DollarParser parser,
+                      @NotNull Source source,
+                      @Nullable Type suggestedType, @NotNull List<Value> inputs,
+                      @NotNull Pipeable pipeable) {
 
-        var result = wrap((var) Proxy.newProxyInstance(
+        Value result = wrap((Value) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
+                new Class<?>[]{Value.class},
                 new SourceNode(pipeable, source, inputs, name, parser,
                                sourceNodeOptions, createId(name), pure, operation)));
 
@@ -394,7 +394,7 @@ public final class DollarUtilFactory implements DollarUtil {
             if (suggestedType != null) {
                 result.meta(TYPE_HINT, suggestedType);
             } else {
-                result.meta(TYPE_HINT, operation.typeFor(inputs.toArray(new var[inputs.size()])));
+                result.meta(TYPE_HINT, operation.typeFor(inputs.toArray(new Value[inputs.size()])));
             }
             return result;
         } catch (RuntimeException e) {
@@ -404,38 +404,38 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var node(@NotNull Op operation,
-                    boolean pure,
-                    @NotNull DollarParser parser,
-                    @NotNull Source source,
-                    @NotNull List<var> inputs,
-                    @NotNull Pipeable pipeable) {
+    public Value node(@NotNull Op operation,
+                      boolean pure,
+                      @NotNull DollarParser parser,
+                      @NotNull Source source,
+                      @NotNull List<Value> inputs,
+                      @NotNull Pipeable pipeable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, null, inputs, pipeable);
     }
 
     @Override
     @NotNull
-    public var node(@NotNull Op operation,
-                    boolean pure,
-                    @NotNull DollarParser parser,
-                    @NotNull Token token,
-                    @NotNull List<var> inputs,
-                    @NotNull Pipeable callable) {
+    public Value node(@NotNull Op operation,
+                      boolean pure,
+                      @NotNull DollarParser parser,
+                      @NotNull Token token,
+                      @NotNull List<Value> inputs,
+                      @NotNull Pipeable callable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                    new SourceCode(scope(), token), null, inputs, callable);
+                    new SourceImpl(scope(), token), null, inputs, callable);
     }
 
     @Override
     @NotNull
-    public var node(@NotNull Op operation,
-                    @NotNull String name,
-                    boolean pure,
-                    @NotNull DollarParser parser,
-                    @NotNull Token token,
-                    @NotNull List<var> inputs,
-                    @NotNull Pipeable callable) {
+    public Value node(@NotNull Op operation,
+                      @NotNull String name,
+                      boolean pure,
+                      @NotNull DollarParser parser,
+                      @NotNull Token token,
+                      @NotNull List<Value> inputs,
+                      @NotNull Pipeable callable) {
         return node(operation, name, pure, operation.nodeOptions(), parser,
-                    new SourceCode(scope(), token), null, inputs, callable);
+                    new SourceImpl(scope(), token), null, inputs, callable);
     }
 
     @Override
@@ -458,15 +458,15 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation, @NotNull String name,
-                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                            @NotNull DollarParser parser,
-                            @NotNull Source source,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull Pipeable callable) {
-        final var node = node(operation, name, pure, sourceNodeOptions, parser, source, null, Arrays.asList(lhs, rhs),
-                              callable
+    public Value reactiveNode(@NotNull Op operation, @NotNull String name,
+                              boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+                              @NotNull DollarParser parser,
+                              @NotNull Source source,
+                              @NotNull Value lhs,
+                              @NotNull Value rhs,
+                              @NotNull Pipeable callable) {
+        final Value node = node(operation, name, pure, sourceNodeOptions, parser, source, null, Arrays.asList(lhs, rhs),
+                                callable
         );
 
 
@@ -477,15 +477,15 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation,
-                            boolean pure,
-                            @NotNull Token token,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
+    public Value reactiveNode(@NotNull Op operation,
+                              boolean pure,
+                              @NotNull Token token,
+                              @NotNull Value lhs,
+                              @NotNull Value rhs,
+                              @NotNull DollarParser parser,
+                              @NotNull Pipeable callable) {
         return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                            new SourceCode(scope(),
+                            new SourceImpl(scope(),
                                            token), lhs,
                             rhs, callable);
 
@@ -493,16 +493,16 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation,
-                            @NotNull String name,
-                            boolean pure,
-                            @NotNull Token token,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
+    public Value reactiveNode(@NotNull Op operation,
+                              @NotNull String name,
+                              boolean pure,
+                              @NotNull Token token,
+                              @NotNull Value lhs,
+                              @NotNull Value rhs,
+                              @NotNull DollarParser parser,
+                              @NotNull Pipeable callable) {
         return reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
-                            new SourceCode(scope(),
+                            new SourceImpl(scope(),
                                            token), lhs,
                             rhs, callable);
 
@@ -510,12 +510,12 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation,
-                            boolean pure,
-                            @NotNull DollarParser parser, @NotNull Source source,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull Pipeable callable) {
+    public Value reactiveNode(@NotNull Op operation,
+                              boolean pure,
+                              @NotNull DollarParser parser, @NotNull Source source,
+                              @NotNull Value lhs,
+                              @NotNull Value rhs,
+                              @NotNull Pipeable callable) {
         return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
                             rhs, callable);
 
@@ -523,30 +523,30 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation,
-                            boolean pure,
-                            @NotNull var lhs,
-                            @NotNull Token token,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
+    public Value reactiveNode(@NotNull Op operation,
+                              boolean pure,
+                              @NotNull Value lhs,
+                              @NotNull Token token,
+                              @NotNull DollarParser parser,
+                              @NotNull Pipeable callable) {
 
-        return reactiveNode(operation, pure, new SourceCode(scope(), token), parser, lhs, callable
+        return reactiveNode(operation, pure, new SourceImpl(scope(), token), parser, lhs, callable
         );
     }
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull Op operation,
-                            boolean pure,
-                            @NotNull Source source,
-                            @NotNull DollarParser parser,
-                            @NotNull var lhs,
-                            @NotNull Pipeable callable) {
+    public Value reactiveNode(@NotNull Op operation,
+                              boolean pure,
+                              @NotNull Source source,
+                              @NotNull DollarParser parser,
+                              @NotNull Value lhs,
+                              @NotNull Pipeable callable) {
 
-        final var node = node(operation, operation.name(),
-                              pure, operation.nodeOptions(), parser, source,
-                              null, Collections.singletonList(lhs),
-                              callable);
+        final Value node = node(operation, operation.name(),
+                                pure, operation.nodeOptions(), parser, source,
+                                null, Collections.singletonList(lhs),
+                                callable);
         lhs.$listen(i -> node.$notify());
         return node;
     }
@@ -567,14 +567,14 @@ public final class DollarUtilFactory implements DollarUtil {
     @NotNull
     public Variable setVariable(@NotNull Scope scope,
                                 @NotNull VarKey key,
-                                @NotNull var value,
+                                @NotNull Value value,
                                 @Nullable DollarParser parser,
                                 @NotNull Token token,
-                                @Nullable var useConstraint,
+                                @Nullable Value useConstraint,
                                 @Nullable SubType useSource,
                                 @NotNull VarFlags varFlags) {
 
-        Source source = new SourceCode(scope, token);
+        Source source = new SourceImpl(scope, token);
         boolean numeric = key.isNumeric();
 
 
@@ -624,16 +624,16 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public String shortHash(@NotNull Token token) {
-        return new SourceCode(scope(), token).getShortHash();
+        return new SourceImpl(scope(), token).getShortHash();
     }
 
     @Override
     @NotNull
     public Variable updateVariable(@NotNull Scope scope,
                                    @NotNull VarKey key,
-                                   @NotNull var value,
+                                   @NotNull Value value,
                                    @NotNull VarFlags varFlags,
-                                   @Nullable var useConstraint,
+                                   @Nullable Value useConstraint,
                                    @Nullable SubType useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
@@ -647,18 +647,18 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var variableNode(boolean pure, @NotNull VarKey key, @NotNull Token token, @NotNull DollarParser parser) {
+    public Value variableNode(boolean pure, @NotNull VarKey key, @NotNull Token token, @NotNull DollarParser parser) {
         return variableNode(pure, key, false, null, token, parser);
     }
 
     @Override
     @NotNull
-    public var variableNode(boolean pure, @NotNull VarKey key,
-                            boolean numeric, @Nullable var defaultValue,
-                            @NotNull Token token, @NotNull DollarParser parser) {
-        var node[] = new var[1];
+    public Value variableNode(boolean pure, @NotNull VarKey key,
+                              boolean numeric, @Nullable Value defaultValue,
+                              @NotNull Token token, @NotNull DollarParser parser) {
+        Value node[] = new Value[1];
         UUID id = UUID.randomUUID();
-        SourceCode sourceCode = new SourceCode(scope(), token);
+        SourceImpl sourceCode = new SourceImpl(scope(), token);
         node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceCode.getShortHash(), pure, parser, token,
                        $(key).$list().toVarList(),
                        (i) -> {
