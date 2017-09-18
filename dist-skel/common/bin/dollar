@@ -4,6 +4,7 @@ cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
 export PATH=$PATH:${DOLLAR_HOME}/jdk/jre/bin
 export DOLLAR_VERSION=$(cat RELEASE)
+export DOLLAR_CACHE_DIR=${HOME}/.dollar-cache/${DOLLAR_VERSION}
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
        os=linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -20,7 +21,7 @@ else
        echo "Unsupported operating system $OSTYPE would you consider porting this simple script?" && exit 1
 fi
 
-if [[ ! -f ~/.dollar-cache/jdk.downloaded ]]
+if [[ ! -f ${DOLLAR_CACHE_DIR}/jdk.downloaded ]]
 then
     echo "Dollar requires a valid Java 1.9 runtime. We'll download and install"
     echo "one that we know works with Dollar well."
@@ -34,28 +35,27 @@ then
     echo
     echo "To learn more about the Zulu JDK please visit http://zulu.org/"
     echo
-    echo "If you have any problems, please delete the ${HOME}/.dollar-cache directory"
+    echo "If you have any problems, please delete the ${DOLLAR_CACHE_DIR} directory"
     echo
     echo "This may take some time, but hey you only need to do it once."
     echo
     echo "For further information, please re-read."
     echo
     echo
-    [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+    [ -d ${DOLLAR_CACHE_DIR} ] || mkdir -p ${DOLLAR_CACHE_DIR}
     if [[ $os == "macosx" ]]
     then
         durl=http://cdn.azul.com/zulu-pre/bin/zulu9.0.0.14-ea-jdk9.0.0-macosx_x64.zip
-        [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
-        unzip -q ~/.dollar-cache/jdk.zip -d .
+        [ -f ${DOLLAR_CACHE_DIR}/jdk.zip ] || curl -L ${durl}  > ${DOLLAR_CACHE_DIR}/jdk.zip
+        unzip -q ${DOLLAR_CACHE_DIR}/jdk.zip -d .
     fi
     if [[ $os == "linux" ]]
     then
         durl=http://cdn.azul.com/zulu-pre/bin/zulu9.0.0.14-ea-jdk9.0.0-linux_x64.tar.gz
-        [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
-        tar -zxvf ~/.dollar-cache/jdk.tgz
+        [ -f ${DOLLAR_CACHE_DIR}/jdk.tgz ] || curl -L ${durl}  | tar -zxv
     fi
     mv zulu* jdk
-    touch ~/.dollar-cache/jdk.downloaded
+    touch ${DOLLAR_CACHE_DIR}/jdk.downloaded
 fi
 
 cd -  &> /dev/null
