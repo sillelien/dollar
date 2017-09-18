@@ -2,7 +2,7 @@
 set -eu
 cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
-export PATH=$PATH:${DOLLAR_HOME}/jdk/jre/bin
+export PATH=$PATH:${DOLLAR_HOME}/jdk/bin
 export DOLLAR_VERSION=$(cat RELEASE)
 export DOLLAR_CACHE_DIR=${HOME}/.dollar-cache/${DOLLAR_VERSION}
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
