@@ -13,23 +13,29 @@
 
 Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/manual/](http://sillelien.github.io/dollar/manual/)
 
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) 
+
 ![dollar](assets/gh-title-dollar.png)
 
-Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is a language built on top of the [dollar-core](https://github.com/sillelien/dollar-core) library which helps to provide a consistent view of multiple dynamic data types. 
+Dollar is a light-weight scripting language for the JVM. More specifically it is an integration centric, reactive dynamic programming language.
 
-It is being designed for the needs of server-side development such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
+It is currently being built for the needs of server-side developers and Java developers in general who need to produce quick prototypes or write simple scripts. Furthermore it is an internet centric language where JSON and URIs are first class citizens.
+
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) 
 
 **The language is currently in early but active development.**
 
-I'm also working full-time on this, if you wish to support efforts back me on [Patreon](https://www.patreon.com/neilellis):
+I'm also working full-time on this, if you wish to support my efforts then please back me on [Patreon](https://www.patreon.com/neilellis):
 
 [![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
+
+And/or star the project on GitHub.
 
 **Thanks!**
 
 ______
 
-Find out your local air quality:
+Example to find out your local air quality:
 
 ```dollar
 //First we get the Geo Location of our IP address
@@ -71,6 +77,7 @@ Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.
 
 Q&A: https://gitq.com/sillelien/dollar
  
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) 
 
 ![Maven](assets/gh-title-maven.png)
 
