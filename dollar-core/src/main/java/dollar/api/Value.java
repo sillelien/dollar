@@ -66,8 +66,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @NotNull
     @Guarded(NotNullGuard.class)
     default String $S() {
-        String s = toHumanString();
-        return (s == null) ? "" : s;
+        return toHumanString();
 
     }
 
@@ -530,7 +529,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
 
     @NotNull
     default String $serialized() {
-        return DollarFactory.toJson(this).toString();
+        return DollarFactory.serialize(this);
     }
 
     /**
@@ -556,12 +555,12 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     /**
      * Convert this object into a list of objects, basically the same as casting to a List.
      *
+     * @param parallel
      * @return a list type Value.
      */
-    @NotNull
     @Guarded(ChainGuard.class)
-    default Value $split() {
-        return DollarFactory.fromValue(toVarList());
+    default Value $split(boolean parallel) {
+        return $stream(parallel);
     }
 
     /**
@@ -571,7 +570,9 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
      * @return a stream of values.
      */
     @NotNull
-    Stream<Value> $stream(boolean parallel);
+    default Value $stream(boolean parallel) {
+        return DollarFactory.fromStream(toVarList(), parallel);
+    }
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -590,16 +591,6 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @NotNull
     @Guarded(ChainGuard.class)
     Value $sum(boolean parallel);
-
-    /**
-     * Remove whitespace before and after the first and last non-whitespace characters.
-     *
-     * @return
-     */
-    @NotNull
-    default Value $trim() {
-        return DollarFactory.fromStringValue(toString().trim());
-    }
 
     /**
      * Returns the definitive type of this object, this will trigger execution in dynamic values.
@@ -1047,6 +1038,11 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @Nullable
     default Source source() {
         return DollarStatic.context().source();
+    }
+
+    @NotNull
+    default Stream<Value> stream(boolean parallel) {
+        return toVarList().stream();
     }
 
     /**

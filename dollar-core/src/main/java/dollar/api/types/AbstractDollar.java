@@ -38,11 +38,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
@@ -85,14 +81,19 @@ public abstract class AbstractDollar implements Value {
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $all() {
-        return $void();
+        return $stream(false).$all();
     }
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $avg(boolean parallel) {
-        return $sum(parallel).$divide($size());
+        return $stream(false).$avg(parallel);
+
     }
 
     @NotNull
@@ -125,6 +126,7 @@ public abstract class AbstractDollar implements Value {
 
     @Override
     @NotNull
+    @Deprecated
     public Value $copy(@NotNull ImmutableList<Throwable> errors) {
         return DollarFactory.fromValue(toJavaObject());
     }
@@ -141,25 +143,17 @@ public abstract class AbstractDollar implements Value {
 
     @NotNull
     @Override
+    @CollectionFunction
     public Value $drain() {
         return $void();
     }
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $each(@NotNull Pipeable pipe) {
-        List<Value> result = new LinkedList<>();
-        for (Value v : toVarList()) {
-            Value res;
-            try {
-                res = pipe.pipe(v);
-            } catch (Exception e) {
-                return DollarFactory.failure(ErrorType.EXCEPTION, e, false);
-            }
-            result.add(res);
-
-        }
-        return DollarFactory.fromValue(result);
+        return $stream(false).$each(pipe);
     }
 
     @NotNull
@@ -182,14 +176,19 @@ public abstract class AbstractDollar implements Value {
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $max(boolean parallel) {
-        return $stream(parallel).max(Comparable::compareTo).orElse($void());
+        return $stream(parallel).$max(parallel);
     }
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $min(boolean parallel) {
-        return $stream(parallel).min(Comparable::compareTo).orElse($void());
+        return $stream(parallel).$min(parallel);
+
     }
 
     @NotNull
@@ -201,8 +200,10 @@ public abstract class AbstractDollar implements Value {
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $product(boolean parallel) {
-        return $stream(parallel).reduce(Value::$multiply).orElse($void());
+        return $stream(parallel).$product(parallel);
     }
 
     @NotNull
@@ -219,74 +220,34 @@ public abstract class AbstractDollar implements Value {
 
     @NotNull
     @Override
+    @CollectionFunction
     public Value $reverse(boolean parallel) {
         throw new UnsupportedOperationException("Cannot reverse a " + type());
     }
 
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $sort(boolean parallel) {
-        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
+        return $stream(parallel).$sort(parallel);
     }
 
     @NotNull
     @Override
-    public Stream<Value> $stream(boolean parallel) {
-        return toVarList().stream();
-    }
-
-    @NotNull
-    @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $sum(boolean parallel) {
-        return $stream(parallel).reduce(Value::$plus).orElse($void());
+        return $stream(parallel).$sum(parallel);
 
     }
 
-
-//    @NotNull
-//    public Value $pipe(@NotNull String label, @NotNull Pipeable pipe) {
-//        try {
-//            return pipe.pipe(this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//    }
-//
-//    @NotNull
-//    public Value $pipe(@NotNull String label, @NotNull String js) {
-//        SimpleScriptContext context = new SimpleScriptContext();
-//        Object value;
-//        try {
-//            nashorn.eval("Value $=" + toJsonObject() + ";", context);
-//            value = nashorn.eval(js, context);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//        return DollarFactory.fromValue(value, ImmutableList.of());
-//    }
-//
-//    @NotNull
-//    public Value $pipe(@NotNull Class<? extends Pipeable> clazz) {
-//        DollarStatic.threadContext.get().passValue($copy());
-//        Pipeable script = null;
-//        try {
-//            script = clazz.newInstance();
-//        } catch (InstantiationException e) {
-//            return DollarStatic.handleError(e.getCause(), this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//        try {
-//            return script.pipe(this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//    }
-
     @NotNull
     @Override
+    @StreamFunction
+    @CollectionFunction
     public Value $unique(boolean parallel) {
-        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
+        return $stream(parallel).$unique(parallel);
     }
 
     @NotNull

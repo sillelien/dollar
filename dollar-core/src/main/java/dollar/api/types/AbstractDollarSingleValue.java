@@ -143,6 +143,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
         return 1;
     }
 
+    @Override
+    public @NotNull Stream<Value> stream(boolean parallel) {
+        return Stream.of(this);
+    }
+
     @NotNull
     @Override
     public String toHumanString() {
@@ -234,8 +239,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public Stream<Value> $stream(boolean parallel) {
-        return Stream.of(this);
+    public Value $stream(boolean parallel) {
+        return DollarFactory.fromValue(Stream.of(this));
     }
 
     @NotNull

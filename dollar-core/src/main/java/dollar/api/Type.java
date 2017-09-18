@@ -83,6 +83,11 @@ public final class Type {
      * The constant STRING.
      */
     @NotNull
+    public static final Type _STREAM = new Type("Stream");
+    /**
+     * The constant STRING.
+     */
+    @NotNull
     public static final Type _STRING = new Type("String");
     /**
      * The constant URI.

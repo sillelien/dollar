@@ -113,7 +113,7 @@ public class HttpURIHandler implements URIHandler {
     @Override
     public Value read(boolean blocking, boolean mutating) {
         try {
-            return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
+            return DollarFactory.fromIOStream(SerializedType.JSON, Unirest.get(uri.toString())
                                                                          .header("Accept", "application/json")
                                                                          .asJson().getRawBody());
         } catch (UnirestException | IOException e) {

@@ -44,7 +44,7 @@ public class DollarArrayTest {
         assertTrue(value instanceof List);
         assertEquals("[ \"Neil\", \"Dimple\", \"Charlie\" ]", list.toString());
         assertEquals("[Neil, Dimple, Charlie]", value.toString());
-        assertTrue(list.$stream(false).anyMatch((i) -> i.equalsString("Neil")));
+        assertTrue(list.stream(false).anyMatch((i) -> i.equalsString("Neil")));
     }
 
 

@@ -306,9 +306,10 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public Stream<Value> $stream(boolean parallel) {
-        return Stream.empty();
+    public Value $stream(boolean parallel) {
+        return DollarFactory.fromStream(Stream.empty());
     }
+
 
     @Override
     public int hashCode() {

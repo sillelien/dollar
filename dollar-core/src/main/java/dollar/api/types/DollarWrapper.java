@@ -379,7 +379,7 @@ public class DollarWrapper implements Value {
 
     @NotNull
     @Override
-    public Stream<Value> $stream(boolean parallel) {
+    public Value $stream(boolean parallel) {
         return getValue().$stream(false);
     }
 
@@ -636,6 +636,11 @@ public class DollarWrapper implements Value {
     }
 
     @Override
+    public @NotNull Stream<Value> stream(boolean parallel) {
+        return getValue().stream(parallel);
+    }
+
+    @Override
     public boolean string() {
         return getValue().string();
     }
@@ -799,7 +804,7 @@ public class DollarWrapper implements Value {
         return getValue().compareTo(o.$unwrap());
     }
 
-    @Nullable
+    @NotNull
     Value getValue() {
         if (value == null) {
             throw new IllegalStateException("Value has become null!!");

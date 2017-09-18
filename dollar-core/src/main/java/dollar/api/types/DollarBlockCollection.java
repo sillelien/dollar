@@ -41,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Stream;
 
 
 //Created by BlockOperator directly now
@@ -424,13 +423,8 @@ public class DollarBlockCollection implements Value {
     }
 
     @Override
-    @NotNull
     @Guarded(ChainGuard.class)
-    public Value $split() {return getValue().$split();}
-
-    @Override
-    @NotNull
-    public Stream<Value> $stream(boolean parallel) {return getValue().$stream(parallel);}
+    public Value $split(boolean parallel) {return getValue().$split(parallel);}
 
     @NotNull
     @Override

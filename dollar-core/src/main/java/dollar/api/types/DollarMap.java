@@ -146,7 +146,7 @@ public class DollarMap extends AbstractDollar {
     @Override
     public Value $get(@NotNull Value key) {
         if (key.integer()) {
-            final Object mapKey = map.keySet().toArray()[key.toInteger()];
+            final Value mapKey = (Value) map.keySet().toArray()[key.toInteger()];
             return DollarStatic.$(mapKey, map.get(mapKey));
         } else {
             return DollarFactory.fromValue(map.get(key));
@@ -304,6 +304,7 @@ public class DollarMap extends AbstractDollar {
         return DollarStatic.$(toJavaMap().size());
     }
 
+
     @NotNull
     @Override
     public Type $type() {
@@ -354,6 +355,12 @@ public class DollarMap extends AbstractDollar {
     @Override
     public int size() {
         return map.size();
+    }
+
+    @NotNull
+    @Override
+    public Stream<Value> stream(boolean parallel) {
+        return split().values().stream();
     }
 
     @NotNull
@@ -489,12 +496,6 @@ public class DollarMap extends AbstractDollar {
     public Value $notify() {
         map.values().forEach(Value::$notify);
         return this;
-    }
-
-    @NotNull
-    @Override
-    public Stream<Value> $stream(boolean parallel) {
-        return split().values().stream();
     }
 
     @Override

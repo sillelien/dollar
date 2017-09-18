@@ -322,6 +322,12 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
+    public Stream<Value> stream(boolean parallel) {
+        return split().values().stream();
+    }
+
+    @NotNull
+    @Override
     public String toDollarScript() {
         StringBuilder builder = new StringBuilder("class ");
         builder.append(name);
@@ -451,12 +457,6 @@ public class DollarObject extends AbstractDollar {
     public Value $notify() {
         fields.values().forEach(v -> v.getValue().$notify());
         return this;
-    }
-
-    @NotNull
-    @Override
-    public Stream<Value> $stream(boolean parallel) {
-        return split().values().stream();
     }
 
     @Override

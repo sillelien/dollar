@@ -185,7 +185,7 @@ public class GithubModuleResolver implements ModuleResolver {
             classLoader =
                     DependencyRetriever.retrieve(module.$get(DollarStatic.$("dependencies"))
                                                          .$list()
-                                                         .$stream(false)
+                                                         .stream(false)
                                                          .map(t -> module.toString())
                                                          .collect(Collectors.toList()));
 

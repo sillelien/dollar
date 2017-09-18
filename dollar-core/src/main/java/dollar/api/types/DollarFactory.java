@@ -64,6 +64,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.stream.Stream;
 
 public final class DollarFactory {
 
@@ -442,6 +443,31 @@ public final class DollarFactory {
                 new DollarLambda(i -> future.get(), false)));
     }
 
+    /**
+     * From stream.
+     *
+     * @param type    the type
+     * @param rawBody the raw body
+     * @return the Value
+     * @throws IOException the iO exception
+     */
+    @NotNull
+    public static Value fromIOStream(@NotNull SerializedType type, @NotNull InputStream rawBody) throws IOException {
+        if (type == SerializedType.JSON) {
+            ObjectMapper mapper = new ObjectMapper();
+            final JsonNode jsonNode = mapper.readTree(rawBody);
+            if (jsonNode.isArray()) {
+                return create(jsonNode);
+            } else if (jsonNode.isObject()) {
+                return create(jsonNode);
+            } else {
+                throw new DollarException("Could not deserialize JSON, not array or object");
+            }
+        } else {
+            throw new DollarException("Could not deserialize " + type);
+        }
+    }
+
     @NotNull
     private static Value fromJson(@NotNull JsonObject jsonObject) {
         final Type type;
@@ -589,29 +615,12 @@ public final class DollarFactory {
         return wrap(new DollarList(ImmutableList.of(Values)));
     }
 
-    /**
-     * From stream.
-     *
-     * @param type    the type
-     * @param rawBody the raw body
-     * @return the Value
-     * @throws IOException the iO exception
-     */
-    @NotNull
-    public static Value fromStream(@NotNull SerializedType type, @NotNull InputStream rawBody) throws IOException {
-        if (type == SerializedType.JSON) {
-            ObjectMapper mapper = new ObjectMapper();
-            final JsonNode jsonNode = mapper.readTree(rawBody);
-            if (jsonNode.isArray()) {
-                return create(jsonNode);
-            } else if (jsonNode.isObject()) {
-                return create(jsonNode);
-            } else {
-                throw new DollarException("Could not deserialize JSON, not array or object");
-            }
-        } else {
-            throw new DollarException("Could not deserialize " + type);
-        }
+    public static Value fromStream(@NotNull Stream<Value> stream) {
+        return wrap(new DollarStream(stream));
+    }
+
+    public static Value fromStream(@NotNull List<Value> stream, boolean parallel) {
+        return wrap(new DollarStream(stream, parallel));
     }
 
     /**
@@ -624,7 +633,6 @@ public final class DollarFactory {
     public static Value fromStringValue(@NotNull String body) {
         return wrap(new DollarString(body));
     }
-
 
     /**
      * From uRI.
@@ -655,7 +663,6 @@ public final class DollarFactory {
             return DollarStatic.handleError(e, null);
         }
     }
-
 
     /**
      * From value.
@@ -747,7 +754,6 @@ public final class DollarFactory {
         final Object jsonObject = toJson(value.$fixDeep());
         return (jsonObject == null) ? null : jsonObject.toString();
     }
-
 
     /**
      * Serialize string.

@@ -405,7 +405,7 @@ public class DollarList extends AbstractDollar {
 
     @Override
     public int toInteger() {
-        return $stream(false).mapToInt(Value::toInteger).sum();
+        return stream(false).mapToInt(Value::toInteger).sum();
     }
 
     @NotNull
@@ -538,14 +538,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public Stream<Value> $stream(boolean parallel) {
+    public Value $stream(boolean parallel) {
         Stream<Value> stream;
         if (parallel) {
             stream = list.stream().parallel();
         } else {
             stream = list.stream();
         }
-        return stream;
+        return DollarFactory.fromStream(stream);
     }
 
     @NotNull

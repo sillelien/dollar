@@ -347,7 +347,7 @@ public final class Func {
     @NotNull
     static Value reduceFunc(boolean pure, @NotNull Value lhs, @NotNull Value rhs) {
         assert REDUCE.validForPure(pure);
-        return lhs.$list().$stream(false).reduce((x, y) -> {
+        return lhs.stream(false).reduce((x, y) -> {
             try {
                 return util().inSubScope(false, pure, REDUCE.name(), newScope -> {
                     newScope.parameter(VarKey.ONE, x);
