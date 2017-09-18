@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script.operators;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Operator;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarParserError;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.Op;
@@ -39,9 +39,9 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarUtilFactory.util;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/BinaryOp.html">BinaryOp</a> <strong class="jxr_keyword">implements</strong> BinaryOperator&lt;<strong class="jxr_keyword">var</strong>&gt;, <a href="../../../../../dollar/internal/runtime/script/api/Operator.html">Operator</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/BinaryOp.html">BinaryOp</a> <strong class="jxr_keyword">implements</strong> BinaryOperator&lt;Value&gt;, <a href="../../../../../dollar/internal/runtime/script/api/Operator.html">Operator</a> {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      @NotNull
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;Value, Value, Value&gt; function;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> immediate;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      @NotNull
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/internal/runtime/script/parser/Op.html">Op</a> operation;
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../dollar/internal/runtime/script/operators/BinaryOp.html">BinaryOp</a>(@NotNull <a href="../../../../../dollar/api/script/DollarParser.html">DollarParser</a> parser,
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>                      @NotNull <a href="../../../../../dollar/internal/runtime/script/parser/Op.html">Op</a> operation,
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      @NotNull BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function, <strong class="jxr_keyword">boolean</strong> pure) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      @NotNull BiFunction&lt;Value, Value, Value&gt; function, <strong class="jxr_keyword">boolean</strong> pure) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">this</strong>.parser = parser;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">this</strong>.operation = operation;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">this</strong>.function = function;
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../dollar/internal/runtime/script/operators/BinaryOp.html">BinaryOp</a>(<strong class="jxr_keyword">boolean</strong> immediate,
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>                      @NotNull <a href="../../../../../dollar/internal/runtime/script/parser/Op.html">Op</a> operation,
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                      @NotNull <a href="../../../../../dollar/api/script/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      @NotNull BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function, <strong class="jxr_keyword">boolean</strong> pure) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      @NotNull BiFunction&lt;Value, Value, Value&gt; function, <strong class="jxr_keyword">boolean</strong> pure) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">this</strong>.immediate = immediate;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">this</strong>.function = function;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">this</strong>.operation = operation;
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      @NotNull
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Override
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> apply(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../dollar/api/Value.html">Value</a> apply(@NotNull <a href="../../../../../dollar/api/Value.html">Value</a> lhs, @NotNull <a href="../../../../../dollar/api/Value.html">Value</a> rhs) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">if</strong> (immediate) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">return</strong> util().node(operation, pure, parser, source, Arrays.asList(lhs, rhs),
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>                                 vars -&gt; function.apply(lhs, rhs));

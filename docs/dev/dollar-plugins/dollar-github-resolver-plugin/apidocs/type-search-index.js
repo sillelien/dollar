@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.plugins.pipe","l":"GithubModuleResolver"},{"p":"dollar.plugins.pipe","l":"GitUtil"}]

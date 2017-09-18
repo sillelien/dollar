@@ -25,17 +25,17 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.api.types;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.SubType;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.DollarFailureException;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.DollarFailureException;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../dollar/api/types/ConstraintViolation.html">ConstraintViolation</a> <strong class="jxr_keyword">extends</strong> <a href="../../../dollar/api/exceptions/DollarFailureException.html">DollarFailureException</a> {
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/types/ConstraintViolation.html">ConstraintViolation</a>(@NotNull <strong class="jxr_keyword">var</strong> constrainedVar,
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>                                 @NotNull <strong class="jxr_keyword">var</strong> constraint,
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>                                 <a href="../../../dollar/api/SubType.html">SubType</a> constrainedFingerprint,
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>                                 <a href="../../../dollar/api/SubType.html">SubType</a> constraintFingerPrint) {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/types/ConstraintViolation.html">ConstraintViolation</a>(@NotNull <a href="../../../dollar/api/Value.html">Value</a> constrainedValue,
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>                                 @NotNull <a href="../../../dollar/api/Value.html">Value</a> constraint,
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>                                 @NotNull <a href="../../../dollar/api/SubType.html">SubType</a> constrainedFingerprint,
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>                                 @NotNull <a href="../../../dollar/api/SubType.html">SubType</a> constraintFingerPrint) {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>          <strong class="jxr_keyword">super</strong>(ErrorType.ASSERTION,
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>                <span class="jxr_string">"Constrained var fingerprint "</span> + constrainedFingerprint + <span class="jxr_string">" did not match constraint fingerprint for "</span> + constraintFingerPrint);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>                <span class="jxr_string">"Constrained Value fingerprint "</span> + constrainedFingerprint + <span class="jxr_string">" did not match constraint fingerprint for "</span> + constraintFingerPrint);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  }
 </pre>

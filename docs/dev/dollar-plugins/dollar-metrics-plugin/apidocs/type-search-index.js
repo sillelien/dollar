@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.monitor","l":"MetricsMonitor"}]

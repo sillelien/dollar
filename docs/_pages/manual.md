@@ -787,7 +787,7 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 var variableA="Hello World"
 
-var java = java `out=scope.get(VarKey.of("variableA"));`
+var java = java `out=in.get(0);` (variableA)
 
 java <=> "Hello World"
 
@@ -1056,7 +1056,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.219 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.208 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -1328,6 +1328,12 @@ ___
 
 **`'class' <identifier> <expression>`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -2025,6 +2031,12 @@ ___
 **`'new' <identifier> (<parameters>)`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### `not` or `!` {#op-not}
@@ -2481,17 +2493,6 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 ```
 const variableA="Hello World"
-
-
-//In this example we are accessing the scope from within Java to directly access variables in Dollar.
-//Note that the script has scope closure so all variables in both the lexical and runtime scope
-//are available.
-
-const javaTest = java`
-out=scope.get(VarKey.of("variableA"));
-`
-
-javaTest <=> "Hello World"
 
 //Now we parametrize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
 

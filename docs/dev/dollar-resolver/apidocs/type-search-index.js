@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.deps","l":"DependencyRetriever"},{"p":"dollar.deps","l":"JarFileLoader"}]

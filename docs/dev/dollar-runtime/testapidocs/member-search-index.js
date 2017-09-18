@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"dollar","c":"DollarDependenciesTest","l":"DollarDependenciesTest()"},{"p":"dollar","c":"DollarDependenciesTest","l":"setUp()"},{"p":"dollar","c":"DollarDependenciesTest","l":"testBasics()"}]

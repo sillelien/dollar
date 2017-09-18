@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script.parser;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.HasKeyword;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.HasSymbol;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.StringEscapeUtils;
@@ -62,24 +62,24 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  @SuppressWarnings({<span class="jxr_string">"UtilityClassCanBeEnum"</span>, <span class="jxr_string">"UtilityClassCanBeSingleton"</span>})
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/parser/DollarLexer.html">DollarLexer</a> {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      @NotNull
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; BUILTIN = token(<strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/DollarLexer.html">TokenTagMap</a>(<span class="jxr_string">"builtin"</span>)).map(s -&gt; {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">var</strong> v = $(s);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt; BUILTIN = token(<strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/DollarLexer.html">TokenTagMap</a>(<span class="jxr_string">"builtin"</span>)).map(s -&gt; {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <a href="../../../../../dollar/api/Value.html">Value</a> v = $(s);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          v.metaAttribute(IS_BUILTIN, s);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">return</strong> v;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      });
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @NotNull
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              DECIMAL_LITERAL =
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              Terminals.DecimalLiteral.PARSER.map(s -&gt; s.contains(<span class="jxr_string">"."</span>) ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              );
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      @NotNull
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; IDENTIFIER = identifier();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt; IDENTIFIER = identifier();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      @NotNull
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Void&gt; IGNORED =
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(<span class="jxr_string">" \t\r"</span>).many1(),
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>                 Scanners.lineComment(<span class="jxr_string">"#!"</span>)).skipMany();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      @NotNull
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt; INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              s -&gt; {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <strong class="jxr_keyword">if</strong> ((<strong class="jxr_keyword">new</strong> BigDecimal(s).compareTo(<strong class="jxr_keyword">new</strong> BigDecimal(Long.MAX_VALUE)) &gt; 0)
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>                              || (<strong class="jxr_keyword">new</strong> BigDecimal(s).compareTo(<strong class="jxr_keyword">new</strong> BigDecimal(-Long.MAX_VALUE)) &lt; 0)) {
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      @NotNull
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Terminals KEYWORDS = Terminals.operators(Symbols.KEYWORD_STRINGS);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      @NotNull
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; IDENTIFIER_KEYWORD = identifierKeyword();
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt; IDENTIFIER_KEYWORD = identifierKeyword();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      @NotNull
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      @NotNull
@@ -101,15 +101,15 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      @NotNull
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;?&gt; SEMICOLON_TERMINATOR = or(OP(SEMI_COLON).followedBy(OP(NEWLINE).many()), OP(NEWLINE).many1());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      @NotNull
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>              STRING_LITERAL =
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>              Terminals.StringLiteral.PARSER.map(DollarFactory::fromStringValue);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>      @NotNull
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;?&gt; TERMINATOR_SYMBOL = Parsers.or(OP(NEWLINE), OP(SEMI_COLON)).many1();
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>     @NotNull
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; URL = token(<strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/DollarLexer.html">TokenTagMap</a>(<span class="jxr_string">"uri"</span>)).map(DollarFactory::fromURI);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Parser&lt;Value&gt; URL = token(<strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/DollarLexer.html">TokenTagMap</a>(<span class="jxr_string">"uri"</span>)).map(DollarFactory::fromURI);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     @NotNull
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Function&lt;String, Tokens.Fragment&gt; BACKTICK_QUOTE_STRING = <strong class="jxr_keyword">new</strong> Function&lt;String, Tokens.Fragment&gt;() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Function&lt;String, Tokens.Fragment&gt; BACKTICK_QUOTE_STRING = <strong class="jxr_keyword">new</strong> Function&lt;&gt;() {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         @Override
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">public</strong> Tokens.Fragment apply(@NotNull String text) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>             <strong class="jxr_keyword">return</strong> fragment(tokenizeBackTick(text), <span class="jxr_string">"backtick"</span>);
@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>                         });
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>     }
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">static</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; identifier() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">static</strong> Parser&lt;Value&gt; identifier() {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>         <strong class="jxr_keyword">return</strong> Terminals.Identifier.PARSER.map(i -&gt; {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>             <strong class="jxr_keyword">switch</strong> (i) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a>                 <strong class="jxr_keyword">case</strong> <span class="jxr_string">"true"</span>:
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a>         });
 <a class="jxr_linenumber" name="L266" href="#L266">266</a>     }
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Parser&lt;<strong class="jxr_keyword">var</strong>&gt; identifierKeyword() {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Parser&lt;Value&gt; identifierKeyword() {
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>         <strong class="jxr_keyword">return</strong> or(KEYWORD(TRUE), KEYWORD(FALSE), KEYWORD(YES), KEYWORD(NO), KEYWORD(NULL), KEYWORD(VOID),
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>                   KEYWORD(INFINITY))
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>                        .map(i -&gt; {

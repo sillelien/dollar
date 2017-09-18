@@ -29,8 +29,8 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.Files;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.common.io.Resources;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.json.JsonArray;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.json.JsonArray;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.StringUtils;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.BeforeAll;
@@ -83,19 +83,19 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> regression(@NotNull String symbol,
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                             @NotNull String operation,
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>                             @NotNull String variant,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                             @NotNull List&lt;List&lt;<strong class="jxr_keyword">var</strong>&gt;&gt; result) <strong class="jxr_keyword">throws</strong>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                             @NotNull List&lt;List&lt;Value&gt;&gt; result) <strong class="jxr_keyword">throws</strong>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              IOException {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          String filename = operation + <span class="jxr_string">"."</span> + variant + <span class="jxr_string">".json"</span>;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">final</strong> JsonArray previous = <strong class="jxr_keyword">new</strong> JsonArray(<strong class="jxr_keyword">new</strong> String(ByteStreams.toByteArray(
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>                  getClass().getResourceAsStream(<span class="jxr_string">"/"</span> + filename))));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          <em class="jxr_comment">//Use small to stop massive string creation</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">final</strong> File file = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"target"</span>, filename);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> current = DollarStatic.$(result);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">final</strong> Value current = DollarStatic.$(result);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          Files.write(current.jsonArray().encodePrettily(), file, Charset.forName(<span class="jxr_string">"utf-8"</span>));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          System.out.println(file.getAbsolutePath());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          SortedSet&lt;String&gt; typeComparison = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          SortedSet&lt;String&gt; humanReadable = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">for</strong> (List&lt;<strong class="jxr_keyword">var</strong>&gt; res : result) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">for</strong> (List&lt;Value&gt; res : result) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">if</strong> (res.size() != 3) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(res.toString());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              }
@@ -127,21 +127,21 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>     @Test
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDivide() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;<strong class="jxr_keyword">var</strong>&gt;, <strong class="jxr_keyword">var</strong>&gt; operation = v -&gt; v.get(0).$divide(v.get(1));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;Value&gt;, Value&gt; operation = v -&gt; v.get(0).$divide(v.get(1));
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>         regression(<span class="jxr_string">"/"</span>, <span class="jxr_string">"divide"</span>, <span class="jxr_string">"all"</span>, testBinary(allValues(), noSmallDecimals(), operation));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         regression(<span class="jxr_string">"/"</span>, <span class="jxr_string">"divide"</span>, <span class="jxr_string">"minimal"</span>, testBinary(minimal(), noSmallDecimals(), operation));
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>     @Test
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMinus() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;<strong class="jxr_keyword">var</strong>&gt;, <strong class="jxr_keyword">var</strong>&gt; operation = v -&gt; v.get(0).$minus(v.get(1));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;Value&gt;, Value&gt; operation = v -&gt; v.get(0).$minus(v.get(1));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         regression(<span class="jxr_string">"-"</span>, <span class="jxr_string">"minus"</span>, <span class="jxr_string">"small"</span>, testBinary(small(), small(), operation));
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>         regression(<span class="jxr_string">"-"</span>, <span class="jxr_string">"minus"</span>, <span class="jxr_string">"minimal"</span>, testBinary(allValues(), allValues(), operation));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     }
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     @Test
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testPlus() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;<strong class="jxr_keyword">var</strong>&gt;, <strong class="jxr_keyword">var</strong>&gt; operation = v -&gt; v.get(0).$plus(v.get(1));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">final</strong> Function&lt;List&lt;Value&gt;, Value&gt; operation = v -&gt; v.get(0).$plus(v.get(1));
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>         regression(<span class="jxr_string">"+"</span>, <span class="jxr_string">"plus"</span>, <span class="jxr_string">"all"</span>, testBinary(allValues(), allValues(), operation));
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         regression(<span class="jxr_string">"+"</span>, <span class="jxr_string">"plus"</span>, <span class="jxr_string">"minimal"</span>, testBinary(minimal(), minimal(), operation));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     }

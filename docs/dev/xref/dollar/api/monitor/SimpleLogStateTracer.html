@@ -26,10 +26,10 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.StateTracer;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarList;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarMap;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarVoid;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarList;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarMap;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarVoid;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../dollar/api/monitor/SimpleLogStateTracer.html">SimpleLogStateTracer</a> <strong class="jxr_keyword">implements</strong> <a href="../../../dollar/api/StateTracer.html">StateTracer</a> {
@@ -37,13 +37,13 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">private</strong> String format(@NotNull Object value) {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          Object unwrapped;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          String formatted;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">if</strong> (value instanceof <strong class="jxr_keyword">var</strong>) {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>              unwrapped = ((<strong class="jxr_keyword">var</strong>) value).$unwrap();
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">if</strong> (value instanceof Value) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>              unwrapped = ((Value) value).$unwrap();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>              unwrapped = value;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          }
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">if</strong> ((value instanceof <strong class="jxr_keyword">var</strong>) &amp;&amp;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>                      (((<strong class="jxr_keyword">var</strong>) unwrapped).dynamic() || (unwrapped instanceof DollarList) || (unwrapped instanceof DollarMap))) {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">if</strong> ((value instanceof Value) &amp;&amp;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>                      (((<a href="../../../dollar/api/Value.html">Value</a>) unwrapped).dynamic() || (unwrapped instanceof DollarList) || (unwrapped instanceof DollarMap))) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>              formatted = <span class="jxr_string">"&lt;"</span> + unwrapped.getClass().getSimpleName() + <span class="jxr_string">"&gt;"</span>;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>              formatted = String.valueOf(value);
@@ -71,14 +71,14 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          String afterStr = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          String afterNotes = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          String beforeNotes = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">if</strong> (after instanceof <strong class="jxr_keyword">var</strong>) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">if</strong> (after instanceof Value) {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              afterStr = format(after);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>              <strong class="jxr_keyword">if</strong> (after != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                  afterStr = String.format(<span class="jxr_string">"%s(%s)"</span>, after.toString(), after.getClass().getName());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              }
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">if</strong> (before instanceof <strong class="jxr_keyword">var</strong>) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">if</strong> (before instanceof Value) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              beforeStr = format(before);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>              <strong class="jxr_keyword">if</strong> (before != <strong class="jxr_keyword">null</strong>) {

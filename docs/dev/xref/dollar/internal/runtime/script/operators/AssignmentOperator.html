@@ -28,14 +28,14 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.SubType;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.SimpleSubType;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.SourceCode;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.SourceImpl;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.jparsec.Token;
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.*;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.Collections.emptyList;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/AssignmentOperator.html">AssignmentOperator</a> <strong class="jxr_keyword">implements</strong> Function&lt;Token, Function&lt;? <strong class="jxr_keyword">super</strong> <strong class="jxr_keyword">var</strong>, ? <strong class="jxr_keyword">extends</strong> <strong class="jxr_keyword">var</strong>&gt;&gt; {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/AssignmentOperator.html">AssignmentOperator</a> <strong class="jxr_keyword">implements</strong> Function&lt;Token, Function&lt;? <strong class="jxr_keyword">super</strong> Value, ? <strong class="jxr_keyword">extends</strong> Value&gt;&gt; {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      @NotNull
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger log = LoggerFactory.getLogger(<span class="jxr_string">"AssignmentOperator"</span>);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      @NotNull
@@ -69,14 +69,14 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Override
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      @Nullable
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> Function&lt;? <strong class="jxr_keyword">super</strong> <strong class="jxr_keyword">var</strong>, ? <strong class="jxr_keyword">extends</strong> <strong class="jxr_keyword">var</strong>&gt; apply(@NotNull Token token) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> Function&lt;? <strong class="jxr_keyword">super</strong> Value, ? <strong class="jxr_keyword">extends</strong> Value&gt; apply(@NotNull Token token) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          @Nullable <a href="../../../../../dollar/api/Type.html">Type</a> type;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          Object[] objects = (Object[]) token.value();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">var</strong> constraint = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <a href="../../../../../dollar/api/Value.html">Value</a> constraint = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          @Nullable <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/SubType.html">SubType</a> constraintSource;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">if</strong> (objects[3] instanceof <strong class="jxr_keyword">var</strong>) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <a href="../../../../../dollar/internal/runtime/script/parser/SourceCode.html">SourceCode</a> meta = ((<strong class="jxr_keyword">var</strong>) objects[3]).meta(CONSTRAINT_SOURCE);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">if</strong> (objects[3] instanceof Value) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a> meta = ((Value) objects[3]).meta(CONSTRAINT_SOURCE);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              constraintSource = (meta == <strong class="jxr_keyword">null</strong>) ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> SimpleSubType(meta);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              constraintSource = <strong class="jxr_keyword">null</strong>;
@@ -86,40 +86,40 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>              type = Type.of(objects[2].toString());
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              constraint = util().node(ASSIGNMENT_CONSTRAINT, <span class="jxr_string">"assignment-constraint"</span>,
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                                       pure, NEW_SCOPE, parser,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                       <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceCode.html">SourceCode</a>(token), type, emptyList(),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                       <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a>(token), type, emptyList(),
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>                                       i -&gt; {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                           <strong class="jxr_keyword">var</strong> it = util().scope().parameter(
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                           <a href="../../../../../dollar/api/Value.html">Value</a> it = util().scope().parameter(
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                                                   VarKey.IT).getValue();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>                                           <strong class="jxr_keyword">return</strong> $(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>                                                   it.is(type) &amp;&amp; ((objects[3] == <strong class="jxr_keyword">null</strong>) || ((<strong class="jxr_keyword">var</strong>) objects[3]).isTrue()));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                                                   it.is(type) &amp;&amp; ((objects[3] == <strong class="jxr_keyword">null</strong>) || ((Value) objects[3]).isTrue()));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                                       });
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>              type = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">if</strong> (objects[3] instanceof <strong class="jxr_keyword">var</strong>) constraint = (<strong class="jxr_keyword">var</strong>) objects[3];
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">if</strong> (objects[3] instanceof Value) constraint = (Value) objects[3];
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          }
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">boolean</strong> constant;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">boolean</strong> isVolatile;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">final</strong> Object mutability = objects[1];
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">boolean</strong> declaration = (mutability != <strong class="jxr_keyword">null</strong>) || (objects[2] instanceof <strong class="jxr_keyword">var</strong>) || (objects[3] instanceof <strong class="jxr_keyword">var</strong>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">boolean</strong> declaration = (mutability != <strong class="jxr_keyword">null</strong>) || (objects[2] instanceof Value) || (objects[3] instanceof Value);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>          constant = (mutability != <strong class="jxr_keyword">null</strong>) &amp;&amp; <span class="jxr_string">"const"</span>.equals(mutability.toString());
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          isVolatile = (mutability != <strong class="jxr_keyword">null</strong>) &amp;&amp; <span class="jxr_string">"volatile"</span>.equals(mutability.toString());
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">if</strong> (((<strong class="jxr_keyword">var</strong>) objects[4]).metaAttribute(IS_BUILTIN) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">if</strong> (((Value) objects[4]).metaAttribute(IS_BUILTIN) != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(String.format(
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>                     <span class="jxr_string">"The variable '%s' cannot be assigned as this name is the name of a builtin function."</span>, objects[4]));
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>         }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/VarKey.html">VarKey</a> varName = VarKey.of((<strong class="jxr_keyword">var</strong>) objects[4]);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/VarKey.html">VarKey</a> varName = VarKey.of((Value) objects[4]);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">var</strong> finalConstraint = constraint;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">return</strong> (Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt;) rhs -&gt; {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <a href="../../../../../dollar/api/Value.html">Value</a> finalConstraint = constraint;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">return</strong> (Function&lt;Value, Value&gt;) rhs -&gt; {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             <a href="../../../../../dollar/api/Scope.html">Scope</a> scope = util().scope();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>             util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">final</strong> String op = ((<strong class="jxr_keyword">var</strong>) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">final</strong> String op = ((Value) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>             <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"when"</span>.equals(op) || <span class="jxr_string">"subscribe"</span>.equals(op)) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/SubType.html">SubType</a> useSource;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 <strong class="jxr_keyword">var</strong> useConstraint;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 <a href="../../../../../dollar/api/Value.html">Value</a> useConstraint;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>                 <strong class="jxr_keyword">if</strong> (finalConstraint != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>                     useConstraint = finalConstraint;
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>                     useSource = constraintSource;
@@ -127,14 +127,14 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                     useConstraint = scope.constraintOf(varName);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                     useSource = scope.subTypeOf(varName);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>                 }
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>                 List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs = Arrays.asList(rhs, util().constrain(scope, rhs, finalConstraint, useSource));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>                 List&lt;Value&gt; inputs = Arrays.asList(rhs, util().constrain(scope, rhs, finalConstraint, useSource));
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>                 <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"when"</span>.equals(op)) {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>                     log.debug(<span class="jxr_string">"DYNAMIC: {}"</span>, rhs.dynamic());
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>                     <strong class="jxr_keyword">return</strong> util().node(WHEN_ASSIGN, pure, parser, token, inputs,
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>                                        c -&gt; {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>                                            <strong class="jxr_keyword">var</strong> condition = (<strong class="jxr_keyword">var</strong>) objects[5];
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>                                            <strong class="jxr_keyword">var</strong> initial = rhs.$fixDeep(false);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>                                            <a href="../../../../../dollar/api/Value.html">Value</a> condition = (Value) objects[5];
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>                                            <a href="../../../../../dollar/api/Value.html">Value</a> initial = rhs.$fixDeep(false);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>                                            scope.set(varName, condition.isTrue() ? initial : $<strong class="jxr_keyword">void</strong>(), <strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>                                                      useSource,
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>                                                      <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/api/VarFlags.html">VarFlags</a>(false, isVolatile, false, pure, false,
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>                                            <strong class="jxr_keyword">return</strong> condition.$listen(
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>                                                    args -&gt; {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>                                                        <strong class="jxr_keyword">if</strong> (condition.isTrue()) {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>                                                            <strong class="jxr_keyword">var</strong> value = rhs.$fixDeep(false);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>                                                            <a href="../../../../../dollar/api/Value.html">Value</a> value = rhs.$fixDeep(false);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>                                                            util().setVariable(scope, varName,
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>                                                                               value, parser,
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>                                                                               token,
@@ -181,27 +181,27 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>                 }
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>             }
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>             <strong class="jxr_keyword">return</strong> assign(rhs, objects, finalConstraint, <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/api/VarFlags.html">VarFlags</a>(constant, isVolatile, declaration, pure),
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>                           constraintSource, scope, token, type, <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceCode.html">SourceCode</a>(util().scope(), token));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>                           constraintSource, scope, token, type, <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a>(util().scope(), token));
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         };
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     @NotNull
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">var</strong> assign(@NotNull <strong class="jxr_keyword">var</strong> rhs,
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>                        @NotNull Object[] objects,
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>                        @Nullable <strong class="jxr_keyword">var</strong> constraint,
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>                        @NotNull <a href="../../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags,
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>                        @Nullable <a href="../../../../../dollar/api/SubType.html">SubType</a> constraintSource,
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>                        @NotNull <a href="../../../../../dollar/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>                        @NotNull Token token,
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>                        @Nullable <a href="../../../../../dollar/api/Type.html">Type</a> type,
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>                        @NotNull <a href="../../../../../dollar/api/script/Source.html">Source</a> source) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../dollar/api/Value.html">Value</a> assign(@NotNull <a href="../../../../../dollar/api/Value.html">Value</a> rhs,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>                          @NotNull Object[] objects,
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>                          @Nullable <a href="../../../../../dollar/api/Value.html">Value</a> constraint,
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>                          @NotNull <a href="../../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags,
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>                          @Nullable <a href="../../../../../dollar/api/SubType.html">SubType</a> constraintSource,
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>                          @NotNull <a href="../../../../../dollar/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>                          @NotNull Token token,
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>                          @Nullable <a href="../../../../../dollar/api/Type.html">Type</a> type,
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>                          @NotNull <a href="../../../../../dollar/api/script/Source.html">Source</a> source) {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/VarKey.html">VarKey</a> varName = VarKey.of((<strong class="jxr_keyword">var</strong>) objects[4]);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/VarKey.html">VarKey</a> varName = VarKey.of((Value) objects[4]);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>         <a href="../../../../../dollar/api/Pipeable.html">Pipeable</a> pipeable = args -&gt; {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>             <a href="../../../../../dollar/api/Scope.html">Scope</a> currentScope = util().scope();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> useConstraint;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/Value.html">Value</a> useConstraint;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/SubType.html">SubType</a> useSource;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>             <a href="../../../../../dollar/api/Scope.html">Scope</a> varScope = util().getScopeForVar(pure, varName, false, util().scope());
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             <strong class="jxr_keyword">if</strong> ((constraint != <strong class="jxr_keyword">null</strong>) || (varScope == <strong class="jxr_keyword">null</strong>)) {
@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>                 useSource = varScope.subTypeOf(varName);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>             }
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>             <em class="jxr_comment">//Don't change this value, 2 is the 'instinctive' depth a programmer would expect</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> rhsFixed = rhs.$fix(2, false);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/api/Value.html">Value</a> rhsFixed = rhs.$fix(2, false);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>             <strong class="jxr_keyword">if</strong> (rhsFixed.$type() != <strong class="jxr_keyword">null</strong> &amp;&amp; type != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>                 <strong class="jxr_keyword">if</strong> (!rhsFixed.$type().canBe(type)) {

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.uri.socketio","l":"SocketIOURIFactory"},{"p":"dollar.uri.socketio","l":"SocketURIHandler"}]

@@ -26,9 +26,9 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.Variable;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.Variable;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      @NotNull
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Override
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> get(@NotNull <a href="../../../../../../dollar/api/VarKey.html">VarKey</a> key, <strong class="jxr_keyword">boolean</strong> mustFind) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/api/Value.html">Value</a> get(@NotNull <a href="../../../../../../dollar/api/VarKey.html">VarKey</a> key, <strong class="jxr_keyword">boolean</strong> mustFind) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">if</strong> (DollarStatic.getConfig().debugScope()) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>              log.info(<span class="jxr_string">"Looking up {} in {}"</span>, key, <strong class="jxr_keyword">this</strong>);

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.internal.runtime.script","l":"ParserMainTest"}]

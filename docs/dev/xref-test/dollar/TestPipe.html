@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../dollar/TestPipe.html">TestPipe</a> <strong class="jxr_keyword">implements</strong> Pipeable {
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>      @NotNull
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>      @Override
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> pipe(<strong class="jxr_keyword">var</strong>... in) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">public</strong> Value pipe(Value... in) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>          <strong class="jxr_keyword">return</strong> in[0].$(<span class="jxr_string">"hello"</span>, <span class="jxr_string">"world"</span>);
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      }
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  }

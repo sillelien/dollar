@@ -24,10 +24,10 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.jayway.restassured.RestAssured;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> io.restassured.RestAssured;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.BeforeAll;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../dollar/DollarSerializationTest.html">DollarSerializationTest</a> {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> profile;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Value profile;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">static</strong> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>          RestAssured.port = 4567;
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          System.out.println(serialized);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> Type type = profile.$type();
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          System.out.println(type);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> deserialized = DollarFactory.deserialize(serialized);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">final</strong> Value deserialized = DollarFactory.deserialize(serialized);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          System.out.println(deserialized);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          System.out.println(profile.$get($(<span class="jxr_string">"progYears"</span>)));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          assertEquals(profile, deserialized);

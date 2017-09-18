@@ -32,11 +32,11 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.ModuleResolver;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.ModuleResolver;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> dollar.deps.DependencyRetriever;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.DollarParserImpl;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.scope.FileScope;
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>             <strong class="jxr_keyword">final</strong> File moduleFile = <strong class="jxr_keyword">new</strong> File(dir, <span class="jxr_string">"module.json"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> module = DollarStatic.$(<strong class="jxr_keyword">new</strong> String(Files.readAllBytes(moduleFile.toPath())));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>             <strong class="jxr_keyword">final</strong> <a href="../../../dollar/api/Value.html">Value</a> module = DollarStatic.$(<strong class="jxr_keyword">new</strong> String(Files.readAllBytes(moduleFile.toPath())));
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>             mainFile = <strong class="jxr_keyword">new</strong> File(dir, module.$get(DollarStatic.$(<span class="jxr_string">"main"</span>)).$S());
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>             content = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(mainFile.toPath()));
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>             classLoader =
@@ -200,8 +200,8 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>         }
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">return</strong> (params) -&gt; util().inSubScope(false, false, <span class="jxr_string">"github-module"</span>, newScope -&gt; {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>             <strong class="jxr_keyword">final</strong> ImmutableMap&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; paramMap = params[0].$map().toVarMap();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">for</strong> (Map.Entry&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; entry : paramMap.entrySet()) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>             <strong class="jxr_keyword">final</strong> ImmutableMap&lt;Value, Value&gt; paramMap = params[0].$map().toVarMap();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Value, Value&gt; entry : paramMap.entrySet()) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>                 newScope.set(VarKey.of(entry.getKey()), entry.getValue(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>                              <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/VarFlags.html">VarFlags</a>(<strong class="jxr_keyword">true</strong>, false, false, false, false, false));
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             }

@@ -174,13 +174,13 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     }
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * Create a Type from a var</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * Create a Type from a Value</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">     * @param name the name of the Type</em>
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">     * @return the Type</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>     @NotNull
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../dollar/api/Type.html">Type</a> of(@NotNull <strong class="jxr_keyword">var</strong> name) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../dollar/api/Type.html">Type</a> of(@NotNull <a href="../../dollar/api/Value.html">Value</a> name) {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>         String[] split = name.$S().split(<span class="jxr_string">":"</span>);
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">if</strong> (split.length == 2) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../dollar/api/Type.html">Type</a>(split[0], split[1]);
