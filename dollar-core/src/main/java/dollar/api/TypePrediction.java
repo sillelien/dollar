@@ -30,6 +30,8 @@ public interface TypePrediction {
      */
     boolean empty();
 
+    String name();
+
     /**
      * Probability of this type being correct (0.0 - 1.0). This does not need to be accurate, just indicative. The sum
      * of the probabilities does not need to equal 1.0.

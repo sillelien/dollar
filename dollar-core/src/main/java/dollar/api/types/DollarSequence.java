@@ -26,7 +26,6 @@ import dollar.api.Signal;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.Value;
-import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,7 +114,7 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value $insert(@NotNull Value value, int position) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$insert(value, position);
     }
 
     @NotNull
@@ -165,25 +164,28 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value $prepend(@NotNull Value value) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$prepend(value);
+
     }
 
     @NotNull
     @Override
     public Value $remove(@NotNull Value value) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$remove(value);
+
     }
 
     @NotNull
     @Override
     public Value $removeByKey(@NotNull String key) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$removeByKey(key);
+
     }
 
     @NotNull
     @Override
     public Value $set(@NotNull Value key, @NotNull Object value) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$set(key, value);
     }
 
     @NotNull
@@ -218,8 +220,8 @@ public class DollarSequence extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $write(@NotNull Value value) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+    public Value $write(@NotNull Value $write) {
+        return getValue().$write($write);
     }
 
     @Override
@@ -278,7 +280,8 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value remove(@NotNull Object value) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().remove(value);
+
     }
 
     @Override
@@ -415,7 +418,8 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value $drain() {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$drain();
+
     }
 
     @NotNull
@@ -472,7 +476,7 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value $reverse(boolean parallel) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$reverse(parallel);
     }
 
     @NotNull
@@ -503,7 +507,8 @@ public class DollarSequence extends AbstractDollar {
     @NotNull
     @Override
     public Value $write(@NotNull Value value, boolean blocking, boolean mutating) {
-        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
+        return getValue().$write(value, blocking, mutating);
+
     }
 
     @NotNull

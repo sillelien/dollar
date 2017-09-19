@@ -1,23 +1,36 @@
-class MyFirstClass {
-    const intVal= 20 + $1;
-    var mutableVal= 10;
-
-    def updateMutableVal {
-        this["mutableVal"]=$1;
+class MyClass {
+    <String> name=$1;
+    <Integer> age=$2;
+    def updateAge {
+          this.age=$1
     }
-
-    def myFunction {
-        $1+" World"
-    }
-
 }
 
-var <MyFirstClass> instance= new MyFirstClass(20)
-@@ (((new MyFirstClass(10)).myFunction)("Hello"))
-(((new MyFirstClass(10)).myFunction)("Hello")) <=> "Hello World"
-(((new MyFirstClass(10)).myFunction)("Hello")) <=> "Hello World"
-(new MyFirstClass(10)).intVal <=> 30
-instance.intVal <=> 40
-//instance["mutableVal"]= 10;
-//instance.updateMutableVal(100)
-//instance.mutableVal <=> 30
+//// Creation
+
+<MyClass> clazz= new MyClass("Neil",47);
+clazz.name <=> "Neil"
+clazz.age <=> 47
+
+
+//// Member Functions and State
+
+//Objects are immutable, just like all types in Dollar
+//When you perform a mutation operation you get a new instance back with
+//the change made.
+var newClazz= clazz.updateAge(20)
+
+//So this hasn't changed
+clazz.age <=> 47
+
+
+//// Member Fields and State
+
+
+//Now try the various ways to access fields
+newClazz.age <=> 20
+var clazz2= newClazz["age"]=30
+clazz2.age <=> 30
+var clazz3= newClazz.age=40
+clazz3.age <=> 40
+

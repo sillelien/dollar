@@ -35,6 +35,11 @@ public class SingleValueTypePrediction implements TypePrediction {
         return false;
     }
 
+    @Override
+    public String name() {
+        return "single-value";
+    }
+
     @NotNull
     @Override
     public Double probability(@NotNull Type type) {

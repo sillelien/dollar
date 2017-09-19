@@ -124,8 +124,11 @@ public final class DollarUtilFactory implements DollarUtil {
                 );
                 if (getConfig().failFast()) {
                     throw new DollarScriptException(format(
-                            "Type prediction failed, was expecting %s but most likely type is %s if this prediction is wrong please add an explicit cast (using 'as %s')",
-                            type, prediction.probableType(), type.name()));
+                            "Type prediction failed, was expecting %s but most likely type is %s (%d%% certain) if this " +
+                                    "prediction is wrong please add an explicit cast (using 'as %s'). Type key was %s",
+                            type, prediction.probableType(), (int) (prediction.probability(prediction.probableType()) * 100),
+                            type.name(),
+                            prediction.name()));
                 }
             }
         }
@@ -394,7 +397,10 @@ public final class DollarUtilFactory implements DollarUtil {
             if (suggestedType != null) {
                 result.meta(TYPE_HINT, suggestedType);
             } else {
-                result.meta(TYPE_HINT, operation.typeFor(inputs.toArray(new Value[inputs.size()])));
+                Type type = operation.typeFor(inputs.toArray(new Value[inputs.size()]));
+                if (type != null) {
+                    result.meta(TYPE_HINT, type);
+                }
             }
             return result;
         } catch (RuntimeException e) {
@@ -660,7 +666,7 @@ public final class DollarUtilFactory implements DollarUtil {
         UUID id = UUID.randomUUID();
         SourceImpl sourceCode = new SourceImpl(scope(), token);
         node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceCode.getShortHash(), pure, parser, token,
-                       $(key).$list().toVarList(),
+                       $(key.toString()).$list().toVarList(),
                        (i) -> {
                            Scope scope = scope();
 

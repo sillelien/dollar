@@ -58,6 +58,11 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return values.isEmpty();
     }
 
+    @Override
+    public String name() {
+        return name;
+    }
+
     @NotNull
     @Override
     public Double probability(@NotNull Type type) {

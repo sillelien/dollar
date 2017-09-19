@@ -1,8 +1,8 @@
 class MyClass {
-    <String> name=$1 as String;
-    <Integer> age=$2 as Integer;
+    <String> name=$1;
+    <Integer> age=$2;
     def updateAge {
-          this["age"]=$1
+          this.age=$1
     }
 }
 

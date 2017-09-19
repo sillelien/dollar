@@ -54,7 +54,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
     private final String symbol;
     @NotNull
     private final OpType type;
-    @NotNull
+    @Nullable
     private final Function<Value[], Type> typeFunction;
     @Nullable
     private String bnf;
@@ -72,7 +72,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
               @Nullable Boolean pure,
               @NotNull SourceNodeOptions nodeOptions,
               @Nullable String emoji,
-              @NotNull Function<Value[], Type> typeFunction) {
+              @Nullable Function<Value[], Type> typeFunction) {
         this.type = type;
         this.typeFunction = typeFunction;
         if (emoji != null) {
@@ -334,7 +334,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
         return type;
     }
 
-    @NotNull
+    @Nullable
     public Type typeFor(@NotNull Value... Values) {
         if (typeFunction == null) {
             return null;

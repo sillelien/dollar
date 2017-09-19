@@ -705,20 +705,38 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<Function<? super Value, ? extends Value>> memberOperator(@NotNull Parser.Reference<Value> ref, boolean pure) {
         return OP(MEMBER).followedBy(OP(MEMBER).not())
-                       .next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).or(IDENTIFIER))
+                       .next(array(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).or(IDENTIFIER),
+                                   OP(ASSIGNMENT).next(ref.lazy()).optional(null)))
                        .token()
-                       .map(rhs -> lhs -> {
+                       .map(token -> lhs -> {
                            assert MEMBER.validForPure(pure);
-                           return util().reactiveNode(MEMBER, pure, rhs, lhs, (Value) rhs.value(), this,
-                                                      i -> {
+                           Object[] objects = (Object[]) token.value();
+                           Value rhs = (Value) objects[0];
+                           Value newValue = (Value) objects[1];
+                           if (newValue == null) {
+                               return util().reactiveNode(MEMBER, pure, token, lhs, rhs, this,
+                                                          i -> {
 
-                                                          util().scope().parameter(VarKey.THIS, lhs);
-                                                          Value get = lhs.$get(
-                                                                  DollarFactory.fromStringValue(
-                                                                          VarKey.removePrefix(rhs.toString())));
 
-                                                          return get.$fix(2, false);
-                                                      });
+                                                              util().scope().parameter(VarKey.THIS, lhs);
+                                                              Value get = lhs.$get(
+                                                                      DollarFactory.fromStringValue(
+                                                                              VarKey.removePrefix(rhs.toString())));
+
+                                                              return get.$fix(2, false);
+
+                                                          });
+                           } else {
+                               return util().node(MEMBER, pure, this, token, List.of(lhs, rhs),
+                                                  i -> {
+
+                                                      return lhs.$set(
+                                                              DollarFactory.fromStringValue(
+                                                                      VarKey.removePrefix(rhs.toString())), newValue.$fix(2,
+                                                                                                                          false));
+
+                                                  });
+                           }
                        });
     }
 

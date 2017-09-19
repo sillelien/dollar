@@ -435,7 +435,7 @@ public final class Symbols {
     @NotNull
     public static final Op VAR_USAGE_OP = new Op(CONTROL_FLOW, null, null, "var-usage", false, true, null, NO_PRIORITY, true,
                                                  NO_SCOPE, null,
-                                                 FIRST_TYPE_F);
+                                                 null);
     @NotNull
     public static final KeywordDef VOID = new KeywordDef("void", false, "A VOID value.", null);
     @NotNull
