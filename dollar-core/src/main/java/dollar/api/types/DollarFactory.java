@@ -616,11 +616,11 @@ public final class DollarFactory {
     }
 
     public static Value fromStream(@NotNull Stream<Value> stream) {
-        return wrap(new DollarStream(stream));
+        return wrap(new DollarSequence(stream));
     }
 
     public static Value fromStream(@NotNull List<Value> stream, boolean parallel) {
-        return wrap(new DollarStream(stream, parallel));
+        return wrap(new DollarSequence(stream, parallel));
     }
 
     /**

@@ -24,15 +24,12 @@ import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
 import dollar.api.Value;
-import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
-import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
@@ -46,11 +43,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static dollar.api.types.DollarFactory.FALSE;
 import static dollar.api.types.DollarFactory.TRUE;
-import static dollar.internal.runtime.script.DollarUtilFactory.util;
 
 public class DollarObject extends AbstractDollar {
 
@@ -59,11 +54,11 @@ public class DollarObject extends AbstractDollar {
     private final Value constructor;
     @NotNull
     private final Map<VarKey, Variable> fields = new ConcurrentHashMap<>();
-    private final boolean mutable;
     @NotNull
     private final String name;
     @NotNull
     private final Type type;
+    private boolean mutable;
 
     public DollarObject(@NotNull String name, @NotNull Value constructor,
                         @NotNull Map<VarKey, Variable> fields) {
@@ -129,13 +124,13 @@ public class DollarObject extends AbstractDollar {
     @Override
     public @NotNull
     Value $get(@NotNull Value key) {
-        return inThisScope(s -> {
-            Variable variable = fields.get(VarKey.of(key));
-            if (variable == null) {
-                throw new DollarException("No such field " + key + " in class " + name);
-            }
-            return variable.getValue();
-        });
+
+        Variable variable = fields.get(VarKey.of(key));
+        if (variable == null) {
+            throw new DollarException("No such field " + key + " in class " + name);
+        }
+        return variable.getValue();
+
     }
 
     @NotNull
@@ -250,18 +245,18 @@ public class DollarObject extends AbstractDollar {
     public @NotNull
     Value $set(@NotNull Value key, @NotNull Object value) {
         if (mutable) {
-
             Variable variable = fields.get(VarKey.of(key));
             if (variable.isReadonly()) {
                 throw new DollarScriptException("Cannot change field " + key + " in class " + name + " it is readonly (const)");
             } else {
-                variable.setValue(DollarStatic.$(value));
+                variable = variable.copy(DollarStatic.$(value));
+                fields.put(VarKey.of(key), variable);
             }
         } else {
-            throw new DollarScriptException(
-                                                   "Cannot update field " + key + " in class " + name + " all fields are immutable outside " +
-                                                           "of the " +
-                                                           "instance, use a member function to update the field.");
+            DollarObject newObject = new DollarObject(name, constructor, fields, true);
+            newObject.$set(key, value);
+            newObject.seal();
+            return newObject;
         }
         return this;
     }
@@ -318,12 +313,6 @@ public class DollarObject extends AbstractDollar {
     @Override
     public int size() {
         return fields.size();
-    }
-
-    @NotNull
-    @Override
-    public Stream<Value> stream(boolean parallel) {
-        return split().values().stream();
     }
 
     @NotNull
@@ -506,21 +495,16 @@ public class DollarObject extends AbstractDollar {
     }
 
     @NotNull
-    private Value inThisScope(@NotNull ScopeExecutable<Value> exe) {
-        ScriptScope subScope = new ScriptScope(util().scope(), "this-" + name, false, true);
-        DollarObject thisObject = new DollarObject(name, constructor, fields, true);
-        subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
-        return util().inScope(true, subScope, exe).orElseThrow(() -> new AssertionError("Optional should not be null " +
-                                                                                                "here"));
-    }
-
-    @NotNull
     private LinkedHashMap<Value, Value> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
         LinkedHashMap<Value, Value> result = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : stringObjectMap.entrySet()) {
             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
         }
         return result;
+    }
+
+    private void seal() {
+        mutable = false;
     }
 
     @NotNull

@@ -709,11 +709,16 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(rhs -> lhs -> {
                            assert MEMBER.validForPure(pure);
-                           Value result = util().reactiveNode(MEMBER, pure, rhs, lhs, (Value) rhs.value(), this,
-                                                              i -> lhs.$get(
-                                                                      DollarFactory.fromStringValue(
-                                                                              VarKey.removePrefix(rhs.toString()))));
-                           return result;
+                           return util().reactiveNode(MEMBER, pure, rhs, lhs, (Value) rhs.value(), this,
+                                                      i -> {
+
+                                                          util().scope().parameter(VarKey.THIS, lhs);
+                                                          Value get = lhs.$get(
+                                                                  DollarFactory.fromStringValue(
+                                                                          VarKey.removePrefix(rhs.toString())));
+
+                                                          return get.$fix(2, false);
+                                                      });
                        });
     }
 
@@ -1032,9 +1037,10 @@ public class DollarParserImpl implements DollarParser {
                                                               source,
                                                               lhs, expression, args -> lhs.$get(expression));
                                } else {
+
                                    return util().node(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-write", pure, NO_SCOPE, this, source,
                                                       null, asList(lhs, expression, subscript),
-                                                      i -> lhs.$set(expression, subscript));
+                                                      i -> lhs.$set(expression, subscript.$fix(1, false)));
                                }
                            };
                        });

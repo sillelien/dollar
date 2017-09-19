@@ -1,0 +1,21 @@
+class MyClass {
+    <String> name=$1 as String;
+    <Integer> age=$2 as Integer;
+    def updateAge {
+          this["age"]=$1
+    }
+}
+
+<MyClass> clazz= new MyClass("Neil",47);
+clazz.name <=> "Neil"
+clazz.age <=> 47
+
+//Objects are immutable, just like all types in Dollar
+//When you perform a mutation operation you get a new instance back with
+//the change made.
+var newClazz= clazz.updateAge(20)
+
+//So this hasn't changed
+clazz.age <=> 47
+newClazz.age <=> 20
+

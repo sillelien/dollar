@@ -232,7 +232,7 @@ public final class Symbols {
     public static final Op MEMBER = new Op(BINARY, ".", null, "member",
                                            false,
                                            true,
-                                           null, MEMBER_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
+                                           null, MEMBER_PRIORITY, true, NEW_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final Op MIN = new Op(POSTFIX, "[<]", "min", "min",
                                         false, true,

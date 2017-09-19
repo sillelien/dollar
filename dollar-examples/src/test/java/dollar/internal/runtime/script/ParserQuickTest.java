@@ -114,8 +114,8 @@ public class ParserQuickTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/quick/test_classes.ds"),
-                                                "/quick/test_classes.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/examples/op/class.ds"),
+                                                "/examples/op/class.ds",
                                                 parallel);
         } catch (Exception e) {
             log.debug(e.getMessage(), e);

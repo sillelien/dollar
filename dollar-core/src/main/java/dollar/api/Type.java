@@ -83,7 +83,7 @@ public final class Type {
      * The constant STRING.
      */
     @NotNull
-    public static final Type _STREAM = new Type("Stream");
+    public static final Type _SEQUENCE = new Type("Sequence");
     /**
      * The constant STRING.
      */

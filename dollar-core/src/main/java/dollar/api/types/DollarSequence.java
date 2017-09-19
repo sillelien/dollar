@@ -26,6 +26,7 @@ import dollar.api.Signal;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.Value;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +41,7 @@ import java.util.stream.Stream;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.DollarFactory.wrap;
 
-public class DollarStream extends AbstractDollar {
+public class DollarSequence extends AbstractDollar {
 
 
     @NotNull
@@ -48,13 +49,13 @@ public class DollarStream extends AbstractDollar {
     private final boolean parallel;
 
 
-    public DollarStream(@NotNull Stream<Value> stream) {
+    public DollarSequence(@NotNull Stream<Value> stream) {
         super();
         parallel = stream.isParallel();
         list = stream.collect(Collectors.toList());
     }
 
-    public DollarStream(@NotNull List<Value> list, boolean parallel) {
+    public DollarSequence(@NotNull List<Value> list, boolean parallel) {
         super();
         this.list = list;
         this.parallel = parallel;
@@ -105,17 +106,16 @@ public class DollarStream extends AbstractDollar {
         return getValue().$get(rhs);
     }
 
-
     @NotNull
     @Override
     public Value $has(@NotNull Value key) {
-        return DollarFactory.fromValue(getValue().$has(key));
+        return getValue().$has(key);
     }
 
     @NotNull
     @Override
     public Value $insert(@NotNull Value value, int position) {
-        return getValue().$insert(value, position);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
@@ -162,32 +162,28 @@ public class DollarStream extends AbstractDollar {
         return $append(rhs);
     }
 
-
     @NotNull
     @Override
     public Value $prepend(@NotNull Value value) {
-        ArrayList<Value> values = new ArrayList<>();
-        values.add(value);
-        values.addAll(toVarList());
-        return wrapList(values);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
     @Override
     public Value $remove(@NotNull Value value) {
-        return getValue().$remove(value);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
     @Override
     public Value $removeByKey(@NotNull String key) {
-        return getValue().$removeByKey(key);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
     @Override
     public Value $set(@NotNull Value key, @NotNull Object value) {
-        return getValue().$set(key, value);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
@@ -217,13 +213,13 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Type $type() {
-        return Type._STREAM;
+        return Type._SEQUENCE;
     }
 
     @NotNull
     @Override
     public Value $write(@NotNull Value value) {
-        return getValue().$write(value);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @Override
@@ -241,10 +237,7 @@ public class DollarStream extends AbstractDollar {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type.is(Type._STREAM)) {
-                return true;
-            }
-            if (type.is(Type._LIST)) {
+            if (type.is(Type._SEQUENCE)) {
                 return true;
             }
         }
@@ -285,7 +278,7 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Value remove(@NotNull Object value) {
-        return getValue().remove(value);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @Override
@@ -404,7 +397,7 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Value $copy() {
-        return wrap(new DollarStream(getStream(false)));
+        return wrap(new DollarSequence(getStream(false)));
     }
 
     @NotNull
@@ -422,7 +415,7 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Value $drain() {
-        return getValue().$drain();
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
@@ -479,7 +472,7 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Value $reverse(boolean parallel) {
-        return getValue().$reverse(parallel);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
@@ -510,7 +503,7 @@ public class DollarStream extends AbstractDollar {
     @NotNull
     @Override
     public Value $write(@NotNull Value value, boolean blocking, boolean mutating) {
-        return $append(value);
+        throw new DollarFailureException(ErrorType.INVALID_SEQUENCE_OPERATION);
     }
 
     @NotNull
@@ -750,12 +743,12 @@ public class DollarStream extends AbstractDollar {
 
     @NotNull
     private Value wrapList(ArrayList<Value> values) {
-        return wrap(new DollarStream(values.stream()));
+        return wrap(new DollarSequence(values.stream()));
     }
 
     @NotNull
     private Value wrapStream(Stream<Value> stream) {
-        return wrap(new DollarStream(stream));
+        return wrap(new DollarSequence(stream));
     }
 
 
