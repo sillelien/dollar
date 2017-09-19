@@ -1056,7 +1056,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.22 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.273 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -1333,6 +1333,27 @@ ___
 
 
 ```
+class MyClass {
+    <String> name=$1;
+    <Integer> age=$2;
+    def updateAge {
+          this.age=$1
+    }
+}
+
+<MyClass> clazz= new MyClass("Neil",47);
+clazz.name <=> "Neil"
+clazz.age <=> 47
+
+//Objects are immutable, just like all types in Dollar
+//When you perform a mutation operation you get a new instance back with
+//the change made.
+var newClazz= clazz.updateAge(20)
+
+//So this hasn't changed
+clazz.age <=> 47
+newClazz.age <=> 20
+
 ```
 
 ___
@@ -1903,7 +1924,7 @@ ___
 
 ### `.` (member) {#op-member}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
