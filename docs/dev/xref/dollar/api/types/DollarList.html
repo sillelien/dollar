@@ -413,7 +413,7 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 
 <a class="jxr_linenumber" name="L406" href="#L406">406</a>     @Override
 <a class="jxr_linenumber" name="L407" href="#L407">407</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> toInteger() {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         <strong class="jxr_keyword">return</strong> $stream(false).mapToInt(Value::toInteger).sum();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         <strong class="jxr_keyword">return</strong> stream(false).mapToInt(Value::toInteger).sum();
 <a class="jxr_linenumber" name="L409" href="#L409">409</a>     }
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a>     @NotNull
@@ -546,14 +546,14 @@
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 
 <a class="jxr_linenumber" name="L539" href="#L539">539</a>     @NotNull
 <a class="jxr_linenumber" name="L540" href="#L540">540</a>     @Override
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     <strong class="jxr_keyword">public</strong> Stream&lt;Value&gt; $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
 <a class="jxr_linenumber" name="L542" href="#L542">542</a>         Stream&lt;Value&gt; stream;
 <a class="jxr_linenumber" name="L543" href="#L543">543</a>         <strong class="jxr_keyword">if</strong> (parallel) {
 <a class="jxr_linenumber" name="L544" href="#L544">544</a>             stream = list.stream().parallel();
 <a class="jxr_linenumber" name="L545" href="#L545">545</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L546" href="#L546">546</a>             stream = list.stream();
 <a class="jxr_linenumber" name="L547" href="#L547">547</a>         }
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         <strong class="jxr_keyword">return</strong> stream;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromStream(stream);
 <a class="jxr_linenumber" name="L549" href="#L549">549</a>     }
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 
 <a class="jxr_linenumber" name="L551" href="#L551">551</a>     @NotNull
