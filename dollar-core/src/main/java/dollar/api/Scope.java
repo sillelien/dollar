@@ -17,6 +17,7 @@
 package dollar.api;
 
 import dollar.api.script.Source;
+import dollar.api.types.NotificationType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,7 +179,7 @@ public interface Scope {
     boolean isRoot();
 
     /**
-     * Listen to a variable ('key') if the variable changes then {@link Value#$notify()} will
+     * Listen to a variable ('key') if the variable changes then {@link Value#$notify(NotificationType, Value)} will
      * be called.
      *
      * @param key      the name of the variable

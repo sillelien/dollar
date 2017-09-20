@@ -243,9 +243,10 @@ public class DollarStatic {
     /**
      * $ fork.
      *
-     * @param source
-     * @param in
-     * @param call   the call  @return the Value
+     * @param source the source
+     * @param in     the in
+     * @param call   the call
+     * @return the Value
      */
     @NotNull
     public static Value $fork(@NotNull Source source, @NotNull Value in, @NotNull Function<Value, Value> call) {
@@ -644,6 +645,8 @@ public class DollarStatic {
 
     /**
      * The shared configuration for Dollar.
+     *
+     * @return the Configuration
      */
     @NotNull
     public static Configuration getConfig() {

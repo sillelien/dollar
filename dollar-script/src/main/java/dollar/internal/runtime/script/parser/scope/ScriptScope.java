@@ -306,7 +306,13 @@ public class ScriptScope implements Scope {
                 if (getConfig().failFast()) {
                     log.info("Fail-fast option is set");
                     try {
-                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, new File(file()));
+                        String filename = file();
+                        if (filename != null) {
+                            ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, new File(filename));
+                        } else {
+                            ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, null);
+
+                        }
                     } catch (Throwable throwable) {
                         log.error(throwable.getMessage(), throwable);
                     }

@@ -1,7 +1,10 @@
 var a= void;
 var e=0;
+var f=0;
 
-def updateE {e=$1}
+def updateE {e=$1; $1;}
+def updateF {f=$1; $1}
+def printOut {@@ $1}
 
 var collectedValues=[]
 
@@ -12,10 +15,11 @@ collect e until it == 6 unless it == 5 {
 }
 
 
-a + 2 | updateE
+a + 2 | updateE | updateF | printOut
 a= 1;
 a= 2;
 a= 3;
 a= 4;
 
-collectedValues <=> [ 3, 4, 6]
+collectedValues <-> [ 3, 4, 6]
+f <-> 6

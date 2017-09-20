@@ -875,14 +875,22 @@ public class DollarParserImpl implements DollarParser {
                            assert PIPE_OP.validForPure(pure);
                            Value rhs = (Value) token.value();
                            return lhs -> {
-                               Value node = util().node(PIPE_OP, pure, this, token, List.of(lhs),
-                                                        i -> pipeFunc(this, pure, token, lhs, rhs)
+                               Value[] node = new Value[1];
+                               node[0] = util().node(PIPE_OP, pure, this, token, List.of(lhs),
+                                                     i -> {
+                                                         lhs.$listen(args -> util().inSubScope(true, pure, "pipe-listen", scope -> {
+                                                             Value newLhs = args[0];
+                                                             node[0].$notify(UNARY_VALUE_CHANGE, pipeFunc(this, pure, token,
+                                                                                                          newLhs,
+                                                                                                          rhs).$fixDeep(false));
+                                                             return $void();
+                                                         }).get());
+
+                                                         return pipeFunc(this, pure, token, lhs, rhs);
+                                                     }
                                );
-                               lhs.$listen(args -> util().inSubScope(true, pure, "pipe-listen", scope -> pipeFunc(this, pure, token,
-                                                                                                                  args[0],
-                                                                                                                  rhs).$fixDeep(
-                                       false)).get());
-                               return node;
+
+                               return node[0];
                            };
                        });
     }

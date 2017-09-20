@@ -36,6 +36,6 @@ public interface ParserErrorHandler {
     @NotNull
     Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e);
 
-    <T extends Throwable> void handleTopLevel(@NotNull T t, @NotNull String name, @NotNull File file) throws T;
+    <T extends Throwable> void handleTopLevel(@NotNull T t, @NotNull String name, @Nullable File file) throws T;
 
 }

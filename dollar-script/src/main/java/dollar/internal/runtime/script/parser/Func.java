@@ -304,7 +304,7 @@ public final class Func {
         if (lhs.isVoid()) {
             return $void();
         }
-        util().scope().parameter(VarKey.ONE, lhs.$fixDeep(false));
+        util().scope().parameter(VarKey.ONE, lhs);
         Value rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;

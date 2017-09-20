@@ -51,7 +51,7 @@ public class SourceImpl implements Source {
         length = t.length();
         start = t.index();
         if (scope.source() == null) {
-            throw new DollarParserError("Cannot create a SourceImpl from a scope with no source: " + scope);
+            throw new DollarParserError("Cannot create a Source object from a scope with no source: " + scope);
         }
         source = scope.source();
         if (source != null) {
