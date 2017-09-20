@@ -1,0 +1,22 @@
+def printOut {
+   @@ $1
+}
+
+
+([1,2,3] ...) | printOut
+
+var e=0;
+
+def updateE {e=$1}
+
+var collectedValues=[]
+
+collect e until it == 4 unless it == 3{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+([1,2,3,4] ...) | updateE
+
+collectedValues <=> [ 1, 2, 4 ]

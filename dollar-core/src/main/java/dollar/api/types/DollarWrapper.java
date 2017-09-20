@@ -267,10 +267,9 @@ public class DollarWrapper implements Value {
         return getValue().$negate();
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
-        return getValue().$notify();
+    public Value $notify(NotificationType type, Value value) {
+        return getValue().$notify(type, value);
     }
 
     @NotNull

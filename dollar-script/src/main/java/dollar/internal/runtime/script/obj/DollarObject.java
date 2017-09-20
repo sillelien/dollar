@@ -29,6 +29,7 @@ import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
+import dollar.api.types.NotificationType;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -441,10 +442,9 @@ public class DollarObject extends AbstractDollar {
         return this;
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
-        fields.values().forEach(v -> v.getValue().$notify());
+    public Value $notify(NotificationType type, Value value) {
+//        fields.values().forEach(v -> v.getValue().$notify(NotificationType.UNARY_VALUE_CHANGE, v.getValue()));
         return this;
     }
 

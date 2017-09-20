@@ -78,6 +78,8 @@ import static com.google.common.io.Files.asCharSource;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.scripting.ScriptingSupport.compile;
+import static dollar.api.types.NotificationType.MULTI_VALUE_CHANGE;
+import static dollar.api.types.NotificationType.UNARY_VALUE_CHANGE;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.api.OperatorPriority.EQ_PRIORITY;
@@ -299,6 +301,28 @@ public class DollarParserImpl implements DollarParser {
                        });
     }
 
+    private Parser<Function<? super Value, ? extends Value>> emitOperator(@NotNull Parser.Reference<Value> ref, boolean pure) {
+        return OP(EMIT_OP).token()
+                       .map(token -> {
+                           assert EMIT_OP.validForPure(pure);
+                           return lhs -> {
+                               final Value[] node = new Value[1];
+
+                               AtomicInteger pos = new AtomicInteger(0);
+                               List<Value> values = lhs.toVarList();
+                               node[0] = util().node(EMIT_OP, pure, this, token, List.of(lhs), args -> {
+
+                                   while (pos.get() < values.size()) {
+                                       node[0].$notify(UNARY_VALUE_CHANGE, values.get(pos.getAndIncrement()));
+                                   }
+                                   return $void();
+                               });
+
+                               return node[0];
+                           };
+                       });
+    }
+
     private Parser<Value> everyExpression(@NotNull Parser<Value> expression, boolean pure) {
         return KEYWORD_NL(EVERY_OP)
                        .next(array(unitExpression(false),
@@ -500,32 +524,33 @@ public class DollarParserImpl implements DollarParser {
         table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEqualsFunc);
 
 
-        table = postfix(pure, table, DEC, (v, u) -> v.$dec());
-        table = postfix(pure, table, INC, (v, u) -> v.$inc());
+        table = postfix(pure, table, DEC, (v, s) -> v.$dec());
+        table = postfix(pure, table, INC, (v, s) -> v.$inc());
 
-        table = prefix(pure, table, NEGATE, (v, u) -> v.$negate());
-        table = prefix(pure, table, SIZE, (v, u) -> v.$size());
+        table = prefix(pure, table, NEGATE, (v, s) -> v.$negate());
+        table = prefix(pure, table, SIZE, (v, s) -> v.$size());
 
-        table = prefix(pure, table, NOT, (v, u) -> DollarStatic.$not(v));
-        table = prefix(pure, table, ERROR, (v, u) -> Func.errorFunc(v));
-        table = prefix(pure, table, TRUTHY, (v, u) -> DollarStatic.$truthy(v));
+        table = prefix(pure, table, NOT, (v, s) -> DollarStatic.$not(v));
+        table = prefix(pure, table, ERROR, (v, s) -> Func.errorFunc(v));
+        table = prefix(pure, table, TRUTHY, (v, s) -> DollarStatic.$truthy(v));
 
-        table = postfix(pure, table, MIN, (v, u) -> v.$min(false));
-        table = postfix(pure, table, MAX, (v, u) -> v.$max(false));
-        table = postfix(pure, table, SUM, (v, u) -> v.$sum(false));
-        table = postfix(pure, table, PRODUCT, (v, u) -> v.$product(false));
-        table = postfix(pure, table, SPLIT, (v, u) -> v.$list());
-        table = prefix(pure, table, SORT, (v, u) -> v.$sort(false));
-        table = postfix(pure, table, REVERSE, (v, u) -> v.$reverse(false));
-        table = postfix(pure, table, UNIQUE, (v, u) -> v.$unique(false));
-        table = postfix(pure, table, AVG, (v, u) -> v.$avg(false));
+        table = postfix(pure, table, MIN, (v, s) -> v.$min(false));
+        table = postfix(pure, table, MAX, (v, s) -> v.$max(false));
+        table = postfix(pure, table, SUM, (v, s) -> v.$sum(false));
+        table = postfix(pure, table, PRODUCT, (v, s) -> v.$product(false));
+        table = postfix(pure, table, SPLIT, (v, s) -> v.$list());
+        table = prefix(pure, table, SORT, (v, s) -> v.$sort(false));
+        table = postfix(pure, table, REVERSE, (v, s) -> v.$reverse(false));
+        table = postfix(pure, table, UNIQUE, (v, s) -> v.$unique(false));
+        table = postfix(pure, table, AVG, (v, s) -> v.$avg(false));
 
-        table = prefixUnReactive(pure, table, FIX, (v1, v12) -> Func.fixFunc(v1));
+        table = prefixUnReactive(pure, table, FIX, (v, s) -> Func.fixFunc(v));
 
         table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
         table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
 
         //More complex expression syntax
+        table = table.postfix(emitOperator(ref, pure), EMIT_OP.priority());
         table = table.postfix(pipeOperator(ref, pure), PIPE_OP.priority());
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
         table = table.postfix(memberOperator(ref, pure), MEMBER.priority());
@@ -545,21 +570,21 @@ public class DollarParserImpl implements DollarParser {
             table = infixl(false, table, PUBLISH, Func::publishFunc);
             table = infixl(false, table, SUBSCRIBE, Func::subscribeFunc);
             table = infixl(false, table, WRITE_SIMPLE, Func::writeFunc);
-            table = prefix(false, table, READ_SIMPLE, (v, u) -> Func.readFunc(v));
+            table = prefix(false, table, READ_SIMPLE, (v, s) -> Func.readFunc(v));
 
-            table = prefix(false, table, DRAIN, (v, u) -> v.$drain());
-            table = prefix(false, table, ALL, (v, u) -> v.$all());
-            table = prefix(false, table, STOP, (v, u) -> v.$stop());
-            table = prefix(false, table, START, (v, u) -> v.$start());
-            table = prefix(false, table, PAUSE, (v, u) -> v.$pause());
-            table = prefix(false, table, UNPAUSE, (v, u) -> v.$unpause());
-            table = prefix(false, table, DESTROY, (v, u) -> v.$destroy());
-            table = prefix(false, table, CREATE, (v, u) -> v.$create());
-            table = prefix(false, table, STATE, (v, u) -> v.$state());
+            table = prefix(false, table, DRAIN, (v, s) -> v.$drain());
+            table = prefix(false, table, ALL, (v, s) -> v.$all());
+            table = prefix(false, table, STOP, (v, s) -> v.$stop());
+            table = prefix(false, table, START, (v, s) -> v.$start());
+            table = prefix(false, table, PAUSE, (v, s) -> v.$pause());
+            table = prefix(false, table, UNPAUSE, (v, s) -> v.$unpause());
+            table = prefix(false, table, DESTROY, (v, s) -> v.$destroy());
+            table = prefix(false, table, CREATE, (v, s) -> v.$create());
+            table = prefix(false, table, STATE, (v, s) -> v.$state());
 
-            table = prefix(false, table, OUT, (v, u) -> printFunc(this, u, OUT, Arrays.asList(v)));
-            table = prefix(false, table, DEBUG, (v, u) -> printFunc(this, u, DEBUG, Arrays.asList(v)));
-            table = prefix(false, table, ERR, (v, u) -> printFunc(this, u, ERR, Arrays.asList(v)));
+            table = prefix(false, table, OUT, (v, s) -> printFunc(this, s, OUT, Arrays.asList(v)));
+            table = prefix(false, table, DEBUG, (v, s) -> printFunc(this, s, DEBUG, Arrays.asList(v)));
+            table = prefix(false, table, ERR, (v, s) -> printFunc(this, s, ERR, Arrays.asList(v)));
 
             table = table.prefix(writeOperator(ref), WRITE_OP.priority());
             table = table.prefix(readOperator(), READ_OP.priority());
@@ -677,7 +702,7 @@ public class DollarParserImpl implements DollarParser {
                                                        return DollarFactory.fromList(entries).$fix(1, parallel);
                                                    }
                     );
-                    entries.forEach(entry -> entry.$listen(i -> node.$notify()));
+                    entries.forEach(entry -> entry.$listen(i -> node.$notify(MULTI_VALUE_CHANGE, i[0])));
                     return node;
 
                 });
@@ -698,7 +723,7 @@ public class DollarParserImpl implements DollarParser {
             List<Value> o = (List<Value>) objects[1];
             final Value node = util().node(MAP_OP, "map-" + util().shortHash(token), pure, this, token, o,
                                            i -> mapFunc(parallel, o));
-            o.forEach(entry -> entry.$listen(i -> node.$notify()));
+            o.forEach(entry -> entry.$listen(i -> node.$notify(MULTI_VALUE_CHANGE, i[0])));
             return node;
         });
     }
@@ -849,9 +874,16 @@ public class DollarParserImpl implements DollarParser {
                        .map(token -> {
                            assert PIPE_OP.validForPure(pure);
                            Value rhs = (Value) token.value();
-                           return lhs -> util().reactiveNode(PIPE_OP, pure, rhs, token, this,
-                                                             i -> pipeFunc(this, pure, token, rhs, lhs)
-                           );
+                           return lhs -> {
+                               Value node = util().node(PIPE_OP, pure, this, token, List.of(lhs),
+                                                        i -> pipeFunc(this, pure, token, lhs, rhs)
+                               );
+                               lhs.$listen(args -> util().inSubScope(true, pure, "pipe-listen", scope -> pipeFunc(this, pure, token,
+                                                                                                                  args[0],
+                                                                                                                  rhs).$fixDeep(
+                                       false)).get());
+                               return node;
+                           };
                        });
     }
 

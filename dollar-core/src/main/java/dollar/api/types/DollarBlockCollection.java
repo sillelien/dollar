@@ -314,11 +314,10 @@ public class DollarBlockCollection implements Value {
     @Guarded(ChainGuard.class)
     public Value $negate() {return getValue().$negate();}
 
-    @NotNull
     @Override
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public Value $notify() {return getValue().$notify();}
+    public Value $notify(NotificationType type, Value value) {return getValue().$notify(type, value);}
 
     @NotNull
     @Override

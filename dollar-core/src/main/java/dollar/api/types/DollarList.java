@@ -324,6 +324,18 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
+    public Value $stream(boolean parallel) {
+        Stream<Value> stream;
+        if (parallel) {
+            stream = list.stream().parallel();
+        } else {
+            stream = list.stream();
+        }
+        return DollarFactory.fromStream(stream);
+    }
+
+    @NotNull
+    @Override
     public Type $type() {
         return new Type(Type._LIST, constraintLabel());
     }
@@ -521,10 +533,9 @@ public class DollarList extends AbstractDollar {
 
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
-        list.forEach(Value::$notify);
+    public Value $notify(NotificationType type, Value value) {
+        list.forEach(member -> member.$notify(NotificationType.UNARY_VALUE_CHANGE, value));
         return this;
     }
 
@@ -534,18 +545,6 @@ public class DollarList extends AbstractDollar {
         ArrayList<Value> newList = new ArrayList<>(list);
         Collections.reverse(newList);
         return DollarFactory.wrap(new DollarList(ImmutableList.copyOf(newList)));
-    }
-
-    @NotNull
-    @Override
-    public Value $stream(boolean parallel) {
-        Stream<Value> stream;
-        if (parallel) {
-            stream = list.stream().parallel();
-        } else {
-            stream = list.stream();
-        }
-        return DollarFactory.fromStream(stream);
     }
 
     @NotNull

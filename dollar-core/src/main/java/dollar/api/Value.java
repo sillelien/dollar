@@ -33,6 +33,7 @@ import dollar.api.json.JsonObject;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
+import dollar.api.types.NotificationType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,7 +117,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @Guarded(ChainGuard.class)
     Value $choose(@NotNull Value map);
 
-    Value $constrain(@NotNull Value constraint, @Nullable SubType label);
+    @NotNull Value $constrain(@NotNull Value constraint, @Nullable SubType label);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -409,10 +410,11 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
         return DollarFactory.fromValue(!equals(other));
     }
 
+
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    Value $notify();
+    Value $notify(@NotNull NotificationType type, @Nullable Value value);
 
     /**
      * Gets pair key.
@@ -558,6 +560,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
      * @param parallel
      * @return a list type Value.
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     default Value $split(boolean parallel) {
         return $stream(parallel);

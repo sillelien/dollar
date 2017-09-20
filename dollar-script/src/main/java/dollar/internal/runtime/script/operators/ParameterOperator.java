@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
+import dollar.api.types.NotificationType;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.SourceImpl;
@@ -109,9 +110,9 @@ public class ParameterOperator implements Function<Token, Function<? super Value
 
 
             //reactive links
-            lhs.$listen(i -> node.$notify());
+            lhs.$listen(i -> node.$notify(NotificationType.UNARY_VALUE_CHANGE, i[0]));
             for (Value param : parameters) {
-                param.$listen(i -> node.$notify());
+                param.$listen(i -> node.$notify(NotificationType.PARAM_VALUE_CHANGE, i[0]));
             }
             return node;
         };

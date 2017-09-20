@@ -277,7 +277,7 @@ public class DollarSequence extends AbstractDollar {
         return getValue().out();
     }
 
-    @NotNull
+    @Nullable
     @Override
     public Value remove(@NotNull Object value) {
         return getValue().remove(value);
@@ -448,10 +448,9 @@ public class DollarSequence extends AbstractDollar {
                 () -> new DollarException("Null encountered"));
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
-        return getValue().$notify();
+    public Value $notify(NotificationType type, Value value) {
+        return getValue().$notify(type, value);
     }
 
     @NotNull

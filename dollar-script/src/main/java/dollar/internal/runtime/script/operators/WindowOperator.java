@@ -25,6 +25,7 @@ import dollar.api.VarKey;
 import dollar.api.script.DollarParser;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
+import dollar.api.types.NotificationType;
 import dollar.api.types.meta.MetaConstants;
 import dollar.internal.runtime.script.parser.Func;
 import org.jetbrains.annotations.NotNull;
@@ -93,7 +94,7 @@ public class WindowOperator implements Function<Token, Value> {
                                Value listenerId = expression.$listen(notifyListener,
                                                                      "window-expression-listener-" + expression.meta(
                                                                              MetaConstants.OPERATION_NAME) + "-" + id);
-                               expression.$notify();
+                               expression.$notify(NotificationType.RE_EVALUATE, null);
                                log.info("After expression listen");
                                Scheduler.schedule(
                                        i -> util().inSubScope(true, pure,

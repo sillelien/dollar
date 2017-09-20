@@ -385,9 +385,8 @@ public class DollarURI extends AbstractDollar {
         return super.$each(pipe);
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
+    public Value $notify(NotificationType type, Value value) {
         ensureRunning();
         return handler.write(this, false, false);
     }

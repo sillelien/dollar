@@ -191,9 +191,8 @@ public abstract class AbstractDollar implements Value {
 
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
+    public Value $notify(NotificationType type, Value value) {
 //        do nothing, not a reactive type
         return this;
     }

@@ -395,18 +395,27 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return $(listenerId);
             } else if ("$notify".equals(method.getName())) {
                 if (notifyStack.get().contains(this)) {
-//                    throw new IllegalStateException("Recursive notify loop detected");
-                    return proxy;
+                    throw new IllegalStateException("Recursive notify loop detected " + notifyStack.get());
+//                    return proxy;
                 }
                 if (getConfig().debugEvents()) {
                     log.info("$notify called on a source node, id used is {} source is {} listener stack size is {}", id,
                              source.getShortSourceMessage(), listeners.size());
                 }
                 notifyStack.get().add(this);
-                try {
+                Value updateValue;
 
+                if (args != null && (args.length == 2) && (args[1] != null)) {
+                    updateValue = (Value) args[1];
+                } else if (args != null && (args.length == 1) && (args[0] instanceof Value)) {
+                    updateValue = (Value) args[0];
+                } else {
+                    updateValue = (Value) proxy;
+                }
+//                Value updateValue = ((Value) proxy).$fix(2, false);
+                try {
                     for (Pipeable listener : listeners.values()) {
-                        listener.pipe((Value) proxy);
+                        listener.pipe(updateValue);
                     }
                 } finally {
                     notifyStack.get().remove(this);

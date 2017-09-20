@@ -491,10 +491,9 @@ public class DollarMap extends AbstractDollar {
         }
     }
 
-    @NotNull
     @Override
-    public Value $notify() {
-        map.values().forEach(Value::$notify);
+    public Value $notify(NotificationType type, Value newValue) {
+        map.values().forEach(member -> member.$notify(NotificationType.UNARY_VALUE_CHANGE, newValue));
         return this;
     }
 

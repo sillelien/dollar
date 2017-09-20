@@ -548,6 +548,9 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef YES = new KeywordDef("yes", false, "Boolean true.", null);
     @NotNull
+    static final Op EMIT_OP = new Op(RESERVED, "...", "emit", "emit",
+                                     false, true, null, PIPE_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
+    @NotNull
     private static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
     @NotNull
     private static final KeywordDef AWAIT = new KeywordDef("await", true, null, null);
@@ -567,8 +570,6 @@ public final class Symbols {
     private static final KeywordDef DO = new KeywordDef("do", true, null, null);
     @NotNull
     private static final KeywordDef DUMP = new KeywordDef("dump", true, null, null);
-    @NotNull
-    private static final KeywordDef EMIT = new KeywordDef("emit", true, null, null);
     @NotNull
     private static final KeywordDef ENUM = new KeywordDef("enum", true, null, null);
     @NotNull
@@ -622,79 +623,76 @@ public final class Symbols {
     @NotNull
     private static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
     @NotNull
-    private static final Op RESERVED_OPERATOR_1 = new Op(RESERVED, "...", null, "RESERVED_OPERATOR_1",
-                                                         true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
-    @NotNull
-    private static final Op RESERVED_OPERATOR_10 = new Op(RESERVED, "|*", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_10 = new Op(RESERVED, "|*", null, "RESERVED_OPERATOR_10",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_11 = new Op(RESERVED, "&>", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_11 = new Op(RESERVED, "&>", null, "RESERVED_OPERATOR_11",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_12 = new Op(RESERVED, "<&", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_12 = new Op(RESERVED, "<&", null, "RESERVED_OPERATOR_12",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_13 = new Op(RESERVED, "?>", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_13 = new Op(RESERVED, "?>", null, "RESERVED_OPERATOR_13",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_14 = new Op(RESERVED, "<?", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_14 = new Op(RESERVED, "<?", null, "RESERVED_OPERATOR_14",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_15 = new Op(RESERVED, ">->", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_15",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_16 = new Op(RESERVED, "@>", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_16 = new Op(RESERVED, "@>", null, "RESERVED_OPERATOR_16",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_17 = new Op(RESERVED, "?..?", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_7",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_18 = new Op(RESERVED, "?$?", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_18",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_19 = new Op(RESERVED, "<$", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_19 = new Op(RESERVED, "<$", null, "RESERVED_OPERATOR_19",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_2 = new Op(RESERVED, "->", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_2 = new Op(RESERVED, "->", null, "RESERVED_OPERATOR_2",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_20 = new Op(RESERVED, "<=<", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_20",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_21 = new Op(RESERVED, "<++", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_21",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final Op RESERVED_OPERATOR_22 = new Op(RESERVED, "-_-", null,
-                                                          "RESERVED_OPERATOR_1",
+                                                          "RESERVED_OPERATOR_22",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_23 = new Op(RESERVED, ">&", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_23 = new Op(RESERVED, ">&", null, "RESERVED_OPERATOR_23",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_3 = new Op(RESERVED, "<-", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_3 = new Op(RESERVED, "<-", null, "RESERVED_OPERATOR_3",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_4 = new Op(RESERVED, "?:", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_4 = new Op(RESERVED, "?:", null, "RESERVED_OPERATOR_4",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_5 = new Op(RESERVED, "@", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_5 = new Op(RESERVED, "@", null, "RESERVED_OPERATOR_5",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_6 = new Op(RESERVED, "::", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_6 = new Op(RESERVED, "::", null, "RESERVED_OPERATOR_6",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_7 = new Op(RESERVED, "&=", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_7 = new Op(RESERVED, "&=", null, "RESERVED_OPERATOR_7",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_8 = new Op(RESERVED, "+>", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_8 = new Op(RESERVED, "+>", null, "RESERVED_OPERATOR_8",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_9 = new Op(RESERVED, "<+", null, "RESERVED_OPERATOR_1",
+    private static final Op RESERVED_OPERATOR_9 = new Op(RESERVED, "<+", null, "RESERVED_OPERATOR_9",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
@@ -833,6 +831,7 @@ public final class Symbols {
                     CAST,
                     CLASS_OP,
                     COLLECT_OP,
+                    EMIT_OP,
                     FOR_OP,
                     IS_OP,
                     SCRIPT_OP,
@@ -851,7 +850,6 @@ public final class Symbols {
                     WRITE_OP,
 
                     //Reserved Operators
-                    RESERVED_OPERATOR_1,
                     RESERVED_OPERATOR_2,
                     RESERVED_OPERATOR_3,
                     RESERVED_OPERATOR_4,
@@ -932,7 +930,7 @@ public final class Symbols {
                     CONTINUE,
                     DO,
                     DUMP,
-                    EMIT,
+                    EMIT_OP,
                     FILTER,
                     FINAL,
                     FINALLY,

@@ -28,6 +28,7 @@ import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
+import dollar.api.types.NotificationType;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -476,8 +477,8 @@ public final class DollarUtilFactory implements DollarUtil {
         );
 
 
-        rhs.$listen(i -> node.$notify());
-        lhs.$listen(i -> node.$notify());
+        rhs.$listen(i -> node.$notify(NotificationType.BINARY_RHS_CHANGE, node));
+        lhs.$listen(i -> node.$notify(NotificationType.BINARY_LHS_CHANGE, node));
         return node;
     }
 
@@ -546,14 +547,14 @@ public final class DollarUtilFactory implements DollarUtil {
                               boolean pure,
                               @NotNull Source source,
                               @NotNull DollarParser parser,
-                              @NotNull Value lhs,
+                              @NotNull Value dependent,
                               @NotNull Pipeable callable) {
 
         final Value node = node(operation, operation.name(),
                                 pure, operation.nodeOptions(), parser, source,
-                                null, Collections.singletonList(lhs),
+                                null, Collections.singletonList(dependent),
                                 callable);
-        lhs.$listen(i -> node.$notify());
+        dependent.$listen(i -> node.$notify(NotificationType.UNARY_VALUE_CHANGE, node));
         return node;
     }
 

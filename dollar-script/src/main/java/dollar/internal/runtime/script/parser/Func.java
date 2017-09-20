@@ -297,13 +297,14 @@ public final class Func {
         return $(lhs.$S(), rhs);
     }
 
-    @NotNull
     static Value pipeFunc(@NotNull DollarParser parser,
                           boolean pure,
                           @NotNull Token token,
-                          @NotNull Value rhs,
-                          @NotNull Value lhs) {
-        util().scope().parameter(VarKey.ONE, lhs);
+                          @NotNull Value lhs, @NotNull Value rhs) {
+        if (lhs.isVoid()) {
+            return $void();
+        }
+        util().scope().parameter(VarKey.ONE, lhs.$fixDeep(false));
         Value rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
@@ -386,4 +387,6 @@ public final class Func {
     static Value writeFunc(@NotNull Value lhs, @NotNull Value rhs) {
         return rhs.$write(lhs);
     }
+
+
 }

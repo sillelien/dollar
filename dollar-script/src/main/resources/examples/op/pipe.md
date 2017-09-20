@@ -1,1 +1,3 @@
-The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
+The pipe operator pipes a value **and all it's changes** to the function on the right-hand-side. Pipes can be chained.
+
+The pipe operator is ideal for using with the emit (`...`) operator for reactive stream processing.

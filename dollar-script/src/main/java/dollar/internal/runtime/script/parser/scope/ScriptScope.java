@@ -32,6 +32,7 @@ import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.Source;
+import dollar.api.types.NotificationType;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -427,7 +428,7 @@ public class ScriptScope implements Scope {
                    if (getConfig().debugEvents()) {
                        log.info("Notifying {} in scope {}", listener.source().getSourceMessage(), this);
                    }
-                   listener.$notify();
+            listener.$notify(NotificationType.UNARY_VALUE_CHANGE, in[1]);
                    return $void();
                }
         );
