@@ -1,13 +1,14 @@
-var a= 1;
+var changeable= 1;
 volatile collectedValues= void;
-window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
+
+window (changeable) over (10 S) period (5 S) unless (it == 5)  until (it == 29) {
         @@collected
         collectedValues= collected;
 }
 
 for i in [1..32] {
     SLEEP (1 S)
-    a=a+1
+    changeable=changeable+1
 }
 
 

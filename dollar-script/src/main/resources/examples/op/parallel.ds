@@ -1,9 +1,11 @@
-var s=  fix      [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-var p=  fix  |:| [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-
+var s=     [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+var p= |:| [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+@@ s
+@@ p
 //Test different execution orders
 .: s[0] is Integer
 .: s[1] >= s[0]
 .: s[2] >= s[1]
 .: p[0] < p[1]
 .: p[2] <= p[1]
+.: p[1] - p[2] > 1000

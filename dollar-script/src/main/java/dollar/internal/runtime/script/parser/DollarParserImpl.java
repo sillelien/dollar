@@ -546,8 +546,8 @@ public class DollarParserImpl implements DollarParser {
 
         table = prefixUnReactive(pure, table, FIX, (v, s) -> Func.fixFunc(v));
 
-        table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
-        table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
+//        table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
+//        table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
 
         //More complex expression syntax
         table = table.postfix(emitOperator(ref, pure), EMIT_OP.priority());
@@ -699,7 +699,11 @@ public class DollarParserImpl implements DollarParser {
                     final Value node = util().node(LIST_OP, "list-" + util().shortHash(token), pure, this, token, entries,
                                                    vars -> {
                                                        log.info("Fixing list {}", parallel ? "parallel" : "serial");
-                                                       return DollarFactory.fromList(entries).$fix(1, parallel);
+                                                       if (parallel) {
+                                                           return DollarFactory.fromList(entries).$fix(2, parallel);
+                                                       } else {
+                                                           return DollarFactory.fromList(entries).$fix(2, parallel);
+                                                       }
                                                    }
                     );
                     entries.forEach(entry -> entry.$listen(i -> node.$notify(MULTI_VALUE_CHANGE, i[0])));

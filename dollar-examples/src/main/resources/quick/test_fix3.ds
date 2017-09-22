@@ -8,7 +8,8 @@ b(5) <=> 15
 
 // Blocks and fix
 
-var c=0
+volatile c=0
+
 def neverRan {
   c=c+1;
 }
@@ -21,15 +22,15 @@ def neverRan {
 
 &c <=> 1
 
-serial {
+& {
     c= c+1;
 }
 
 &c <=> 2
 
-parallel {
-    c= c+1;
-}
+//Execute in a seperate thread by using the parallel list |:| []
+|:| [ c= c+1 ]
+SLEEP(0.1 S)
 
 &c <=> 3
 
@@ -55,8 +56,10 @@ def e {{c=c+1}}
 &c <=> 5
 var f= e()
 &c <=> 6
+
+//f has already been fixed by the var f=... statement
 f()
-&c <=> 7
+&c <=> 6
 
 
 

@@ -1003,23 +1003,20 @@ export def state_ [STATE(www),STATE(redis)]
 Notes:
 
 All types are immutable, including collections.
-You cannot reassign a variable from a different thread, so they are readonly from other threads.
+You cannot reassign a variable from a different thread unless it is declared as `volatile`.
 
 
-### Parallel &amp; Serial Operators
-The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+### Parallel &amp; Serial Lists
+The parallel operator `|:|` or `parallel` causes a list to be evaluated in parallel, otherwise it is executed in serial even if the current expression is being evaluated in parallel.
 
 ```dollar
 
-const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+const a = [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
+const b = |:| [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
 ```
-
-As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
 ### Fork
 

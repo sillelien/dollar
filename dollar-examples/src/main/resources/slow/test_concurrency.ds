@@ -1,9 +1,9 @@
 
 
-var a= serial [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
+var a=  [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
 
 
-var b= parallel [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
+var b= |:| [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
 
 @@ a
 @@ b

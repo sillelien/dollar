@@ -357,17 +357,18 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return proxy;
 //                return lambda.pipe(in).$unwrap();
             } else if ("$fix".equals(method.getName())) {
-                if (args.length == 1) {
-                    return executePipe(DollarFactory.fromValue(args[0]));
-                } else {
+                if ((args != null) && (args.length == 1)) {
+                    return executePipe(DollarFactory.fromValue(args[0])).$fix(1, (Boolean) args[0]);
+                } else if ((args != null) && (args.length == 2)) {
                     if ((int) args[0] > 1) {
                         return executePipe(DollarFactory.fromValue(args[1])).$fix((int) args[0] - 1, (Boolean) args[1]);
                     } else {
                         return executePipe(DollarFactory.fromValue(args[1]));
                     }
 
-                }
 
+                }
+                throw new IllegalArgumentException();
             } else if ("$fixDeep".equals(method.getName())) {
 
                 if ((args == null) || (args.length == 0)) {

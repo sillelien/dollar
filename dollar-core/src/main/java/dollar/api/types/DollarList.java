@@ -511,16 +511,16 @@ public class DollarList extends AbstractDollar {
             if (parallel) {
                 for (Value in : list) {
                     if (DollarStatic.getConfig().debugParallel()) {
-                        log.info("Fixing list in parallel (depth={})", depth);
+                        log.info("Fixing list {} in parallel (depth={})", source().getShortSourceMessage(), depth);
 
                     }
-                    result.add(DollarStatic.$fork(source(), in, i -> i.$fix(depth, true)));
+                    result.add(DollarStatic.$fork(source(), in, i -> i.$fix(depth, false)));
                 }
 
             } else {
                 for (Value in : list) {
                     if (DollarStatic.getConfig().debugParallel()) {
-                        log.info("Fixing list in serial (depth={})", depth);
+                        log.info("Fixing list {} in serial (depth={})", source().getShortSourceMessage(), depth);
 
                     }
                     result.add(in.$fix(depth, false));

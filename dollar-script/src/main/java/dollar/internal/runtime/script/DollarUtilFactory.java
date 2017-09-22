@@ -126,7 +126,7 @@ public final class DollarUtilFactory implements DollarUtil {
                          (int) (prediction.probability(prediction.probableType()) * 100),
                          new SourceImpl(scope(), token).getSourceMessage()
                 );
-                if (getConfig().failFast()) {
+                if (getConfig().failFast() && !Objects.equals(prediction.probableType(), type)) {
                     throw new DollarScriptException(format(
                             "Type prediction failed, was expecting %s but most likely type is %s (%d%% certain) if this " +
                                     "prediction is wrong please add an explicit cast (using 'as %s'). Type key was %s",

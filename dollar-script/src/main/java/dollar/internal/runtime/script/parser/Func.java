@@ -186,6 +186,7 @@ public final class Func {
         return $void();
     }
 
+    @NotNull
     static Value fixFunc(@NotNull Value v) {
         return v.$fix(Integer.MAX_VALUE, false);
     }

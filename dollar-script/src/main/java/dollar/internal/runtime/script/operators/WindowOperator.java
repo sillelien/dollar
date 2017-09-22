@@ -156,6 +156,7 @@ public class WindowOperator implements Function<Token, Value> {
         public Value pipe(Value... in2) {
             Value value = in2[0].$fixDeep();
             count.incrementAndGet();
+            util().scope().parameter(VarKey.IT, value);
             log.debug("Count is {} value is {} size is {}", count.get(), value, collected.size());
 
             if (!finished) {
