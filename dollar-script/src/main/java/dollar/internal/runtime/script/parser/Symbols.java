@@ -35,64 +35,79 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static dollar.internal.runtime.script.api.OperatorPriority.*;
-import static dollar.internal.runtime.script.parser.OpType.*;
 import static dollar.internal.runtime.script.parser.SourceNodeOptions.*;
 import static java.util.Arrays.asList;
 
 public final class Symbols {
+    @NotNull
+    public static final SymbolDef COMMA = new SymbolDef(",", false);
 
 
     @NotNull
     public static final Function<Value[], Type> ANY_TYPE_F = i -> Type._ANY;
     @NotNull
+    public static final Function<Value[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
+    @NotNull
+    public static final Function<Value[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
+    @NotNull
+    public static final Function<Value[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
+    @NotNull
+    public static final Function<Value[], Type> LIST_TYPE_F = i -> Type._LIST;
+    @NotNull
+    public static final Function<Value[], Type> MAP_TYPE_F = i -> Type._MAP;
+    @NotNull
+    public static final Function<Value[], Type> RANGE_TYPE_F = i -> Type._RANGE;
+    @NotNull
+    public static final Function<Value[], Type> RHS_TYPE_F = i -> i[1].$type();
+    @NotNull
+    public static final Function<Value[], Type> VOID_TYPE_F = i -> Type._VOID;
+
+
+    @NotNull
     public static final KeywordDef AS = new KeywordDef("as", false, null, null);
     @NotNull
-    public static final Op AVG = new Op(POSTFIX, "[%]", "avg", "avg",
+    public static final Op AVG = new Op(OpType.POSTFIX, "[%]", "avg", "avg",
                                         false, true,
                                         null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final KeywordDef BLOCK = new KeywordDef("block", false, null, null);
     @NotNull
-    public static final Op BLOCK_OP = new Op(COLLECTION, null, null, "block",
+    public static final Op BLOCK_OP = new Op(OpType.COLLECTION, null, null, "block",
                                              false, true,
                                              "'{' ( <expression> ';' ) * [ <expression> ] '}'",
                                              NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, i -> Type._BLOCK);
     @NotNull
-    public static final Function<Value[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
-    @NotNull
-    public static final Op AND = new Op(BINARY, "&&", "and", "and",
+    public static final Op AND = new Op(OpType.BINARY, "&&", "and", "and",
                                         false, true,
                                         null, OperatorPriority.AND_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op ASSERT_EQ_REACT = new Op(BINARY, "<=>",
+    public static final Op ASSERT_EQ_REACT = new Op(OpType.BINARY, "<=>",
                                                     null,
                                                     "assert-equals-reactive",
                                                     false, true,
                                                     null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op ASSERT_EQ_UNREACT = new Op(BINARY, "<->", null,
+    public static final Op ASSERT_EQ_UNREACT = new Op(OpType.BINARY, "<->", null,
                                                       "assert-equals",
                                                       false, false,
                                                       null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow",
                                                       BOOL_TYPE_F);
     @NotNull
-    public static final Op BUILTIN_OP = new Op(OTHER, null, null, "builtin",
+    public static final Op BUILTIN_OP = new Op(OpType.OTHER, null, null, "builtin",
                                                false, true,
                                                "<name> (<parameter>)*",
                                                NO_PRIORITY, null, NO_SCOPE, null, i -> Builtins.type(i[0].$S()));
     @NotNull
-    public static final Op CAST = new Op(POSTFIX, null, null, "cast", false, true, "<expression> 'as' <type>",
+    public static final Op CAST = new Op(OpType.POSTFIX, null, null, "cast", false, true, "<expression> 'as' <type>",
                                          UNARY_PRIORITY, true, NO_SCOPE, null, i -> Type.of(i[1]));
     @NotNull
-    public static final Op CHOOSE = new Op(BINARY, "?*", "choose", "choose", false, true, null,
+    public static final Op CHOOSE = new Op(OpType.BINARY, "?*", "choose", "choose", false, true, null,
                                            CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op CLASS_OP = new Op(OTHER, null, "class", "class",
+    public static final Op CLASS_OP = new Op(OpType.OTHER, null, "class", "class",
                                              false, true,
                                              "'class' <identifier> <expression>",
                                              NO_PRIORITY, null, NO_SCOPE, null, i -> Type.of(i[0]));
-    @NotNull
-    public static final SymbolDef COMMA = new SymbolDef(",", false);
     @NotNull
     public static final KeywordDef CONST = new KeywordDef("const", false,
                                                           "Mark a variable definition as a constant, i.e. readonly.", null);
@@ -101,7 +116,7 @@ public final class Symbols {
     @NotNull
     public static final SymbolDef DOLLAR = new SymbolDef("$", false);
     @NotNull
-    public static final Op EQUALITY = new Op(BINARY, "==", null, "equal", false, true, null, EQ_PRIORITY, true, NO_SCOPE,
+    public static final Op EQUALITY = new Op(OpType.BINARY, "==", null, "equal", false, true, null, EQ_PRIORITY, true, NO_SCOPE,
                                              null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef EVERY = new KeywordDef("every", false, null, null);
@@ -110,27 +125,33 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef FALSE = new KeywordDef("false", false, "Boolean false.", null);
     @NotNull
-    public static final Function<Value[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
-    @NotNull
-    public static final Op DEC = new Op(PREFIX, "--", null, "decrement",
+    public static final Op DEC = new Op(OpType.PREFIX, "--", null, "decrement",
                                         false,
                                         true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op DEFAULT = new Op(BINARY, ":-", "default", "default",
+    public static final Op DEFAULT = new Op(OpType.BINARY, ":-", "default", "default",
                                             false,
                                             true,
                                             null,
                                             MEMBER_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final Op DEFINITION = new Op(OpType.ASSIGNMENT, ":=", null,
-                                               "declaration",
+                                               "definition",
                                                false,
                                                true,
                                                "( [export] [const] <variable-name> ':=' <expression>) | ( def " +
                                                        "<variable-name> <expression )",
                                                ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op FIX = new Op(PREFIX, "&", "fix", "fix",
+    public static final Op DEFINITION_CONSTRAINT = new Op(OpType.ASSIGNMENT, null, null,
+                                                          "definition-constraint",
+                                                          false,
+                                                          true,
+                                                          null,
+                                                          ASSIGNMENT_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
+
+    @NotNull
+    public static final Op FIX = new Op(OpType.PREFIX, "&", "fix", "fix",
                                         false,
                                         false, null, FIX_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
@@ -146,45 +167,43 @@ public final class Symbols {
 
      */
     @NotNull
-    public static final Op FORK = new Op(PREFIX, "-<", "fork", "fork",
+    public static final Op FORK = new Op(OpType.PREFIX, "-<", "fork", "fork",
                                          false,
                                          true,
                                          null, SIGNAL_PRIORITY, false, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
     @NotNull
-    public static final Op FUNCTION_NAME_OP = new Op(OTHER, null, null, "function-call",
+    public static final Op FUNCTION_NAME_OP = new Op(OpType.OTHER, null, null, "function-call",
                                                      false, true,
                                                      "'<builtin-name> | <variable-name>",
                                                      NO_PRIORITY, null, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op GT = new Op(BINARY, ">", null, "greater-than",
+    public static final Op GT = new Op(OpType.BINARY, ">", null, "greater-than",
                                        false, true,
                                        null, COMP_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op GT_EQUALS = new Op(BINARY, ">=", null, "greater-than-equal",
+    public static final Op GT_EQUALS = new Op(OpType.BINARY, ">=", null, "greater-than-equal",
                                               false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op IF_OP = new Op(BINARY, null, "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+    public static final Op IF_OP = new Op(OpType.BINARY, null, "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
                                           FIRST_TYPE_F);
     @NotNull
-    public static final Op IN = new Op(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208",
+    public static final Op IN = new Op(OpType.BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208",
                                        BOOL_TYPE_F);
     @NotNull
-    public static final Op INC = new Op(PREFIX, "++", null, "increment",
+    public static final Op INC = new Op(OpType.PREFIX, "++", null, "increment",
                                         false, true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op INEQUALITY_OPERATOR = new Op(BINARY, "!=", null, "not-equal",
+    public static final Op INEQUALITY_OPERATOR = new Op(OpType.BINARY, "!=", null, "not-equal",
                                                         false, true, null,
                                                         EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null, null);
     @NotNull
-    public static final Function<Value[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
-    @NotNull
     public static final KeywordDef IS = new KeywordDef("is", false, null, null);
     @NotNull
-    public static final Op IS_OP = new Op(BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+    public static final Op IS_OP = new Op(OpType.BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
                                           BOOL_TYPE_F);
     @NotNull
     public static final List<String> KEYWORD_STRINGS;
@@ -195,162 +214,154 @@ public final class Symbols {
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
     @NotNull
-    public static final Function<Value[], Type> LIST_TYPE_F = i -> Type._LIST;
-    @NotNull
-    public static final Op ALL = new Op(PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE,
+    public static final Op ALL = new Op(OpType.PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE,
                                         null, LIST_TYPE_F);
     @NotNull
-    public static final Op DRAIN = new Op(PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false,
+    public static final Op DRAIN = new Op(OpType.PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false,
                                           NO_SCOPE, null, LIST_TYPE_F);
     @NotNull
-    public static final Op EACH = new Op(BINARY, "=>>", "each", "each", false, true, null,
+    public static final Op EACH = new Op(OpType.BINARY, "=>>", "each", "each", false, true, null,
                                          MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, LIST_TYPE_F);
     @NotNull
-    public static final Op LIST_OP = new Op(COLLECTION, null, null, "list",
+    public static final Op LIST_OP = new Op(OpType.COLLECTION, null, null, "list",
                                             false, true,
                                             "'[' ( <expression> ',' ) * [ <expression> ] ']'",
                                             NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, LIST_TYPE_F);
     @NotNull
-    public static final Op LT = new Op(BINARY, "<", null, "less-than",
+    public static final Op LT = new Op(OpType.BINARY, "<", null, "less-than",
                                        false, true,
                                        null, COMP_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op LT_EQUALS = new Op(BINARY, "<=", null, "less-than-equal",
+    public static final Op LT_EQUALS = new Op(OpType.BINARY, "<=", null, "less-than-equal",
                                               false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Function<Value[], Type> MAP_TYPE_F = i -> Type._MAP;
-    @NotNull
-    public static final Op MAP_OP = new Op(COLLECTION, null, null, "map",
+    public static final Op MAP_OP = new Op(OpType.COLLECTION, null, null, "map",
                                            false, true,
                                            "'{' ( <expression> ',' ) * [ <expression> ] '}'",
                                            NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, MAP_TYPE_F);
     @NotNull
-    public static final Op MAX = new Op(POSTFIX, "[>]", "max", "max",
+    public static final Op MAX = new Op(OpType.POSTFIX, "[>]", "max", "max",
                                         false, true,
                                         null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op MEMBER = new Op(BINARY, ".", null, "member",
+    public static final Op MEMBER = new Op(OpType.BINARY, ".", null, "member",
                                            false,
                                            true,
                                            null, MEMBER_PRIORITY, true, NEW_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op MIN = new Op(POSTFIX, "[<]", "min", "min",
+    public static final Op MIN = new Op(OpType.POSTFIX, "[<]", "min", "min",
                                         false, true,
                                         null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op MOD = new Op(BINARY, "%", null, "modulus",
+    public static final Op MOD = new Op(OpType.BINARY, "%", null, "modulus",
                                         false, true,
                                         null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op MODULE_OP = new Op(OTHER, null, "module", "module",
+    public static final Op MODULE_OP = new Op(OpType.OTHER, null, "module", "module",
                                               false, true,
                                               "module <name> (<parameter>)*",
                                               NO_PRIORITY, false, NEW_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final KeywordDef MUTATE = new KeywordDef("mutate", false, null, null);
     @NotNull
-    public static final Op NEGATE = new Op(PREFIX, "-", null, "negate",
+    public static final Op NEGATE = new Op(OpType.PREFIX, "-", null, "negate",
                                            false, true,
                                            null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final SymbolDef NEWLINE = new SymbolDef("\n", false);
     @NotNull
-    public static final Op NEW_OP = new Op(PREFIX, null, "new", "new",
+    public static final Op NEW_OP = new Op(OpType.PREFIX, null, "new", "new",
                                            false, true,
                                            "'new' <identifier> (<parameters>)",
                                            NO_PRIORITY, null, NEW_SCOPE, null, i -> Type.of(i[0]));
     @NotNull
     public static final KeywordDef NO = new KeywordDef("no", false, "Boolean false.", null);
     @NotNull
-    public static final Op NOT = new Op(PREFIX, "!", "not", "not", false,
+    public static final Op NOT = new Op(OpType.PREFIX, "!", "not", "not", false,
                                         true, null, UNARY_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef NULL = new KeywordDef("null", false, "A NULL value of ANY type.", null);
     @NotNull
     public static final List<Op> OPERATORS;
     @NotNull
-    public static final Op OR = new Op(BINARY, "||", "or", "or",
+    public static final Op OR = new Op(OpType.BINARY, "||", "or", "or",
                                        false,
                                        true, null,
                                        OperatorPriority.LOGICAL_OR_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef OVER = new KeywordDef("over", false, null, null);
     @NotNull
-    public static final Op PAIR = new Op(BINARY, ":", null, "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null,
+    public static final Op PAIR = new Op(OpType.BINARY, ":", null, "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null,
                                          MAP_TYPE_F);
     @NotNull
-    public static final Op PARALLEL = new Op(PREFIX, "|:|", "parallel", "parallel",
+    public static final Op PARALLEL = new Op(OpType.PREFIX, "|:|", "parallel", "parallel",
                                              false, false,
                                              null, SIGNAL_PRIORITY, true, NEW_PARALLEL_SCOPE, ":vertical_traffic_light:",
                                              FIRST_TYPE_F);
     @NotNull
-    public static final Op PARAM_OP = new Op(POSTFIX, null, null, "parameter", false, true,
+    public static final Op PARAM_OP = new Op(OpType.POSTFIX, null, null, "parameter", false, true,
                                              "( <expression> | <builtin-name> | <function-name> ) '(' " +
                                                      "( <expression> | <name> '=' <expression> )* ')'",
                                              MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, ANY_TYPE_F);
     @NotNull
     public static final KeywordDef PERIOD = new KeywordDef("period", false, null, null);
     @NotNull
-    public static final Op PIPE_OP = new Op(BINARY, "|", null, "pipe",
+    public static final Op PIPE_OP = new Op(OpType.BINARY, "|", null, "pipe",
                                             false, true, null, PIPE_PRIORITY, true, NEW_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op PRODUCT = new Op(POSTFIX, "[*]", "product", "product",
+    public static final Op PRODUCT = new Op(OpType.POSTFIX, "[*]", "product", "product",
                                             false, true,
                                             null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final KeywordDef PURE = new KeywordDef("pure", false, "The start of a pure expression.", "pure <expression>");
     @NotNull
-    public static final Op PURE_OP = new Op(PREFIX, null, "pure", "pure",
+    public static final Op PURE_OP = new Op(OpType.PREFIX, null, "pure", "pure",
                                             false, true,
                                             null,
                                             NO_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Function<Value[], Type> RANGE_TYPE_F = i -> Type._RANGE;
-    @NotNull
-    public static final Op RANGE = new Op(BINARY, "..", null, "range",
+    public static final Op RANGE = new Op(OpType.BINARY, "..", null, "range",
                                           false, true,
                                           null,
                                           OperatorPriority.RANGE_PRIORITY, true, NO_SCOPE, null, RANGE_TYPE_F);
     @NotNull
-    public static final Op READ_OP = new Op(PREFIX, null, "read", "read",
+    public static final Op READ_OP = new Op(OpType.PREFIX, null, "read", "read",
                                             false, true,
                                             "'read' ['block'] ['mutate'] ['from'] <expression>",
                                             OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op READ_SIMPLE = new Op(PREFIX, "<<", null, "read-simple",
+    public static final Op READ_SIMPLE = new Op(OpType.PREFIX, "<<", null, "read-simple",
                                                 false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op REDUCE = new Op(BINARY, ">>=", "reduce", "reduce", false, true, null,
+    public static final Op REDUCE = new Op(OpType.BINARY, ">>=", "reduce", "reduce", false, true, null,
                                            MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op REVERSE = new Op(POSTFIX, "<-", "reversed", "reversed",
+    public static final Op REVERSE = new Op(OpType.POSTFIX, "<-", "reversed", "reversed",
                                             false, true,
                                             null, REVERSE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Function<Value[], Type> RHS_TYPE_F = i -> i[1].$type();
-    @NotNull
     public static final Op ASSIGNMENT = new Op(OpType.ASSIGNMENT, "=", null, "assign", false, true, null,
-                                               ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
+                                               ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op CAUSES = new Op(BINARY, "=>", "causes", "causes",
+    public static final Op CAUSES = new Op(OpType.BINARY, "=>", "causes", "causes",
                                            false, true, null, CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
-    public static final Op DIVIDE = new Op(BINARY, "/", null, "divide",
+    public static final Op DIVIDE = new Op(OpType.BINARY, "/", null, "divide",
                                            false, true,
                                            null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
-    public static final Op ELSE = new Op(BINARY, null, "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+    public static final Op ELSE = new Op(OpType.BINARY, null, "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
                                          RHS_TYPE_F);
     @NotNull
-    public static final Op MINUS = new Op(BINARY, "-", null, "minus",
+    public static final Op MINUS = new Op(OpType.BINARY, "-", null, "minus",
                                           false, true,
                                           null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
-    public static final Op MULTIPLY = new Op(BINARY, "*", null, "multiply",
+    public static final Op MULTIPLY = new Op(OpType.BINARY, "*", null, "multiply",
                                              false, true,
                                              null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
-    public static final Op PLUS = new Op(BINARY, "+", null, "plus",
+    public static final Op PLUS = new Op(OpType.BINARY, "+", null, "plus",
                                          false, true,
                                          null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
@@ -360,34 +371,34 @@ public final class Symbols {
     @NotNull
     public static final SymbolDef RIGHT_PAREN = new SymbolDef(")", false);
     @NotNull
-    public static final Op SCRIPT_OP = new Op(OTHER, null, null,
+    public static final Op SCRIPT_OP = new Op(OpType.OTHER, null, null,
                                               "script", false, false,
                                               " <language-name> ``<script-code>`` ",
                                               NO_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final SymbolDef SEMI_COLON = new SymbolDef(";", false);
     @NotNull
-    public static final Op SERIAL = new Op(PREFIX, "|..|", "serial", "serial",
+    public static final Op SERIAL = new Op(OpType.PREFIX, "|..|", "serial", "serial",
                                            false, false,
                                            null, SIGNAL_PRIORITY, true, NEW_SERIAL_SCOPE, ":traffic_light:", FIRST_TYPE_F);
     @NotNull
-    public static final Op SIZE = new Op(PREFIX, "#", null, "size",
+    public static final Op SIZE = new Op(OpType.PREFIX, "#", null, "size",
                                          false, true,
                                          null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:", INTEGER_TYPE_F);
     @NotNull
-    public static final Op SORT = new Op(PREFIX, "->", "sorted", "sorted",
+    public static final Op SORT = new Op(OpType.PREFIX, "->", "sorted", "sorted",
                                          false, true,
                                          null, SORT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op SPLIT = new Op(POSTFIX, "[/]", "split", "split",
+    public static final Op SPLIT = new Op(OpType.POSTFIX, "[/]", "split", "split",
                                           false, true,
                                           null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op STATE = new Op(PREFIX, "<|>", "state", "state",
+    public static final Op STATE = new Op(OpType.PREFIX, "<|>", "state", "state",
                                           false, true,
                                           null, SIGNAL_PRIORITY, false, NO_SCOPE, ":keycap_asterisk:", ANY_TYPE_F);
     @NotNull
-    public static final Op SUBSCRIBE = new Op(BINARY, "<*", "subscribe", "subscribe", false, true, null,
+    public static final Op SUBSCRIBE = new Op(OpType.BINARY, "<*", "subscribe", "subscribe", false, true, null,
                                               OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final Op SUBSCRIBE_ASSIGN = new Op(OpType.ASSIGNMENT, "*=", null,
@@ -395,12 +406,12 @@ public final class Symbols {
                                                      false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null,
                                                      ANY_TYPE_F);
     @NotNull
-    public static final Op SUBSCRIPT_OP = new Op(POSTFIX, null, null, "subscript", false, true,
+    public static final Op SUBSCRIPT_OP = new Op(OpType.POSTFIX, null, null, "subscript", false, true,
                                                  "( <expression> '[' <index-expression>|<key-expression> ']' ) | " +
                                                          "( <expression> '.' (<index-expression>|<key-expression>) )",
                                                  MEMBER_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
-    public static final Op SUM = new Op(POSTFIX, "[+]", "sum", "sum",
+    public static final Op SUM = new Op(OpType.POSTFIX, "[+]", "sum", "sum",
                                         false, true,
                                         null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
@@ -412,17 +423,17 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef TRUE = new KeywordDef("true", false, "Boolean true.", null);
     @NotNull
-    public static final Op TRUTHY = new Op(PREFIX, "~", null, "truthy",
+    public static final Op TRUTHY = new Op(OpType.PREFIX, "~", null, "truthy",
                                            false,
                                            true,
                                            null,
                                            UNARY_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op UNIQUE = new Op(POSTFIX, "[!]", "unique", "unique",
+    public static final Op UNIQUE = new Op(OpType.POSTFIX, "[!]", "unique", "unique",
                                            false, true,
                                            null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op UNIT_OP = new Op(POSTFIX, null, null, "unit",
+    public static final Op UNIT_OP = new Op(OpType.POSTFIX, null, null, "unit",
                                             false, true,
                                             "<numeric> <unit-name>",
                                             NO_PRIORITY, null, NEW_SCOPE, null, ANY_TYPE_F);
@@ -433,82 +444,80 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef VAR = new KeywordDef("var", false, "Marks a variable as variable i.e. not readonly.", null);
     @NotNull
-    public static final Op VAR_USAGE_OP = new Op(CONTROL_FLOW, null, null, "var-usage", false, true, null, NO_PRIORITY, true,
+    public static final Op VAR_USAGE_OP = new Op(OpType.CONTROL_FLOW, null, null, "var-usage", false, true, null, NO_PRIORITY, true,
                                                  NO_SCOPE, null,
                                                  null);
     @NotNull
     public static final KeywordDef VOID = new KeywordDef("void", false, "A VOID value.", null);
     @NotNull
-    public static final Function<Value[], Type> VOID_TYPE_F = i -> Type._VOID;
-    @NotNull
-    public static final Op ASSERT = new Op(PREFIX, ".:", "assert", "assert",
+    public static final Op ASSERT = new Op(OpType.PREFIX, ".:", "assert", "assert",
                                            false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234", VOID_TYPE_F);
     @NotNull
     public static final Op ASSIGNMENT_CONSTRAINT = new Op(OpType.ASSIGNMENT, null, null, "assignment-constraint", false,
                                                           true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op COLLECT_OP = new Op(CONTROL_FLOW, null,
+    public static final Op COLLECT_OP = new Op(OpType.CONTROL_FLOW, null,
                                                "collect", "collect",
                                                false, false,
                                                "collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>",
                                                NO_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op CREATE = new Op(PREFIX, "|||>", "create", "create",
+    public static final Op CREATE = new Op(OpType.PREFIX, "|||>", "create", "create",
                                            false, true,
                                            null, SIGNAL_PRIORITY, false, NO_SCOPE, ":fast_forward:", VOID_TYPE_F);
     @NotNull
-    public static final Op DEBUG = new Op(PREFIX, "!!", "debug", "debug",
+    public static final Op DEBUG = new Op(OpType.PREFIX, "!!", "debug", "debug",
                                           false, true,
                                           null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, "‼️:bangbang:", VOID_TYPE_F);
     @NotNull
-    public static final Op DESTROY = new Op(PREFIX, "<|||", "destroy", "destroy",
+    public static final Op DESTROY = new Op(OpType.PREFIX, "<|||", "destroy", "destroy",
                                             false, true,
                                             null, SIGNAL_PRIORITY, false, NO_SCOPE, ":rewind:", VOID_TYPE_F);
     @NotNull
-    public static final Op ERR = new Op(PREFIX, "!?", "err", "err",
+    public static final Op ERR = new Op(OpType.PREFIX, "!?", "err", "err",
                                         false,
                                         true,
                                         null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, ":interrobang:", VOID_TYPE_F);
     @NotNull
-    public static final Op ERROR = new Op(PREFIX, "?->", "error", "error",
+    public static final Op ERROR = new Op(OpType.PREFIX, "?->", "error", "error",
                                           false, true,
                                           null,
                                           LINE_PREFIX_PRIORITY, true, NO_SCOPE, ":fire:", VOID_TYPE_F);
     @NotNull
-    public static final Op EVERY_OP = new Op(CONTROL_FLOW, null, "every",
+    public static final Op EVERY_OP = new Op(OpType.CONTROL_FLOW, null, "every",
                                              "every", false, false,
                                              "every <duration> <expression>",
                                              NO_PRIORITY, false, NEW_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op FOR_OP = new Op(CONTROL_FLOW, null, "for", "for", false, true,
+    public static final Op FOR_OP = new Op(OpType.CONTROL_FLOW, null, "for", "for", false, true,
                                            "for <variable-name> <iterable-expression> <expression>",
                                            UNARY_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op OUT = new Op(PREFIX, "@@", "print", "print",
+    public static final Op OUT = new Op(OpType.PREFIX, "@@", "print", "print",
                                         false, true,
                                         null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op PAUSE = new Op(PREFIX, "||>", "pause", "pause",
+    public static final Op PAUSE = new Op(OpType.PREFIX, "||>", "pause", "pause",
                                           false, true,
                                           null, SIGNAL_PRIORITY, false, NO_SCOPE, ":double_vertical_bar:", VOID_TYPE_F);
     @NotNull
-    public static final Op PRINT = new Op(PREFIX, null, "print", "print",
+    public static final Op PRINT = new Op(OpType.PREFIX, null, "print", "print",
                                           false, true,
                                           null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op PUBLISH = new Op(BINARY, "*>", "publish", "publish", false, true, null,
+    public static final Op PUBLISH = new Op(OpType.BINARY, "*>", "publish", "publish", false, true, null,
                                             OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op START = new Op(PREFIX, "|>", "start", "start",
+    public static final Op START = new Op(OpType.PREFIX, "|>", "start", "start",
                                           false, true,
                                           "('|>'|'start') <expression>", SIGNAL_PRIORITY, true, NO_SCOPE, ":arrow_forward:",
                                           VOID_TYPE_F);
     @NotNull
-    public static final Op STOP = new Op(PREFIX, "<|", "stop", "stop",
+    public static final Op STOP = new Op(OpType.PREFIX, "<|", "stop", "stop",
                                          false, true,
                                          null, SIGNAL_PRIORITY, false, NO_SCOPE, ":black_square_for_stop:", VOID_TYPE_F);
     @NotNull
-    public static final Op UNPAUSE = new Op(PREFIX, "<||", "unpause", "unpause",
+    public static final Op UNPAUSE = new Op(OpType.PREFIX, "<||", "unpause", "unpause",
                                             false, true,
                                             null, SIGNAL_PRIORITY, false, NO_SCOPE,
                                             ":black_right_pointing_triangle_with_double_vertical_bar:", VOID_TYPE_F);
@@ -518,19 +527,19 @@ public final class Symbols {
                                       "Marks a variable as volatile, i.e. it can be accessed by multiple threads.",
                                       null);
     @NotNull
-    public static final Op WHEN = new Op(BINARY, "?", "when", "when", false, true, null,
+    public static final Op WHEN = new Op(OpType.BINARY, "?", "when", "when", false, true, null,
                                          CONTROL_FLOW_PRIORITY, true, NEW_SCOPE, null, RHS_TYPE_F);
     @NotNull
     public static final Op WHEN_ASSIGN = new Op(OpType.ASSIGNMENT, null, null, "when-assign",
                                                 false, true,
                                                 "('var'|'volatile') [<type-assertion>] <variable-name> '?' <condition-expression> '='<assignment-expression>",
-                                                ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
+                                                ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
-    public static final Op WHILE_OP = new Op(CONTROL_FLOW, null, "while", "while", false, true,
+    public static final Op WHILE_OP = new Op(OpType.CONTROL_FLOW, null, "while", "while", false, true,
                                              "while <condition> <expression>",
                                              UNARY_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op WINDOW_OP = new Op(CONTROL_FLOW, null,
+    public static final Op WINDOW_OP = new Op(OpType.CONTROL_FLOW, null,
                                               "window", "window",
                                               false, false,
                                               "window <expression> 'over' <duration-expression> [ 'period' <duration-expression> ] [ 'unless' <expression> ] [ 'until' <expression> ]  <window-expression>",
@@ -538,17 +547,17 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef WITH = new KeywordDef("with", false, null, null);
     @NotNull
-    public static final Op WRITE_OP = new Op(CONTROL_FLOW, null, "write", "write",
+    public static final Op WRITE_OP = new Op(OpType.CONTROL_FLOW, null, "write", "write",
                                              false, true,
                                              "'write' ['block'] ['mutate'] ['to'] <expression>",
                                              OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    public static final Op WRITE_SIMPLE = new Op(BINARY, ">>", null, "write-simple",
+    public static final Op WRITE_SIMPLE = new Op(OpType.BINARY, ">>", null, "write-simple",
                                                  false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     public static final KeywordDef YES = new KeywordDef("yes", false, "Boolean true.", null);
     @NotNull
-    static final Op EMIT_OP = new Op(RESERVED, "...", "emit", "emit",
+    static final Op EMIT_OP = new Op(OpType.RESERVED, "...", "emit", "emit",
                                      false, true, null, PIPE_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     private static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
@@ -623,76 +632,76 @@ public final class Symbols {
     @NotNull
     private static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
     @NotNull
-    private static final Op RESERVED_OPERATOR_10 = new Op(RESERVED, "|*", null, "RESERVED_OPERATOR_10",
+    private static final Op RESERVED_OPERATOR_10 = new Op(OpType.RESERVED, "|*", null, "RESERVED_OPERATOR_10",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_11 = new Op(RESERVED, "&>", null, "RESERVED_OPERATOR_11",
+    private static final Op RESERVED_OPERATOR_11 = new Op(OpType.RESERVED, "&>", null, "RESERVED_OPERATOR_11",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_12 = new Op(RESERVED, "<&", null, "RESERVED_OPERATOR_12",
+    private static final Op RESERVED_OPERATOR_12 = new Op(OpType.RESERVED, "<&", null, "RESERVED_OPERATOR_12",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_13 = new Op(RESERVED, "?>", null, "RESERVED_OPERATOR_13",
+    private static final Op RESERVED_OPERATOR_13 = new Op(OpType.RESERVED, "?>", null, "RESERVED_OPERATOR_13",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_14 = new Op(RESERVED, "<?", null, "RESERVED_OPERATOR_14",
+    private static final Op RESERVED_OPERATOR_14 = new Op(OpType.RESERVED, "<?", null, "RESERVED_OPERATOR_14",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_15 = new Op(RESERVED, ">->", null,
+    private static final Op RESERVED_OPERATOR_15 = new Op(OpType.RESERVED, ">->", null,
                                                           "RESERVED_OPERATOR_15",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_16 = new Op(RESERVED, "@>", null, "RESERVED_OPERATOR_16",
+    private static final Op RESERVED_OPERATOR_16 = new Op(OpType.RESERVED, "@>", null, "RESERVED_OPERATOR_16",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_17 = new Op(RESERVED, "?..?", null,
+    private static final Op RESERVED_OPERATOR_17 = new Op(OpType.RESERVED, "?..?", null,
                                                           "RESERVED_OPERATOR_7",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_18 = new Op(RESERVED, "?$?", null,
+    private static final Op RESERVED_OPERATOR_18 = new Op(OpType.RESERVED, "?$?", null,
                                                           "RESERVED_OPERATOR_18",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_19 = new Op(RESERVED, "<$", null, "RESERVED_OPERATOR_19",
+    private static final Op RESERVED_OPERATOR_19 = new Op(OpType.RESERVED, "<$", null, "RESERVED_OPERATOR_19",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_2 = new Op(RESERVED, "->", null, "RESERVED_OPERATOR_2",
+    private static final Op RESERVED_OPERATOR_2 = new Op(OpType.RESERVED, "->", null, "RESERVED_OPERATOR_2",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_20 = new Op(RESERVED, "<=<", null,
+    private static final Op RESERVED_OPERATOR_20 = new Op(OpType.RESERVED, "<=<", null,
                                                           "RESERVED_OPERATOR_20",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_21 = new Op(RESERVED, "<++", null,
+    private static final Op RESERVED_OPERATOR_21 = new Op(OpType.RESERVED, "<++", null,
                                                           "RESERVED_OPERATOR_21",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_22 = new Op(RESERVED, "-_-", null,
+    private static final Op RESERVED_OPERATOR_22 = new Op(OpType.RESERVED, "-_-", null,
                                                           "RESERVED_OPERATOR_22",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_23 = new Op(RESERVED, ">&", null, "RESERVED_OPERATOR_23",
+    private static final Op RESERVED_OPERATOR_23 = new Op(OpType.RESERVED, ">&", null, "RESERVED_OPERATOR_23",
                                                           true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_3 = new Op(RESERVED, "<-", null, "RESERVED_OPERATOR_3",
+    private static final Op RESERVED_OPERATOR_3 = new Op(OpType.RESERVED, "<-", null, "RESERVED_OPERATOR_3",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_4 = new Op(RESERVED, "?:", null, "RESERVED_OPERATOR_4",
+    private static final Op RESERVED_OPERATOR_4 = new Op(OpType.RESERVED, "?:", null, "RESERVED_OPERATOR_4",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_5 = new Op(RESERVED, "@", null, "RESERVED_OPERATOR_5",
+    private static final Op RESERVED_OPERATOR_5 = new Op(OpType.RESERVED, "@", null, "RESERVED_OPERATOR_5",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_6 = new Op(RESERVED, "::", null, "RESERVED_OPERATOR_6",
+    private static final Op RESERVED_OPERATOR_6 = new Op(OpType.RESERVED, "::", null, "RESERVED_OPERATOR_6",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_7 = new Op(RESERVED, "&=", null, "RESERVED_OPERATOR_7",
+    private static final Op RESERVED_OPERATOR_7 = new Op(OpType.RESERVED, "&=", null, "RESERVED_OPERATOR_7",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_8 = new Op(RESERVED, "+>", null, "RESERVED_OPERATOR_8",
+    private static final Op RESERVED_OPERATOR_8 = new Op(OpType.RESERVED, "+>", null, "RESERVED_OPERATOR_8",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
-    private static final Op RESERVED_OPERATOR_9 = new Op(RESERVED, "<+", null, "RESERVED_OPERATOR_9",
+    private static final Op RESERVED_OPERATOR_9 = new Op(OpType.RESERVED, "<+", null, "RESERVED_OPERATOR_9",
                                                          true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
@@ -753,6 +762,7 @@ public final class Symbols {
                     DEC,
                     DEFAULT,
                     DEFINITION,
+                    DEFINITION_CONSTRAINT,
                     DESTROY,
                     DIVIDE,
                     DOLLAR,

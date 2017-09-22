@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.getConfig;
@@ -126,7 +127,8 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
-                List<Scope> attachedScopes = new ArrayList<>(DollarUtilFactory.util().scopes());
+                List<Scope> attachedScopes = DollarUtilFactory.util().scopes().stream().filter(i -> !i.isRoot()).collect(
+                        Collectors.toList());
                 return DollarUtilFactory.util().node(operation, name + "-closure", pure,
                                                      new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
                                                      parser, source, null, inputs, vars2 -> {
@@ -161,10 +163,15 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             meta.put(IMPURE, "true");
         }
         meta.put(ID, id);
-        Type opType = operation.typeFor(inputs.toArray(new Value[inputs.size()]));
-        if (opType != null) {
-            log.debug(name + ":" + opType);
-            meta.put(MetaConstants.TYPE_HINT, opType);
+        try {
+            Type opType = operation.typeFor(inputs.toArray(new Value[inputs.size()]));
+            if (opType != null) {
+                log.debug(name + ":" + opType);
+                meta.put(MetaConstants.TYPE_HINT, opType);
+            }
+        } catch (ArrayIndexOutOfBoundsException iobe) {
+            throw new DollarScriptException(iobe,
+                                            "Index out of bounds, the Op.typeFor() function might be incorrect for op " + operation.name() + " message was " + iobe.getMessage());
         }
     }
 

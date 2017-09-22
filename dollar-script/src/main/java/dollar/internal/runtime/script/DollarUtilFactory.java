@@ -67,9 +67,10 @@ import static java.lang.String.format;
 public final class DollarUtilFactory implements DollarUtil {
 
     @NotNull
-    static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
+    private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
-        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false));
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getName().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "-"), false,
+                                 false));
         return list;
     });
     @NotNull
@@ -105,7 +106,9 @@ public final class DollarUtilFactory implements DollarUtil {
         boolean newScope = scopes.get().isEmpty() || !scope.equals(scope());
         scopes.get().add(scope);
         if (getConfig().debugScope()) {
-            log.info("{}{}BEGIN {}", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope);
+            StackTraceElement caller = getCaller(Thread.currentThread().getStackTrace());
+            log.info("{}{}BEGIN {} ({}:{})", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope, caller.getFileName(),
+                     caller.getLineNumber());
         }
 
     }
@@ -719,5 +722,16 @@ public final class DollarUtilFactory implements DollarUtil {
         node[0].metaAttribute(VARIABLE, key.asString());
         return node[0];
 
+    }
+
+    private StackTraceElement getCaller(StackTraceElement[] stackTrace) {
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if (!stackTraceElement.getClassName().endsWith(getClass().getName()) && !stackTraceElement.getClassName().endsWith(
+                    "java.lang" +
+                            ".Thread")) {
+                return stackTraceElement;
+            }
+        }
+        return null;
     }
 }

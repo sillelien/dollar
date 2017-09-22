@@ -277,8 +277,8 @@ public class DollarParserImpl implements DollarParser {
                 ).token().map(new DefinitionOperator(pure, this, false)),
                 array(
                         KEYWORD(EXPORT).optional(null), //0
-                        IDENTIFIER.between(OP(LT), OP(GT)).optional(null), //1
-                        KEYWORD(DEF), //2
+                        KEYWORD(DEF), //1
+                        IDENTIFIER.between(OP(LT), OP(GT)).optional(null), //2
                         IDENTIFIER //3
 
                 ).token().map(new DefinitionOperator(pure, this, true))
@@ -926,8 +926,8 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<Value> prefixUnReactive(boolean pure,
                                                   @NotNull OperatorTable<Value> table,
                                                   @NotNull Op operator,
-                                                  @NotNull BiFunction<Value, Source, Value> f) {
-        return table.prefix(op(operator, new UnaryOp(true, f, operator, this, pure)), operator.priority());
+                                                  @NotNull BiFunction<Value, Source, Value> function) {
+        return table.prefix(op(operator, new UnaryOp(true, function, operator, this, pure)), operator.priority());
     }
 
 //    private Parser<Value> printExpression(@NotNull Parser.Reference<Value> ref, boolean pure) {
@@ -1030,7 +1030,8 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private Parser<Value> script() {
         log.debug("Starting Parse Phase");
-
+        ScriptScope parseScope = new ScriptScope(util().scope(), "parse-scope", false, false);
+        util().pushScope(parseScope);
 
         Parser.Reference<Value> ref = Parser.newReference();
 //        Parser<Value> block = block(ref.lazy(), false).between(OP_NL(LEFT_BRACE), NL_OP(RIGHT_BRACE));
@@ -1039,11 +1040,16 @@ public class DollarParserImpl implements DollarParser {
                                        .next(expression.followedBy(TERMINATOR_SYMBOL).many1())
                                        .map(expressions -> {
                                            log.debug("Ended Parse Phase");
-                                           log.debug("Starting Runtime Phase");
-                                           Value resultValue = Func.blockFunc(Integer.MAX_VALUE, expressions);
-                                           Value fixedResult = resultValue.$fixDeep(false);
-                                           log.debug("Ended Runtime Phase");
-                                           return fixedResult;
+                                           util().popScope(parseScope);
+                                           return util().inSubScope(true, false, "runtime-scope", scope -> {
+                                               log.debug("Starting Runtime Phase");
+                                               Value resultValue = Func.blockFunc(2, expressions);
+                                               Value fixedResult = resultValue.$fixDeep(false);
+                                               log.debug("Ended Runtime Phase");
+                                               return fixedResult;
+
+                                           }).get();
+
                                        });
         ref.set(parser);
         return parser;

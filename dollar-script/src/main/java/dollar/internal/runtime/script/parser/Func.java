@@ -44,7 +44,6 @@ import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.*;
@@ -89,7 +88,10 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, false));
+            int bound = l.size() - 1;
+            for (int i = 0; i < bound; i++) {
+                l.get(i).$fix(depth, false);
+            }
             return l.get(l.size() - 1).$fix(1, false);
         }
     }

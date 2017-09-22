@@ -24,13 +24,11 @@ import dollar.api.Pipeable;
 import dollar.api.Type;
 import dollar.api.Value;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.execution.DollarExecutor;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
-import dollar.api.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -48,10 +46,10 @@ import java.util.stream.Stream;
 public class DollarList extends AbstractDollar {
 
     public static final int MAX_LIST_MULTIPLIER = 1000;
-    @Nullable
-    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
+
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("DollarList");
+    private static final Logger log = LoggerFactory.getLogger(DollarList.class);
+
     @NotNull
     private final ImmutableList<Value> list;
 

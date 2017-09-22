@@ -39,8 +39,8 @@ import java.util.function.Function;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
-import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
+import static dollar.internal.runtime.script.parser.Symbols.DEFINITION_CONSTRAINT;
 
 public class DefinitionOperator implements Function<Token, Function<? super Value, ? extends Value>> {
     @NotNull
@@ -71,19 +71,11 @@ public class DefinitionOperator implements Function<Token, Function<? super Valu
             @Nullable Value constraint;
             @Nullable SubType constraintSource;
             boolean readonly;
+            variableName = (Value) objects[3];
+            value = rhs;
+            typeConstraintObj = (Value) objects[2];
 
-            if (def) {
-                variableName = (Value) objects[3];
-                value = rhs;
-                typeConstraintObj = (Value) objects[1];
-                readonly = true;
-
-            } else {
-                variableName = (Value) objects[3];
-                value = rhs;
-                typeConstraintObj = (Value) objects[2];
-                readonly = objects[1] != null;
-            }
+            readonly = def || (objects[1] != null);
 
 
             if (pure) {
@@ -94,8 +86,8 @@ public class DefinitionOperator implements Function<Token, Function<? super Valu
 
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
-                constraint = DollarUtilFactory.util().node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                                           new SourceImpl(DollarUtilFactory.util().scope(), token), null,
+                constraint = DollarUtilFactory.util().node(DEFINITION_CONSTRAINT, pure, parser,
+                                                           new SourceImpl(DollarUtilFactory.util().scope(), token),
                                                            new ArrayList<>(),
                                                            i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
                 DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);

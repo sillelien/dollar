@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.base.Objects;
 import dollar.api.SubType;
 import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
@@ -35,5 +36,23 @@ public class SimpleSubType implements SubType {
     @Override
     public boolean isEmpty() {
         return value.isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleSubType that = (SimpleSubType) o;
+        return Objects.equal(value, that.value);
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

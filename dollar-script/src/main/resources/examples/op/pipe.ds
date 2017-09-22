@@ -1,21 +1,21 @@
-var a= void;
-var e=0;
+var inputValue= void;
+<Integer> collectable=0;
 
-def updateE {e=$1;$1}
+def update {
+    collectable= $1;
+}
 
-var collectedValues=[]
+<List> result=[]
 
-collect e until it == 6 unless it == 5 {
+collect collectable until it == 6 unless it == 5 {
     print count
     print collected
-    collectedValues= collected
+    result= collected
 }
 
 
-a + 2 | updateE
-a= 1;
-a= 2;
-a= 3;
-a= 4;
+inputValue + 2 | update
 
-collectedValues <=> [ 3, 4, 6]
+inputValue= 1; inputValue= 2; inputValue= 3; inputValue= 4;
+
+result <=> [ 3, 4, 6]

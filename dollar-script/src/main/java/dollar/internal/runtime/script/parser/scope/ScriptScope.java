@@ -423,7 +423,7 @@ public class ScriptScope implements Scope {
 
     @Override
     public boolean isRoot() {
-        return root;
+        return root || (parent == null);
     }
 
     @Override

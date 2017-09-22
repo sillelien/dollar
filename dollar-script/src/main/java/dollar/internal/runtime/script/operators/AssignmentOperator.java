@@ -105,62 +105,37 @@ public class AssignmentOperator implements Function<Token, Function<? super Valu
 
         Value finalConstraint = constraint;
         return (Function<Value, Value>) rhs -> {
-            Scope scope = util().scope();
             util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
 
             final String op = ((Value) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
-            if ("when".equals(op) || "subscribe".equals(op)) {
-                final SubType useSource;
-                Value useConstraint;
-                if (finalConstraint != null) {
-                    useConstraint = finalConstraint;
-                    useSource = constraintSource;
-                } else {
-                    useConstraint = scope.constraintOf(varName);
-                    useSource = scope.subTypeOf(varName);
-                }
-                List<Value> inputs = Arrays.asList(rhs, util().constrain(scope, rhs, finalConstraint, useSource));
-                if ("when".equals(op)) {
-                    log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                    return util().node(WHEN_ASSIGN, pure, parser, token, inputs,
-                                       c -> {
-                                           Value condition = (Value) objects[5];
-                                           Value initial = rhs.$fixDeep(false);
-                                           scope.set(varName, condition.isTrue() ? initial : $void(), null,
-                                                     useSource,
-                                                     new VarFlags(false, isVolatile, false, pure, false,
-                                                                  declaration));
-                                           return condition.$listen(
-                                                   args -> {
-                                                       if (condition.isTrue()) {
-                                                           Value value = rhs.$fixDeep(false);
-                                                           util().setVariable(scope, varName,
-                                                                              value, parser,
-                                                                              token,
-                                                                              useConstraint,
-                                                                              useSource,
-                                                                              new VarFlags(
-                                                                                                  false,
-                                                                                                  isVolatile,
-                                                                                                  false,
-                                                                                                  pure,
-                                                                                                  false,
-                                                                                                  false));
+//                , util().constrain(scope, rhs, finalConstraint, useSource)
+            List<Value> inputs = Arrays.asList(rhs);
+            if ("when".equals(op)) {
+                log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                                                           return value;
-                                                       } else {
-                                                           return $void();
-                                                       }
-                                                   });
+                return util().node(WHEN_ASSIGN, pure, parser, token, inputs,
+                                   new WhenAssignAction(finalConstraint, constraintSource, varName, objects, rhs, isVolatile,
+                                                        declaration, token)
+                );
+
+            } else if ("subscribe".equals(op)) {
+                return util().node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
+                                   c -> {
+                                       Scope scope = util().scope();
+                                       final SubType useSource;
+                                       Value useConstraint;
+                                       if (finalConstraint != null) {
+                                           useConstraint = finalConstraint;
+                                           useSource = constraintSource;
+                                       } else {
+                                           useConstraint = scope.constraintOf(varName);
+                                           useSource = scope.subTypeOf(varName);
                                        }
-                    );
+                                       scope.set(varName, $void(), null, useSource,
+                                                 new VarFlags(false, true, true, pure, false, declaration));
 
-                } else if ("subscribe".equals(op)) {
-                    scope.set(varName, $void(), null, useSource,
-                              new VarFlags(false, true, true, pure, false, declaration));
-                    return util().node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
-                                       c -> $(rhs.$subscribe(
+                                       return $(rhs.$subscribe(
                                                i -> util().setVariable(scope, varName,
                                                                        util().fix(
                                                                                i[0]),
@@ -169,11 +144,12 @@ public class AssignmentOperator implements Function<Token, Function<? super Valu
                                                                        new VarFlags(false, true,
                                                                                     false, pure,
                                                                                     false,
-                                                                                    declaration)).getValue())));
-                }
+                                                                                    declaration)).getValue()));
+                                   });
             }
+
             return assign(rhs, objects, finalConstraint, new VarFlags(constant, isVolatile, declaration, pure),
-                          constraintSource, scope, token, type, new SourceImpl(util().scope(), token));
+                          constraintSource, token, type, new SourceImpl(util().scope(), token));
         };
     }
 
@@ -183,7 +159,7 @@ public class AssignmentOperator implements Function<Token, Function<? super Valu
                          @Nullable Value constraint,
                          @NotNull VarFlags varFlags,
                          @Nullable SubType constraintSource,
-                         @NotNull Scope scope,
+
                          @NotNull Token token,
                          @Nullable Type type,
                          @NotNull Source source) {
@@ -232,14 +208,85 @@ public class AssignmentOperator implements Function<Token, Function<? super Valu
                 parser.export(varName, rhsFixed);
             }
             util().setVariable(currentScope, varName, rhsFixed, parser, token, constraint, useSource, varFlags);
-            return $void();
+            return rhsFixed;
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return util().node(ASSIGNMENT, pure, parser, token, Arrays.asList(rhs, util().constrain(
-                scope, rhs, constraint, constraintSource)),
-                           pipeable);
+        return util().node(ASSIGNMENT, pure, parser, token, Arrays.asList(rhs), pipeable);
     }
 
 
+    private class WhenAssignAction implements Pipeable {
+        private @Nullable
+        final SubType constraintSource;
+
+        private final boolean declaration;
+
+        @Nullable
+        private final Value finalConstraint;
+
+        private final boolean isVolatile;
+
+        @NotNull
+        private final Object[] objects;
+
+        @NotNull
+        private final Value rhs;
+        @NotNull
+
+        private final Token token;
+
+        @NotNull
+        private final VarKey varName;
+
+        WhenAssignAction(@Nullable Value finalConstraint,
+                         @Nullable SubType constraintSource,
+                         @NotNull VarKey varName,
+                         @NotNull Object[] objects,
+                         @NotNull Value rhs,
+                         boolean isVolatile, boolean declaration, @NotNull Token token) {
+            this.finalConstraint = finalConstraint;
+            this.constraintSource = constraintSource;
+            this.varName = varName;
+            this.objects = Arrays.copyOf(objects, objects.length);
+            this.rhs = rhs;
+            this.isVolatile = isVolatile;
+            this.declaration = declaration;
+            this.token = token;
+        }
+
+        @Override
+        public @NotNull Value pipe(Value... c) throws Exception {
+            Scope scope = util().scope();
+            final SubType useSource;
+            Value useConstraint;
+            if (finalConstraint != null) {
+                useConstraint = finalConstraint;
+                useSource = constraintSource;
+            } else {
+                useConstraint = scope.constraintOf(varName);
+                useSource = scope.subTypeOf(varName);
+            }
+
+            Value condition = (Value) objects[5];
+            Value initial = rhs.$fixDeep(false);
+            scope.set(varName, condition.isTrue() ? initial : $void(), useConstraint,
+                      useSource,
+                      new VarFlags(false, isVolatile, false, pure, false,
+                                   declaration));
+            return condition.$listen(
+                    args -> {
+                        Value value;
+                        if (condition.isTrue()) {
+                            value = rhs.$fixDeep(false);
+                        } else {
+                            value = $void();
+                        }
+                        util().setVariable(scope, varName, value, parser, token, useConstraint, useSource,
+                                           new VarFlags(false, isVolatile, false, pure, false, false));
+
+                        return value;
+                    });
+        }
+    }
 }

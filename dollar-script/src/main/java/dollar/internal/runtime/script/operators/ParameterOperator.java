@@ -76,9 +76,19 @@ public class ParameterOperator implements Function<Token, Function<? super Value
             }
 
             @SuppressWarnings("ConstantConditions")
-            Value node = util().node(PARAM_OP, name, pure, parser, token, parameters,
-                                     i -> util().inSubScope(true, pure, "param-disposable-scope",
+            Value[] node = new Value[1];
+            node[0] = util().node(PARAM_OP, name, pure, parser, token, parameters,
+                                  args -> util().inSubScope(true, pure, "param-disposable-scope",
                                                             newScope -> {
+                                                                //reactive links
+                                                                lhs.$listen(i -> node[0].$notify(NotificationType
+                                                                                                         .UNARY_VALUE_CHANGE,
+                                                                                                 i[0]));
+                                                                for (Value param : parameters) {
+                                                                    param.$listen(i -> node[0].$notify(NotificationType
+                                                                                                               .PARAM_VALUE_CHANGE,
+                                                                                                       i[0]));
+                                                                }
                                                                 util().addParameterstoCurrentScope(
                                                                         util().scope(),
                                                                         parameters);
@@ -95,7 +105,7 @@ public class ParameterOperator implements Function<Token, Function<? super Value
                                                                                 VarKey.of(lhs),
                                                                                 false, null,
                                                                                 token, parser)
-                                                                                         .$fix(2,
+                                                                                         .$fix(3,
                                                                                                false);
                                                                     }
                                                                 } else {
@@ -109,12 +119,7 @@ public class ParameterOperator implements Function<Token, Function<? super Value
             );
 
 
-            //reactive links
-            lhs.$listen(i -> node.$notify(NotificationType.UNARY_VALUE_CHANGE, i[0]));
-            for (Value param : parameters) {
-                param.$listen(i -> node.$notify(NotificationType.PARAM_VALUE_CHANGE, i[0]));
-            }
-            return node;
+            return node[0];
         };
     }
 

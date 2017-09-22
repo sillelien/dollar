@@ -341,7 +341,7 @@ public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
         }
         try {
             return typeFunction.apply(Values);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(type + ":" + e.getMessage(), e);
             throw e;
         }

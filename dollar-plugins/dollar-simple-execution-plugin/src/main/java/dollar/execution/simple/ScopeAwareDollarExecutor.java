@@ -25,6 +25,7 @@ import dollar.api.execution.DollarExecutor;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
+import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -32,11 +33,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -85,9 +86,13 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
         if (getConfig().debugExecution()) {
             log.info("Immediate Execution");
         }
-        final FutureTask<T> tFutureTask = new FutureTask<>(wrap(callable));
-        tFutureTask.run();
-        return tFutureTask;
+        CompletableFuture<T> future = new CompletableFuture<>();
+        try {
+            future.complete(callable.call());
+        } catch (Exception e) {
+            throw new DollarScriptException(e);
+        }
+        return future;
     }
 
     @Override
