@@ -314,32 +314,33 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 
 <a class="jxr_linenumber" name="L307" href="#L307">307</a>     @NotNull
 <a class="jxr_linenumber" name="L308" href="#L308">308</a>     @Override
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">public</strong> Stream&lt;Value&gt; $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">return</strong> Stream.empty();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromStream(Stream.empty());
 <a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     @Override
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     }
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>     @Override
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(@Nullable Object obj) {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">if</strong> (obj instanceof Value &amp;&amp; ((Value) obj).isVoid()) {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         }
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">return</strong> ((obj instanceof Value) &amp;&amp; (((Value) obj).toJavaObject() == <strong class="jxr_keyword">null</strong>)) || (obj == <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     }
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>     @Override
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <a href="../../../dollar/api/Value.html">Value</a> o) {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>         <strong class="jxr_keyword">if</strong> (o.isVoid()) {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>             <strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>             <strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         }
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>     }
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> }
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     @Override
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     }
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     @Override
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(@Nullable Object obj) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">if</strong> (obj instanceof Value &amp;&amp; ((Value) obj).isVoid()) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>         <strong class="jxr_keyword">return</strong> ((obj instanceof Value) &amp;&amp; (((Value) obj).toJavaObject() == <strong class="jxr_keyword">null</strong>)) || (obj == <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     @Override
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <a href="../../../dollar/api/Value.html">Value</a> o) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         <strong class="jxr_keyword">if</strong> (o.isVoid()) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>             <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>             <strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>

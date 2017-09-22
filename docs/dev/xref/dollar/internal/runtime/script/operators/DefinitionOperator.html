@@ -47,8 +47,8 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.DEFINITION;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.DEFINITION;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.DEFINITION_CONSTRAINT;
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/DefinitionOperator.html">DefinitionOperator</a> <strong class="jxr_keyword">implements</strong> Function&lt;Token, Function&lt;? <strong class="jxr_keyword">super</strong> Value, ? <strong class="jxr_keyword">extends</strong> Value&gt;&gt; {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      @NotNull
@@ -79,61 +79,53 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              @Nullable <a href="../../../../../dollar/api/Value.html">Value</a> constraint;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              @Nullable <a href="../../../../../dollar/api/SubType.html">SubType</a> constraintSource;
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              <strong class="jxr_keyword">boolean</strong> readonly;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">if</strong> (def) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  variableName = (Value) objects[3];
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  value = rhs;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  typeConstraintObj = (Value) objects[1];
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                  readonly = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              variableName = (Value) objects[3];
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              value = rhs;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>              typeConstraintObj = (Value) objects[2];
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              readonly = def || (objects[1] != <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>              } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  variableName = (Value) objects[3];
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  value = rhs;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  typeConstraintObj = (Value) objects[2];
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  readonly = objects[1] != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              <strong class="jxr_keyword">if</strong> (pure) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                  log.info(<span class="jxr_string">"Creating pure variable {}"</span>, variableName);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>                  log.info(<span class="jxr_string">"Creating impure variable {}"</span>, variableName);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">if</strong> (typeConstraintObj != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>                  <a href="../../../../../dollar/api/Type.html">Type</a> type = Type.of(typeConstraintObj);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>                  constraint = DollarUtilFactory.util().node(DEFINITION, <span class="jxr_string">"definition-constraint"</span>, pure, NEW_SCOPE, parser,
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                                                             <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a>(DollarUtilFactory.util().scope(), token), <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>                                                             <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(),
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>                                                            i -&gt; $(scope.parameter(VarKey.IT).getValue().is(type)));
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                 <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a> meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>                 <strong class="jxr_keyword">if</strong> (meta != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>                     constraintSource = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/SimpleSubType.html">SimpleSubType</a>(meta);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                     constraintSource = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 }
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 constraint = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 constraintSource = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">boolean</strong> finalReadonly = readonly;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>             <a href="../../../../../dollar/api/Value.html">Value</a> node = DollarUtilFactory.util().node(DEFINITION, pure, parser, token,
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>                                                        Arrays.asList(rhs,
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>                                                                      DollarUtilFactory.util().constrain(scope, value, constraint,
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                                                                                         constraintSource)),
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>                                                        i -&gt; Func.definitionFunc(token, (exportObj != <strong class="jxr_keyword">null</strong>), value, variableName,
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>                                                                                 constraint, constraintSource,
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>                                                                                 parser, pure, finalReadonly)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>             );
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>             node.$listen(i -&gt; scope.notify(VarKey.of(variableName)));
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>             <strong class="jxr_keyword">return</strong> node;
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>         };
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>     }
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>              <strong class="jxr_keyword">if</strong> (pure) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  log.info(<span class="jxr_string">"Creating pure variable {}"</span>, variableName);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>              } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  log.info(<span class="jxr_string">"Creating impure variable {}"</span>, variableName);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>              }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">if</strong> (typeConstraintObj != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <a href="../../../../../dollar/api/Type.html">Type</a> type = Type.of(typeConstraintObj);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                  constraint = DollarUtilFactory.util().node(DEFINITION_CONSTRAINT, pure, parser,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                                                             <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a>(DollarUtilFactory.util().scope(), token),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>                                                             <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>                                                             i -&gt; $(scope.parameter(VarKey.IT).getValue().is(type)));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <a href="../../../../../dollar/internal/runtime/script/parser/SourceImpl.html">SourceImpl</a> meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                  <strong class="jxr_keyword">if</strong> (meta != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>                      constraintSource = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/SimpleSubType.html">SimpleSubType</a>(meta);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>                  } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                      constraintSource = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                  }
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 constraint = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                 constraintSource = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>             }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">boolean</strong> finalReadonly = readonly;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             <a href="../../../../../dollar/api/Value.html">Value</a> node = DollarUtilFactory.util().node(DEFINITION, pure, parser, token,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                                                        Arrays.asList(rhs,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                                                                      DollarUtilFactory.util().constrain(scope, value, constraint,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                                                                                                         constraintSource)),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                                                        i -&gt; Func.definitionFunc(token, (exportObj != <strong class="jxr_keyword">null</strong>), value, variableName,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>                                                                                 constraint, constraintSource,
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>                                                                                 parser, pure, finalReadonly)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>             );
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             node.$listen(i -&gt; scope.notify(VarKey.of(variableName)));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">return</strong> node;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         };
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
