@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 
 <a class="jxr_linenumber" name="L380" href="#L380">380</a>     @NotNull
 <a class="jxr_linenumber" name="L381" href="#L381">381</a>     @Override
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">public</strong> Stream&lt;Value&gt; $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $stream(<strong class="jxr_keyword">boolean</strong> parallel) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a>         <strong class="jxr_keyword">return</strong> getValue().$stream(false);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a>     }
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 
@@ -644,195 +644,200 @@
 <a class="jxr_linenumber" name="L636" href="#L636">636</a>     }
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 
 <a class="jxr_linenumber" name="L638" href="#L638">638</a>     @Override
-<a class="jxr_linenumber" name="L639" href="#L639">639</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> string() {
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>         <strong class="jxr_keyword">return</strong> getValue().string();
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>     <strong class="jxr_keyword">public</strong> @NotNull Stream&lt;Value&gt; stream(<strong class="jxr_keyword">boolean</strong> parallel) {
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>         <strong class="jxr_keyword">return</strong> getValue().stream(parallel);
 <a class="jxr_linenumber" name="L641" href="#L641">641</a>     }
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>     @NotNull
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>     @Override
-<a class="jxr_linenumber" name="L645" href="#L645">645</a>     <strong class="jxr_keyword">public</strong> String toDollarScript() {
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>         <strong class="jxr_keyword">return</strong> getValue().toString();
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>     }
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>     @Override
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> string() {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>         <strong class="jxr_keyword">return</strong> getValue().string();
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>     }
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>     @NotNull
 <a class="jxr_linenumber" name="L649" href="#L649">649</a>     @Override
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> toDouble() {
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>         <strong class="jxr_keyword">return</strong> getValue().toDouble();
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>     <strong class="jxr_keyword">public</strong> String toDollarScript() {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a>         <strong class="jxr_keyword">return</strong> getValue().toString();
 <a class="jxr_linenumber" name="L652" href="#L652">652</a>     }
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>     @NotNull
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>     @Override
-<a class="jxr_linenumber" name="L656" href="#L656">656</a>     <strong class="jxr_keyword">public</strong> String toHumanString() {
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>         <strong class="jxr_keyword">return</strong> getValue().toHumanString();
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>     }
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>     @Override
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> toDouble() {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>         <strong class="jxr_keyword">return</strong> getValue().toDouble();
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>     }
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>     @NotNull
 <a class="jxr_linenumber" name="L660" href="#L660">660</a>     @Override
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> toInteger() {
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>         <strong class="jxr_keyword">return</strong> getValue().toInteger();
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>     <strong class="jxr_keyword">public</strong> String toHumanString() {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>         <strong class="jxr_keyword">return</strong> getValue().toHumanString();
 <a class="jxr_linenumber" name="L663" href="#L663">663</a>     }
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 
-<a class="jxr_linenumber" name="L665" href="#L665">665</a>     @NotNull
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>     @Override
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>     <strong class="jxr_keyword">public</strong> &lt;K <strong class="jxr_keyword">extends</strong> Comparable&lt;K&gt;, V&gt; ImmutableMap&lt;K, V&gt; toJavaMap() {
-<a class="jxr_linenumber" name="L668" href="#L668">668</a>         <strong class="jxr_keyword">return</strong> getValue().toJavaMap();
-<a class="jxr_linenumber" name="L669" href="#L669">669</a>     }
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
-<a class="jxr_linenumber" name="L671" href="#L671">671</a>     @Nullable
-<a class="jxr_linenumber" name="L672" href="#L672">672</a>     @Override
-<a class="jxr_linenumber" name="L673" href="#L673">673</a>     <strong class="jxr_keyword">public</strong> &lt;R&gt; R toJavaObject() {
-<a class="jxr_linenumber" name="L674" href="#L674">674</a>         <strong class="jxr_keyword">return</strong> getValue().toJavaObject();
-<a class="jxr_linenumber" name="L675" href="#L675">675</a>     }
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
-<a class="jxr_linenumber" name="L677" href="#L677">677</a>     @NotNull
-<a class="jxr_linenumber" name="L678" href="#L678">678</a>     @Override
-<a class="jxr_linenumber" name="L679" href="#L679">679</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/json/ImmutableJsonObject.html">ImmutableJsonObject</a> toJsonObject() {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a>         <strong class="jxr_keyword">return</strong> getValue().toJsonObject();
-<a class="jxr_linenumber" name="L681" href="#L681">681</a>     }
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>     @NotNull
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>     @Override
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;?&gt; toList() {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>         <strong class="jxr_keyword">return</strong> getValue().toList();
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>     }
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>     @Override
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> toInteger() {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a>         <strong class="jxr_keyword">return</strong> getValue().toInteger();
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>     }
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>     @NotNull
+<a class="jxr_linenumber" name="L671" href="#L671">671</a>     @Override
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>     <strong class="jxr_keyword">public</strong> &lt;K <strong class="jxr_keyword">extends</strong> Comparable&lt;K&gt;, V&gt; ImmutableMap&lt;K, V&gt; toJavaMap() {
+<a class="jxr_linenumber" name="L673" href="#L673">673</a>         <strong class="jxr_keyword">return</strong> getValue().toJavaMap();
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>     }
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a>     @Nullable
+<a class="jxr_linenumber" name="L677" href="#L677">677</a>     @Override
+<a class="jxr_linenumber" name="L678" href="#L678">678</a>     <strong class="jxr_keyword">public</strong> &lt;R&gt; R toJavaObject() {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a>         <strong class="jxr_keyword">return</strong> getValue().toJavaObject();
+<a class="jxr_linenumber" name="L680" href="#L680">680</a>     }
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>     @NotNull
+<a class="jxr_linenumber" name="L683" href="#L683">683</a>     @Override
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/json/ImmutableJsonObject.html">ImmutableJsonObject</a> toJsonObject() {
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>         <strong class="jxr_keyword">return</strong> getValue().toJsonObject();
+<a class="jxr_linenumber" name="L686" href="#L686">686</a>     }
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>     @NotNull
 <a class="jxr_linenumber" name="L689" href="#L689">689</a>     @Override
-<a class="jxr_linenumber" name="L690" href="#L690">690</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> toLong() {
-<a class="jxr_linenumber" name="L691" href="#L691">691</a>         <strong class="jxr_keyword">return</strong> getValue().toLong();
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;?&gt; toList() {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a>         <strong class="jxr_keyword">return</strong> getValue().toList();
 <a class="jxr_linenumber" name="L692" href="#L692">692</a>     }
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 
-<a class="jxr_linenumber" name="L694" href="#L694">694</a>     @NotNull
-<a class="jxr_linenumber" name="L695" href="#L695">695</a>     @Override
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>     <strong class="jxr_keyword">public</strong> Number toNumber() {
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>         <strong class="jxr_keyword">return</strong> getValue().toNumber();
-<a class="jxr_linenumber" name="L698" href="#L698">698</a>     }
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
-<a class="jxr_linenumber" name="L700" href="#L700">700</a>     @NotNull
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>     @Override
-<a class="jxr_linenumber" name="L702" href="#L702">702</a>     <strong class="jxr_keyword">public</strong> InputStream toStream() {
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>         <strong class="jxr_keyword">return</strong> getValue().toStream();
-<a class="jxr_linenumber" name="L704" href="#L704">704</a>     }
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>     @Override
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> toLong() {
+<a class="jxr_linenumber" name="L696" href="#L696">696</a>         <strong class="jxr_keyword">return</strong> getValue().toLong();
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>     }
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>     @NotNull
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>     @Override
+<a class="jxr_linenumber" name="L701" href="#L701">701</a>     <strong class="jxr_keyword">public</strong> Number toNumber() {
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>         <strong class="jxr_keyword">return</strong> getValue().toNumber();
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>     }
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>     @NotNull
 <a class="jxr_linenumber" name="L706" href="#L706">706</a>     @Override
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;String&gt; toStrings() {
-<a class="jxr_linenumber" name="L708" href="#L708">708</a>         <strong class="jxr_keyword">return</strong> getValue().toStrings();
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>     <strong class="jxr_keyword">public</strong> InputStream toStream() {
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>         <strong class="jxr_keyword">return</strong> getValue().toStream();
 <a class="jxr_linenumber" name="L709" href="#L709">709</a>     }
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 
-<a class="jxr_linenumber" name="L711" href="#L711">711</a>     @NotNull
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>     @Override
-<a class="jxr_linenumber" name="L713" href="#L713">713</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;Value&gt; toVarList() {
-<a class="jxr_linenumber" name="L714" href="#L714">714</a>         <strong class="jxr_keyword">return</strong> getValue().toVarList();
-<a class="jxr_linenumber" name="L715" href="#L715">715</a>     }
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 
-<a class="jxr_linenumber" name="L717" href="#L717">717</a>     @NotNull
-<a class="jxr_linenumber" name="L718" href="#L718">718</a>     @Override
-<a class="jxr_linenumber" name="L719" href="#L719">719</a>     <strong class="jxr_keyword">public</strong> ImmutableMap&lt;Value, Value&gt; toVarMap() {
-<a class="jxr_linenumber" name="L720" href="#L720">720</a>         <strong class="jxr_keyword">return</strong> getValue().toVarMap();
-<a class="jxr_linenumber" name="L721" href="#L721">721</a>     }
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 
-<a class="jxr_linenumber" name="L723" href="#L723">723</a>     @NotNull
-<a class="jxr_linenumber" name="L724" href="#L724">724</a>     @Override
-<a class="jxr_linenumber" name="L725" href="#L725">725</a>     <strong class="jxr_keyword">public</strong> String toYaml() {
-<a class="jxr_linenumber" name="L726" href="#L726">726</a>         <strong class="jxr_keyword">return</strong> getValue().toYaml();
-<a class="jxr_linenumber" name="L727" href="#L727">727</a>     }
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>     @Override
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;String&gt; toStrings() {
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>         <strong class="jxr_keyword">return</strong> getValue().toStrings();
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>     }
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>     @NotNull
+<a class="jxr_linenumber" name="L717" href="#L717">717</a>     @Override
+<a class="jxr_linenumber" name="L718" href="#L718">718</a>     <strong class="jxr_keyword">public</strong> ImmutableList&lt;Value&gt; toVarList() {
+<a class="jxr_linenumber" name="L719" href="#L719">719</a>         <strong class="jxr_keyword">return</strong> getValue().toVarList();
+<a class="jxr_linenumber" name="L720" href="#L720">720</a>     }
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>     @NotNull
+<a class="jxr_linenumber" name="L723" href="#L723">723</a>     @Override
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>     <strong class="jxr_keyword">public</strong> ImmutableMap&lt;Value, Value&gt; toVarMap() {
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>         <strong class="jxr_keyword">return</strong> getValue().toVarMap();
+<a class="jxr_linenumber" name="L726" href="#L726">726</a>     }
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>     @NotNull
 <a class="jxr_linenumber" name="L729" href="#L729">729</a>     @Override
-<a class="jxr_linenumber" name="L730" href="#L730">730</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> truthy() {
-<a class="jxr_linenumber" name="L731" href="#L731">731</a>         <strong class="jxr_keyword">return</strong> getValue().truthy();
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>     <strong class="jxr_keyword">public</strong> String toYaml() {
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>         <strong class="jxr_keyword">return</strong> getValue().toYaml();
 <a class="jxr_linenumber" name="L732" href="#L732">732</a>     }
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 
 <a class="jxr_linenumber" name="L734" href="#L734">734</a>     @Override
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> uri() {
-<a class="jxr_linenumber" name="L736" href="#L736">736</a>         <strong class="jxr_keyword">return</strong> getValue().uri();
+<a class="jxr_linenumber" name="L735" href="#L735">735</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> truthy() {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a>         <strong class="jxr_keyword">return</strong> getValue().truthy();
 <a class="jxr_linenumber" name="L737" href="#L737">737</a>     }
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 
-<a class="jxr_linenumber" name="L739" href="#L739">739</a>     @NotNull
-<a class="jxr_linenumber" name="L740" href="#L740">740</a>     @Override
-<a class="jxr_linenumber" name="L741" href="#L741">741</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $create() {
-<a class="jxr_linenumber" name="L742" href="#L742">742</a>         <strong class="jxr_keyword">return</strong> getValue().$create();
-<a class="jxr_linenumber" name="L743" href="#L743">743</a>     }
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>     @NotNull
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>     @Override
-<a class="jxr_linenumber" name="L747" href="#L747">747</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $destroy() {
-<a class="jxr_linenumber" name="L748" href="#L748">748</a>         <strong class="jxr_keyword">return</strong> getValue().$destroy();
-<a class="jxr_linenumber" name="L749" href="#L749">749</a>     }
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 
-<a class="jxr_linenumber" name="L751" href="#L751">751</a>     @NotNull
-<a class="jxr_linenumber" name="L752" href="#L752">752</a>     @Override
-<a class="jxr_linenumber" name="L753" href="#L753">753</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $pause() {
-<a class="jxr_linenumber" name="L754" href="#L754">754</a>         <strong class="jxr_keyword">return</strong> getValue().$pause();
-<a class="jxr_linenumber" name="L755" href="#L755">755</a>     }
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>     @Override
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> uri() {
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>         <strong class="jxr_keyword">return</strong> getValue().uri();
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>     }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>     @NotNull
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>     @Override
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $create() {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>         <strong class="jxr_keyword">return</strong> getValue().$create();
+<a class="jxr_linenumber" name="L748" href="#L748">748</a>     }
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 
+<a class="jxr_linenumber" name="L750" href="#L750">750</a>     @NotNull
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>     @Override
+<a class="jxr_linenumber" name="L752" href="#L752">752</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $destroy() {
+<a class="jxr_linenumber" name="L753" href="#L753">753</a>         <strong class="jxr_keyword">return</strong> getValue().$destroy();
+<a class="jxr_linenumber" name="L754" href="#L754">754</a>     }
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 
+<a class="jxr_linenumber" name="L756" href="#L756">756</a>     @NotNull
 <a class="jxr_linenumber" name="L757" href="#L757">757</a>     @Override
-<a class="jxr_linenumber" name="L758" href="#L758">758</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> $signal(@NotNull <a href="../../../dollar/api/Signal.html">Signal</a> signal) {
-<a class="jxr_linenumber" name="L759" href="#L759">759</a>         getValue().$signal(signal);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $pause() {
+<a class="jxr_linenumber" name="L759" href="#L759">759</a>         <strong class="jxr_keyword">return</strong> getValue().$pause();
 <a class="jxr_linenumber" name="L760" href="#L760">760</a>     }
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 
-<a class="jxr_linenumber" name="L762" href="#L762">762</a>     @NotNull
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>     @Override
-<a class="jxr_linenumber" name="L764" href="#L764">764</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $start() {
-<a class="jxr_linenumber" name="L765" href="#L765">765</a>         <strong class="jxr_keyword">return</strong> getValue().$start();
-<a class="jxr_linenumber" name="L766" href="#L766">766</a>     }
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 
-<a class="jxr_linenumber" name="L768" href="#L768">768</a>     @NotNull
-<a class="jxr_linenumber" name="L769" href="#L769">769</a>     @Override
-<a class="jxr_linenumber" name="L770" href="#L770">770</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $state() {
-<a class="jxr_linenumber" name="L771" href="#L771">771</a>         <strong class="jxr_keyword">return</strong> getValue().$state();
-<a class="jxr_linenumber" name="L772" href="#L772">772</a>     }
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 
-<a class="jxr_linenumber" name="L774" href="#L774">774</a>     @NotNull
-<a class="jxr_linenumber" name="L775" href="#L775">775</a>     @Override
-<a class="jxr_linenumber" name="L776" href="#L776">776</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $stop() {
-<a class="jxr_linenumber" name="L777" href="#L777">777</a>         <strong class="jxr_keyword">return</strong> getValue().$stop();
-<a class="jxr_linenumber" name="L778" href="#L778">778</a>     }
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
-<a class="jxr_linenumber" name="L780" href="#L780">780</a>     @NotNull
-<a class="jxr_linenumber" name="L781" href="#L781">781</a>     @Override
-<a class="jxr_linenumber" name="L782" href="#L782">782</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $unpause() {
-<a class="jxr_linenumber" name="L783" href="#L783">783</a>         <strong class="jxr_keyword">return</strong> getValue().$unpause();
-<a class="jxr_linenumber" name="L784" href="#L784">784</a>     }
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 
-<a class="jxr_linenumber" name="L786" href="#L786">786</a>     @NotNull
-<a class="jxr_linenumber" name="L787" href="#L787">787</a>     @Override
-<a class="jxr_linenumber" name="L788" href="#L788">788</a>     <strong class="jxr_keyword">public</strong> StateMachine&lt;ResourceState, Signal&gt; getStateMachine() {
-<a class="jxr_linenumber" name="L789" href="#L789">789</a>         <strong class="jxr_keyword">return</strong> getValue().getStateMachine();
-<a class="jxr_linenumber" name="L790" href="#L790">790</a>     }
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
-<a class="jxr_linenumber" name="L792" href="#L792">792</a>     @NotNull
-<a class="jxr_linenumber" name="L793" href="#L793">793</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $set(@NotNull String key, Object value) {
-<a class="jxr_linenumber" name="L794" href="#L794">794</a>         <strong class="jxr_keyword">return</strong> tracer.trace(<strong class="jxr_keyword">null</strong>, getValue().$set(DollarStatic.$(key), value), StateTracer.Operations.SET, key, value);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a>     @Override
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> $signal(@NotNull <a href="../../../dollar/api/Signal.html">Signal</a> signal) {
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>         getValue().$signal(signal);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>     }
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 
+<a class="jxr_linenumber" name="L767" href="#L767">767</a>     @NotNull
+<a class="jxr_linenumber" name="L768" href="#L768">768</a>     @Override
+<a class="jxr_linenumber" name="L769" href="#L769">769</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $start() {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a>         <strong class="jxr_keyword">return</strong> getValue().$start();
+<a class="jxr_linenumber" name="L771" href="#L771">771</a>     }
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 
+<a class="jxr_linenumber" name="L773" href="#L773">773</a>     @NotNull
+<a class="jxr_linenumber" name="L774" href="#L774">774</a>     @Override
+<a class="jxr_linenumber" name="L775" href="#L775">775</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $state() {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>         <strong class="jxr_keyword">return</strong> getValue().$state();
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>     }
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 
+<a class="jxr_linenumber" name="L779" href="#L779">779</a>     @NotNull
+<a class="jxr_linenumber" name="L780" href="#L780">780</a>     @Override
+<a class="jxr_linenumber" name="L781" href="#L781">781</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $stop() {
+<a class="jxr_linenumber" name="L782" href="#L782">782</a>         <strong class="jxr_keyword">return</strong> getValue().$stop();
+<a class="jxr_linenumber" name="L783" href="#L783">783</a>     }
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 
+<a class="jxr_linenumber" name="L785" href="#L785">785</a>     @NotNull
+<a class="jxr_linenumber" name="L786" href="#L786">786</a>     @Override
+<a class="jxr_linenumber" name="L787" href="#L787">787</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $unpause() {
+<a class="jxr_linenumber" name="L788" href="#L788">788</a>         <strong class="jxr_keyword">return</strong> getValue().$unpause();
+<a class="jxr_linenumber" name="L789" href="#L789">789</a>     }
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 
+<a class="jxr_linenumber" name="L791" href="#L791">791</a>     @NotNull
+<a class="jxr_linenumber" name="L792" href="#L792">792</a>     @Override
+<a class="jxr_linenumber" name="L793" href="#L793">793</a>     <strong class="jxr_keyword">public</strong> StateMachine&lt;ResourceState, Signal&gt; getStateMachine() {
+<a class="jxr_linenumber" name="L794" href="#L794">794</a>         <strong class="jxr_keyword">return</strong> getValue().getStateMachine();
 <a class="jxr_linenumber" name="L795" href="#L795">795</a>     }
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 
-<a class="jxr_linenumber" name="L797" href="#L797">797</a>     @Override
-<a class="jxr_linenumber" name="L798" href="#L798">798</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <a href="../../../dollar/api/Value.html">Value</a> o) {
-<a class="jxr_linenumber" name="L799" href="#L799">799</a>         <strong class="jxr_keyword">return</strong> getValue().compareTo(o.$unwrap());
+<a class="jxr_linenumber" name="L797" href="#L797">797</a>     @NotNull
+<a class="jxr_linenumber" name="L798" href="#L798">798</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> $set(@NotNull String key, Object value) {
+<a class="jxr_linenumber" name="L799" href="#L799">799</a>         <strong class="jxr_keyword">return</strong> tracer.trace(<strong class="jxr_keyword">null</strong>, getValue().$set(DollarStatic.$(key), value), StateTracer.Operations.SET, key, value);
 <a class="jxr_linenumber" name="L800" href="#L800">800</a>     }
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 
-<a class="jxr_linenumber" name="L802" href="#L802">802</a>     @Nullable
-<a class="jxr_linenumber" name="L803" href="#L803">803</a>     <a href="../../../dollar/api/Value.html">Value</a> getValue() {
-<a class="jxr_linenumber" name="L804" href="#L804">804</a>         <strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L805" href="#L805">805</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Value has become null!!"</span>);
-<a class="jxr_linenumber" name="L806" href="#L806">806</a>         }
-<a class="jxr_linenumber" name="L807" href="#L807">807</a>         <strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L808" href="#L808">808</a>     }
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 
-<a class="jxr_linenumber" name="L810" href="#L810">810</a>     @Override
-<a class="jxr_linenumber" name="L811" href="#L811">811</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L812" href="#L812">812</a>         <strong class="jxr_keyword">return</strong> getValue().hashCode();
+<a class="jxr_linenumber" name="L802" href="#L802">802</a>     @Override
+<a class="jxr_linenumber" name="L803" href="#L803">803</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <a href="../../../dollar/api/Value.html">Value</a> o) {
+<a class="jxr_linenumber" name="L804" href="#L804">804</a>         <strong class="jxr_keyword">return</strong> getValue().compareTo(o.$unwrap());
+<a class="jxr_linenumber" name="L805" href="#L805">805</a>     }
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 
+<a class="jxr_linenumber" name="L807" href="#L807">807</a>     @NotNull
+<a class="jxr_linenumber" name="L808" href="#L808">808</a>     <a href="../../../dollar/api/Value.html">Value</a> getValue() {
+<a class="jxr_linenumber" name="L809" href="#L809">809</a>         <strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L810" href="#L810">810</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Value has become null!!"</span>);
+<a class="jxr_linenumber" name="L811" href="#L811">811</a>         }
+<a class="jxr_linenumber" name="L812" href="#L812">812</a>         <strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L813" href="#L813">813</a>     }
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 
 <a class="jxr_linenumber" name="L815" href="#L815">815</a>     @Override
-<a class="jxr_linenumber" name="L816" href="#L816">816</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
-<a class="jxr_linenumber" name="L817" href="#L817">817</a>         <strong class="jxr_keyword">return</strong> getValue().equals(obj);
+<a class="jxr_linenumber" name="L816" href="#L816">816</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L817" href="#L817">817</a>         <strong class="jxr_keyword">return</strong> getValue().hashCode();
 <a class="jxr_linenumber" name="L818" href="#L818">818</a>     }
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
-<a class="jxr_linenumber" name="L820" href="#L820">820</a>     @NotNull
-<a class="jxr_linenumber" name="L821" href="#L821">821</a>     @Override
-<a class="jxr_linenumber" name="L822" href="#L822">822</a>     <strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L823" href="#L823">823</a>         <strong class="jxr_keyword">return</strong> getValue().toString();
-<a class="jxr_linenumber" name="L824" href="#L824">824</a>     }
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> }
+<a class="jxr_linenumber" name="L820" href="#L820">820</a>     @Override
+<a class="jxr_linenumber" name="L821" href="#L821">821</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
+<a class="jxr_linenumber" name="L822" href="#L822">822</a>         <strong class="jxr_keyword">return</strong> getValue().equals(obj);
+<a class="jxr_linenumber" name="L823" href="#L823">823</a>     }
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 
+<a class="jxr_linenumber" name="L825" href="#L825">825</a>     @NotNull
+<a class="jxr_linenumber" name="L826" href="#L826">826</a>     @Override
+<a class="jxr_linenumber" name="L827" href="#L827">827</a>     <strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L828" href="#L828">828</a>         <strong class="jxr_keyword">return</strong> getValue().toString();
+<a class="jxr_linenumber" name="L829" href="#L829">829</a>     }
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>

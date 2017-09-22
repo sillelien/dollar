@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a>     @NotNull
 <a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">static</strong> <a href="../../../../../dollar/api/Value.html">Value</a> reduceFunc(<strong class="jxr_keyword">boolean</strong> pure, @NotNull <a href="../../../../../dollar/api/Value.html">Value</a> lhs, @NotNull <a href="../../../../../dollar/api/Value.html">Value</a> rhs) {
 <a class="jxr_linenumber" name="L349" href="#L349">349</a>         assert REDUCE.validForPure(pure);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         <strong class="jxr_keyword">return</strong> lhs.$list().$stream(false).reduce((x, y) -&gt; {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         <strong class="jxr_keyword">return</strong> lhs.stream(false).reduce((x, y) -&gt; {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a>             <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a>                 <strong class="jxr_keyword">return</strong> util().inSubScope(false, pure, REDUCE.name(), newScope -&gt; {
 <a class="jxr_linenumber" name="L353" href="#L353">353</a>                     newScope.parameter(VarKey.ONE, x);
