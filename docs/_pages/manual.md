@@ -1008,23 +1008,20 @@ export def state_ [STATE(www),STATE(redis)]
 Notes:
 
 All types are immutable, including collections.
-You cannot reassign a variable from a different thread, so they are readonly from other threads.
+You cannot reassign a variable from a different thread unless it is declared as `volatile`.
 
 
-### Parallel &amp; Serial Operators
-The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+### Parallel &amp; Serial Lists
+The parallel operator `|:|` or `parallel` causes a list to be evaluated in parallel, otherwise it is executed in serial even if the current expression is being evaluated in parallel.
 
 ```
 
-const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+const a = [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
+const b = |:| [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
 ```
-
-As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
 ### Fork
 
@@ -1056,7 +1053,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.212 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.191 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -2209,15 +2206,17 @@ ___
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
-var s=  fix      [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-var p=  fix  |:| [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-
+var s=     [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+var p= |:| [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+@@ s
+@@ p
 //Test different execution orders
 .: s[0] is Integer
 .: s[1] >= s[0]
 .: s[2] >= s[1]
 .: p[0] < p[1]
 .: p[2] <= p[1]
+.: p[1] - p[2] > 1000
 ```
 
 ___
@@ -2918,16 +2917,17 @@ Finally the window-expression is the expression which is evaluated with the foll
 
 
 ```
-var a= 1;
+var changeable= 1;
 volatile collectedValues= void;
-window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
+
+window (changeable) over (10 S) period (5 S) unless (it == 5)  until (it == 29) {
         @@collected
         collectedValues= collected;
 }
 
 for i in [1..32] {
     SLEEP (1 S)
-    a=a+1
+    changeable=changeable+1
 }
 
 

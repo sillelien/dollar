@@ -164,27 +164,28 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../../dollar/api/Value.html">Value</a> pipe(Value... in2) {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>             <a href="../../../../../dollar/api/Value.html">Value</a> value = in2[0].$fixDeep();
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>             count.incrementAndGet();
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>             log.debug(<span class="jxr_string">"Count is {} value is {} size is {}"</span>, count.get(), value, collected.size());
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>             <strong class="jxr_keyword">if</strong> (!finished) {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 <strong class="jxr_keyword">if</strong> ((unless != <strong class="jxr_keyword">null</strong>) &amp;&amp; unless.isTrue()) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>                     log.debug(<span class="jxr_string">"Skipping {}"</span>, value);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>                     log.debug(<span class="jxr_string">"Adding {}"</span>, value);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>                     collected.put(collectedId.incrementAndGet(), value);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>                 }
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>             }
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>             <strong class="jxr_keyword">if</strong> ((until != <strong class="jxr_keyword">null</strong>) &amp;&amp; until.isTrue()) {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>                 log.debug(<span class="jxr_string">"End reached"</span>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>                 finished = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>             }
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>             <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         }
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>             util().scope().parameter(VarKey.IT, value);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>             log.debug(<span class="jxr_string">"Count is {} value is {} size is {}"</span>, count.get(), value, collected.size());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>             <strong class="jxr_keyword">if</strong> (!finished) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>                 <strong class="jxr_keyword">if</strong> ((unless != <strong class="jxr_keyword">null</strong>) &amp;&amp; unless.isTrue()) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>                     log.debug(<span class="jxr_string">"Skipping {}"</span>, value);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>                     log.debug(<span class="jxr_string">"Adding {}"</span>, value);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>                     collected.put(collectedId.incrementAndGet(), value);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>                 }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>             }
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>             <strong class="jxr_keyword">if</strong> ((until != <strong class="jxr_keyword">null</strong>) &amp;&amp; until.isTrue()) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>                 log.debug(<span class="jxr_string">"End reached"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>                 finished = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             }
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
