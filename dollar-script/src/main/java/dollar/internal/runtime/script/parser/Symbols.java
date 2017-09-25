@@ -83,7 +83,7 @@ public final class Symbols {
     @NotNull
     public static final Op ASSERT_EQ_REACT = new Op(OpType.BINARY, "<=>",
                                                     null,
-                                                    "assert-equals-reactive",
+                                                    "assert-equivalence",
                                                     false, true,
                                                     null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull

@@ -155,12 +155,10 @@ var b=1
 b=2
 ```
 
+### Assignment and Definition
 
 
-
-### Assignment
-
-Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
+#### Assignment
 
 ```dollar
 
@@ -171,26 +169,27 @@ variableA = 2
 .: variableB == 1
 ```
 
-So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable. Watch what happens when we use expressions.
+So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable.
 
+The assignment operator `=` has an infinite 'fix' depth This means that any expression will be evaluated completely also it means the result is not reactive.
+
+The assert equivalence operator `<=>` will compare two values and throw an exception if they are not the same at any point **proceeding** the expression,  ` a <=> b`  is the same as `.: a == b`**
+
+The assert equals operator `<->` will compare two values only at the point that the expression occurs. It is roughly the same as .equals() in Java and is the equivalent of `.: &a == &b`
+
+#### Definition
+
+There are two ways of using definitions in Dollar they are semantically the same but syntatically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
 
 ```dollar
 
-var variableA = 1
-var variableB = variableA
-var variableC = (variableA +1 )
-const variableD := (variableA + 1)
-variableA = 2
-
-.: variableB == 1
-.: variableC == 2
-.: variableD == 3
+const lamdaVar :=  {$1 + 10}
+lamdaVar(5) <=> 15
 
 ```
+In the above example we have parameterized the expression `lamdaVar` with the value `5` and got the value `15`. So we can clearly see that `lambdaVar` is an expression (or lambda) in this case, not a fixed value.
 
-The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
-
-The assert equals operator `<=>` will compare two values and throw an exception if they are ever not the same ` a <=> b` is the same as `.: a == b`**
+The above looks a lot like a function doesn't it. So to add a little syntatic sugar you can also declare the exact same expression using the `def` syntax below.
 
 ```dollar
 
@@ -198,6 +197,10 @@ def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
 
 ```
+
+Note that `def` implies `const`, `def` means define and therefore not variable.
+
+#### Summary
 
 > It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
@@ -408,7 +411,7 @@ In this example the list has lexical scope closure and when we parameterize it u
 Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
 
 
-Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)# Implementation_and_theory)).
+Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
 
 >Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
 
