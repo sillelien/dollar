@@ -160,12 +160,10 @@ var b=1
 b=2
 ```
 
+### Assignment and Definition
 
 
-
-### Assignment
-
-Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
+#### Assignment
 
 ```
 
@@ -176,26 +174,27 @@ variableA = 2
 .: variableB == 1
 ```
 
-So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable. Watch what happens when we use expressions.
+So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable.
 
+The assignment operator `=` has an infinite 'fix' depth This means that any expression will be evaluated completely also it means the result is not reactive.
 
-```
+The assert equivalence operator `<=>` will compare two values and throw an exception if they are not the same at any point **proceeding** the expression,  ` a <=> b`  is the same as `.: a == b`**
 
-var variableA = 1
-var variableB = variableA
-var variableC = (variableA +1 )
-const variableD := (variableA + 1)
-variableA = 2
+The assert equals operator `<->` will compare two values only at the point that the expression occurs. It is roughly the same as .equals() in Java and is the equivalent of `.: &a == &b`
 
-.: variableB == 1
-.: variableC == 2
-.: variableD == 3
+#### Definition
+
+There are two ways of using definitions in Dollar they are semantically the same but syntatically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
 
 ```
 
-The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
+const lamdaVar :=  {$1 + 10}
+lamdaVar(5) <=> 15
 
-The assert equals operator `<=>` will compare two values and throw an exception if they are ever not the same ` a <=> b` is the same as `.: a == b`**
+```
+In the above example we have parameterized the expression `lamdaVar` with the value `5` and got the value `15`. So we can clearly see that `lambdaVar` is an expression (or lambda) in this case, not a fixed value.
+
+The above looks a lot like a function doesn't it. So to add a little syntatic sugar you can also declare the exact same expression using the `def` syntax below.
 
 ```
 
@@ -203,6 +202,10 @@ def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
 
 ```
+
+Note that `def` implies `const`, `def` means define and therefore not variable.
+
+#### Summary
 
 > It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
@@ -413,7 +416,7 @@ In this example the list has lexical scope closure and when we parameterize it u
 Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
 
 
-Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)# Implementation_and_theory)).
+Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
 
 >Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
 
@@ -1008,23 +1011,20 @@ export def state_ [STATE(www),STATE(redis)]
 Notes:
 
 All types are immutable, including collections.
-You cannot reassign a variable from a different thread, so they are readonly from other threads.
+You cannot reassign a variable from a different thread unless it is declared as `volatile`.
 
 
-### Parallel &amp; Serial Operators
-The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+### Parallel &amp; Serial Lists
+The parallel operator `|:|` or `parallel` causes a list to be evaluated in parallel, otherwise it is executed in serial even if the current expression is being evaluated in parallel.
 
 ```
 
-const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+const a = [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
+const b = |:| [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
 ```
-
-As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
 ### Fork
 
@@ -1056,7 +1056,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.208 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.2 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -1134,20 +1134,12 @@ Asserts that at the point of execution that the left-hand-side is equal to the r
 
 ___
 
-### `<=>` (assert-equals-reactive) {#op-assert-equals-reactive}
+### `<=>` (assert-equivalence) {#op-assert-equivalence}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
-
-
-Asserts that the left-hand-side is **always** equal to the right-hand-side.
-
-```
-def lamdaVar  {$1 + 10}
-lamdaVar(5) <=> 15
-```
 
 ___
 
@@ -1333,6 +1325,27 @@ ___
 
 
 ```
+class MyClass {
+    <String> name=$1;
+    <Integer> age=$2;
+    def updateAge {
+          this.age=$1
+    }
+}
+
+<MyClass> clazz= new MyClass("Neil",47);
+clazz.name <=> "Neil"
+clazz.age <=> 47
+
+//Objects are immutable, just like all types in Dollar
+//When you perform a mutation operation you get a new instance back with
+//the change made.
+var newClazz= clazz.updateAge(20)
+
+//So this hasn't changed
+clazz.age <=> 47
+newClazz.age <=> 20
+
 ```
 
 ___
@@ -1402,29 +1415,6 @@ Sends the result of the right-hand-side to the debug log.
 
 ___
 
-### `:=` (declaration) {#op-declaration}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
-
-
-
-Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
-
-Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
-
-
-```
-var variableA = 1
-const variableB := variableA
-variableA = 2
-
-.: variableB == 2
-```
-
-___
-
 ### `--` (decrement) {#op-decrement}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1458,6 +1448,36 @@ If the left-hand-side is VOID this returns the right-hand-side, otherwise return
 void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
 ```
+
+___
+
+### `:=` (definition) {#op-definition}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
+
+
+
+Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
+
+
+```
+var variableA = 1
+const variableB := variableA
+variableA = 2
+
+.: variableB == 2
+```
+
+___
+
+### definition-constraint {#op-definition-constraint}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
 
 ___
 
@@ -1549,6 +1569,64 @@ var a=5
 //Parenthesis added for clarity, not required.
 var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
+```
+
+___
+
+### `emit` or `...` {#op-emit}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+
+
+The emit operator `...` takes a list and converts it to a set of events, typically this is piped to a function to process each event as it occurs.
+
+
+```
+var e=0;
+
+def updateE {e=$1}
+
+var collectedValues=[]
+
+collect e until it == 4 unless it == 3{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+([1,2,3,4] ...) | updateE
+
+collectedValues <=> [ 1, 2, 4 ]
+```
+
+___
+
+### `emit` or `...` {#op-emit}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+
+
+The emit operator `...` takes a list and converts it to a set of events, typically this is piped to a function to process each event as it occurs.
+
+
+```
+var e=0;
+
+def updateE {e=$1}
+
+var collectedValues=[]
+
+collect e until it == 4 unless it == 3{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+([1,2,3,4] ...) | updateE
+
+collectedValues <=> [ 1, 2, 4 ]
 ```
 
 ___
@@ -1903,7 +1981,7 @@ ___
 
 ### `.` (member) {#op-member}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -2123,18 +2201,17 @@ ___
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
-const testListS := fix [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-const testListP := fix |:|  [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-var a= testListS("serial: ") ;
-var b= testListP("parallel: ") ;
-
-@@"a="+a
-@@"b="+b
+var s=     [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+var p= |:| [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+@@ s
+@@ p
 //Test different execution orders
-.: a[0] is Integer
-.: a[1] >= a[0]
-.: a[2] >= a[1]
-.: b[2] <= b[1]
+.: s[0] is Integer
+.: s[1] >= s[0]
+.: s[2] >= s[1]
+.: p[0] < p[1]
+.: p[2] <= p[1]
+.: p[1] - p[2] > 1000
 ```
 
 ___
@@ -2217,20 +2294,33 @@ ___
 
 
 
-The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
+The pipe operator pipes a value **and all it's changes** to the function on the right-hand-side. Pipes can be chained.
+
+The pipe operator is ideal for using with the emit (`...`) operator for reactive stream processing.
+
 
 ```
-def funcA {
-    $1 + 10
+var inputValue= void;
+<Integer> collectable=0;
+
+def update {
+    collectable= $1;
+}
+
+<List> result=[]
+
+collect collectable until it == 6 unless it == 5 {
+    print count
+    print collected
+    result= collected
 }
 
 
-def funcB {
-    $1 - 10
-}
+inputValue + 2 | update
 
-10 | funcA | funcA <=> 30
-10 | funcA | funcB <=> 10
+inputValue= 1; inputValue= 2; inputValue= 3; inputValue= 4;
+
+result <=> [ 3, 4, 6]
 ```
 
 ___
@@ -2773,7 +2863,7 @@ The 'when assign' operator assigns updates a variable to the assignment expressi
 var h=1
 var i ? (h < 3) = (h + 2)
 h=4
-i is VOID
+.: i is Void
 h=2
 i <=>4
 ```
@@ -2822,16 +2912,17 @@ Finally the window-expression is the expression which is evaluated with the foll
 
 
 ```
-var a= 1;
+var changeable= 1;
 volatile collectedValues= void;
-window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
+
+window (changeable) over (10 S) period (5 S) unless (it == 5)  until (it == 29) {
         @@collected
         collectedValues= collected;
 }
 
 for i in [1..32] {
     SLEEP (1 S)
-    a=a+1
+    changeable=changeable+1
 }
 
 
@@ -2989,7 +3080,7 @@ Boolean true.
 
 The following keywords are reserved:
 
-> abstract, await, break, case, catch, closure, continue, dispatch, do, dump, emit, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
+> abstract, await, break, case, catch, closure, continue, dispatch, do, dump, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
 
 ### Operators
 
@@ -2999,7 +3090,7 @@ The following operator keywords are reserved:
 
 The following operator symbols are reserved:
 
-> `&=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
+> `&=, &>, +>, ->, -_-, ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
 
 ### Symbols
 
@@ -3045,6 +3136,8 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[split](#op-split)            |`split`        | `[/]`    |postfix   |
 |[sum](#op-sum)                |`sum`          | `[+]`    |postfix   |
 |[unique](#op-unique)          |`unique`       | `[!]`    |postfix   |
+|[emit](#op-emit)              |`emit`         | `...`    |reserved  |
+|[emit](#op-emit)              |`emit`         | `...`    |reserved  |
 |[greater-than](#op-greater-than)|               | `>`      |binary    |
 |[less-than](#op-less-than)    |               | `<`      |binary    |
 |[pipe](#op-pipe)              |               | `|`      |binary    |
@@ -3080,12 +3173,13 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
-|[declaration](#op-declaration)|               | `:=`     |assignment|
+|[definition](#op-definition)  |               | `:=`     |assignment|
+|[definition-constraint](#op-definition-constraint)|               |          |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[when-assign](#op-when-assign)|               |          |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
 |[assert-equals](#op-assert-equals)|               | `<->`    |binary    |
-|[assert-equals-reactive](#op-assert-equals-reactive)|               | `<=>`    |binary    |
+|[assert-equivalence](#op-assert-equivalence)|               | `<=>`    |binary    |
 |[debug](#op-debug)            |`debug`        | `!!`     |prefix    |
 |[err](#op-err)                |`err`          | `!?`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |

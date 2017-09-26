@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.4970.tgz)
+[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -13,23 +13,29 @@
 
 Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/manual/](http://sillelien.github.io/dollar/manual/)
 
-![dollar](assets/gh-title-dollar.png)
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
 
-Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is a language built on top of the [dollar-core](https://github.com/sillelien/dollar-core) library which helps to provide a consistent view of multiple dynamic data types. 
+## Intro
 
-It is being designed for the needs of server-side development such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
+Dollar is a light-weight scripting language for the JVM. More specifically it is an integration centric, reactive dynamic programming language.
+
+It is currently being built for the needs of server-side developers and Java developers in general who need to produce quick prototypes or write simple scripts. Furthermore it is an internet centric language where JSON and URIs are first class citizens.
+
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
 
 **The language is currently in early but active development.**
 
-I'm also working full-time on this, if you wish to support efforts back me on [Patreon](https://www.patreon.com/neilellis):
+I'm also working full-time on this, if you wish to support my efforts then please back me on [Patreon](https://www.patreon.com/neilellis):
 
 [![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
+
+And/or star the project on GitHub.
 
 **Thanks!**
 
 ______
 
-Find out your local air quality:
+Example to find out your local air quality:
 
 ```dollar
 //First we get the Geo Location of our IP address
@@ -50,13 +56,13 @@ quality.results each {
 
 Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
-![Install](assets/gh-title-install.png)
+## Install
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.4970.tgz) then run the following in your shell:
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.4.4970.tgz
+    tar -zxvf dollar-0.4.5130.tgz
 ```
 
 To use dollar:
@@ -65,14 +71,15 @@ To use dollar:
     ./dollar/bin/dollar <filename>.ds
 ```
 
-![Docs](assets/gh-title-docs.png)
+## Docs
 
 Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
 Q&A: https://gitq.com/sillelien/dollar
  
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
 
-![Maven](assets/gh-title-maven.png)
+## Maven
 
 The artifacts used to build the Dollar project can be accessed using
 
@@ -98,7 +105,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.4.4970</version>
+            <version>0.4.5130</version>
         </dependency>
 ```
 
@@ -107,9 +114,9 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 
 
-![Docker](assets/gh-title-docker.png)
+## Docker
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.4970.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.4  <filename>.ds
  ```
@@ -142,3 +149,25 @@ Please contact me through Gitter (chat) or through GitHub Issues.
 
 For commercial support please <a href="mailto:hello@neilellis.me">contact me directly</a>.
 -------
+
+--------
+
+# 💰 Referral Links
+
+This is an open source project, which means that we are giving our time to you for free. However like yourselves, we do have bills to pay. Please consider visiting some of these excellent services, they are not junk we can assure you, all services we would or do use ourselves.
+
+[Really Excellent Dedicated Servers from Limestone Networks](http://www.limestonenetworks.com/?utm_campaign=rwreferrer&utm_medium=affiliate&utm_source=RFR16798) - fantastic service, great price.
+
+[Low Cost and High Quality Cloud Hosting from Digital Ocean](https://www.digitalocean.com/?refcode=7b4639fc8194) - truly awesome service.
+
+# 👮 Copyright and License
+
+[![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE)
+
+(c) 2014-2017 Neil Ellis all rights reserved. Please see [LICENSE](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) for license details of this project. Please visit http://neilellis.me for help and raise issues on [GitHub](https://github.com/sillelien/dollar/issues).
+
+For commercial support please ✉ <a href="mailto:hello@neilellis.me">contact me directly</a>.
+
+<div width="100%" align="right">
+<img>
+</div>
