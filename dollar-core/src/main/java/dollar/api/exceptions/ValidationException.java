@@ -20,7 +20,7 @@ import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 
 public class ValidationException extends DollarException {
-    public ValidationException(@NotNull Throwable e) {
+    public ValidationException(@NotNull Exception e) {
         super(e);
     }
 

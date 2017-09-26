@@ -32,7 +32,7 @@ public class DollarScriptException extends DollarFailureException {
     @Nullable
     private Source source;
 
-    public DollarScriptException(@NotNull Throwable e) {
+    public DollarScriptException(@NotNull Exception e) {
         super(e);
     }
 
@@ -40,7 +40,7 @@ public class DollarScriptException extends DollarFailureException {
         super(errorMessage);
     }
 
-    public DollarScriptException(@NotNull Throwable t, @NotNull String s) {
+    public DollarScriptException(@NotNull Exception t, @NotNull String s) {
         super(t, s);
     }
 
@@ -76,12 +76,12 @@ public class DollarScriptException extends DollarFailureException {
     }
 
 
-    public DollarScriptException(@NotNull Throwable cause, @Nullable Source source) {
+    public DollarScriptException(@NotNull Exception cause, @Nullable Source source) {
         super(cause, cause.getMessage() + ":\n" + optionalSource(source));
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull Throwable cause, @NotNull Value context) {
+    public DollarScriptException(@NotNull Exception cause, @NotNull Value context) {
         super(cause, context.source().getSourceMessage());
         source = context.source();
     }

@@ -39,33 +39,33 @@
 .: -1 <= 0
 .: -1 >= -2
 
-.: (1 - 1.0) is Decimal
-.: (1.0 - 1.0) is Decimal
-.: (1.0 - 1) is Decimal
-.: (1 - 1) is Integer
+.: (1 - 1.0) type Decimal
+.: (1.0 - 1.0) type Decimal
+.: (1.0 - 1) type Decimal
+.: (1 - 1) type Integer
 
-.: (1 + 1.0) is Decimal
-.: (1.0 + 1.0) is Decimal
-.: (1.0 + 1) is Decimal
-.: (1 + 1) is Integer
+.: (1 + 1.0) type Decimal
+.: (1.0 + 1.0) type Decimal
+.: (1.0 + 1) type Decimal
+.: (1 + 1) type Integer
 
-.: 1/1 is Integer
-.: 1/1.0 is Decimal
-.: 2.0/1 is Decimal
-.: 2.0/1.0 is Decimal
+.: 1/1 type Integer
+.: 1/1.0 type Decimal
+.: 2.0/1 type Decimal
+.: 2.0/1.0 type Decimal
 
-.: 1*1 is Integer
-.: 1*1.0 is Decimal
-.: 2.0*1 is Decimal
-.: 2.0*1.0 is Decimal
+.: 1*1 type Integer
+.: 1*1.0 type Decimal
+.: 2.0*1 type Decimal
+.: 2.0*1.0 type Decimal
 
 
-.: 1%1 is Integer
-.: 1%1.0 is Decimal
-.: 2.0%1 is Decimal
-.: 2.0%1.0 is Decimal
-.: ABS(1) is Integer
-.: ABS(1.0) is Decimal
+.: 1%1 type Integer
+.: 1%1.0 type Decimal
+.: 2.0%1 type Decimal
+.: 2.0%1.0 type Decimal
+.: ABS(1) type Integer
+.: ABS(1.0) type Decimal
 
 
 

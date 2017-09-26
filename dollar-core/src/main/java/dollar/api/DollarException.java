@@ -38,7 +38,7 @@ public class DollarException extends RuntimeException {
      *
      * @param cause the cause of this exception
      */
-    public DollarException(@NotNull Throwable cause) {
+    public DollarException(@NotNull Exception cause) {
         super(unravel(cause));
     }
 
@@ -57,14 +57,14 @@ public class DollarException extends RuntimeException {
      * @param cause   the cause of this exception
      * @param message the error message associated with this exception
      */
-    public DollarException(@NotNull Throwable cause, @NotNull String message) {
+    public DollarException(@NotNull Exception cause, @NotNull String message) {
         super(message, unravel(cause));
     }
 
     public static @NotNull
-    Throwable unravel(@NotNull Throwable e) {
+    Exception unravel(@NotNull Exception e) {
         if ((e instanceof InvocationTargetException) || (e instanceof ExecutionException)) {
-            return unravel(e.getCause());
+            return unravel((Exception) e.getCause());
         } else {
             return e;
         }

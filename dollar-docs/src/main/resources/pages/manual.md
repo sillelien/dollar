@@ -18,7 +18,7 @@ The source for this page (minus that header) is [here](manual.md)
 
 ### Getting Started
 
-NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
+NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is supported, however since Dollar is entirely based in Java it's trivial to port to other systems. Please add an issue on the GitHub project specifying the platform you'd like to help support.
 
 First download the Dollar scripting runtime from [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-{{site.release}}.tgz)
 
@@ -43,25 +43,6 @@ def testParams {$2 + " " + $1}
 
 Dollar has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
 
-### Functional Programming and the 'pure' operator
-
-Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
-
-In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
-
- ```dollar
- pure def reverse [$1[1],$1[0]]
-
- a= pure {
-     reverse([2,1])
- }
-
- ```
-
-Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
-
-
-
 ### Reactive Programming
 
 Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
@@ -79,9 +60,9 @@ variableA = 2
 .: variableB == 2
 ```
 
-In the above example we are declaring (using the declarative operator `:=`) that variableA is current the value 1, we then declare that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
+In the above example we are assigning the variableA to the value 1, we then declare (using the declarative operator `:=`) that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
 
-Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the logic [described here](https://math.stackexchange.com/questions/1838678/confused-about-notation-versus-plain-old) so that the `:=` operator is a definition (and by it's nature reactive) and `=` is an assignment ( not reactive and has a fix depth of 1 - more on that later).
+Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the logic [described here](https://math.stackexchange.com/questions/1838678/confused-about-notation-versus-plain-old) so that the `:=` operator is a definition (and by it's nature reactive) and `=` is an assignment ( not reactive and has an infinite fix depth, more on that later).
 
 This means that `a := b + 1` translates to **a is defined as b + 1** so a is behaving reactively, changes to b cause a change in the value of a. It also means that `a = b + 1` simply assigns `b + 1` to the variable a, changes to b do not cause changes to a. 
 
@@ -155,6 +136,25 @@ var b=1
 b=2
 ```
 
+
+### Functional Programming and the 'pure' operator
+
+Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
+
+In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
+
+ ```dollar
+ pure def reverse [$1[1],$1[0]]
+
+ a= pure {
+     reverse([2,1])
+ }
+
+ ```
+
+Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
+
+
 ### Assignment and Definition
 
 
@@ -179,7 +179,7 @@ The assert equals operator `<->` will compare two values only at the point that 
 
 #### Definition
 
-There are two ways of using definitions in Dollar they are semantically the same but syntatically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
+There are two ways of using definitions in Dollar, they are semantically the same but syntatically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
 
 ```dollar
 
@@ -446,14 +446,14 @@ Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and 
 
 ## Type System
 ### Intro
-Although Dollar is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+Although Dollar has a very loose type system, it does support basic runtime typing and a type prediction system. At present the inbuilt types includes: String, Integer, Decimal, List, Map, URI, Void, Range, Boolean. The value for a type can be checked using the `type` operator:
 
 ```dollar
-.: "Hello World" is String
-.: ["Hello World"] is List
+.: "Hello World" type String
+.: ["Hello World"] type List
 ```
 
-### DATE
+### Date
 
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
@@ -462,8 +462,8 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 @@ DATE() + 1
 @@ DATE() - 1
 
-.: DATE() + "1.0" is String
-.: DATE() / "1.0" is Decimal
+.: DATE() + "1.0" type String
+.: DATE() / "1.0" type Decimal
 ```
 
 Components of the date can be accessed using the subscript operators:
@@ -512,10 +512,10 @@ Although there are no compile type constraints in Dollar a runtime type system c
 
 ```dollar
 var (it < 100) a = 50
-var (previous is Void|| it > previous) b = 5
+var (previous type Void|| it > previous) b = 5
 b=6
 b=7
-var ( it is String) s="String value"
+var ( it type String) s="String value"
 ```
 
 The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
@@ -538,14 +538,14 @@ var myColor="apple"
 
 ```
 
-Of course since the use of `(it is XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+Of course since the use of `(it type XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
 
 
 ```dollar
 var <String> (#it > 5) s="String value"
 ```
 
-It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
+It is intended that the predictive type system, will be in time combined with runtime types to help spot more bugs at compile time.
 
 ### Type Coercion
 Dollar also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
@@ -662,19 +662,19 @@ var a=1; var b=1
 
 a => (b= a)
 
-&a <=> 1 ; &b <=> 1
+a <-> 1 ; b <-> 1
 
-a=2 ; &a <=> 2 ; &b <=> 2
+a=2 ; a <-> 2 ; b <-> 2
 
 ```
 
 Okay so reactive programming can melt your head a little. So let's go through the example step by step.
 
-Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1, we use the fix operator `&` here to say that we are only interested in the current value. Because `<=>` is a reactive operator if we didn't use the fix operator then `a <=> 1` would mean a is always 1. When we add the fix operator it fixes the value of a to the value at this point in the code.
+Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1 (using the imperative assert equals operator `<->`).
 
 We then do the same with b to see if it is 1.
 
-Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `->` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
+Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `=>` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
 
 ### When
 
@@ -689,9 +689,9 @@ var d=1
 //When c is greater than 3 assign it's value to d
 c > 3 ? (d= c)
 
-&c <=> 1; &d <=> 1
-c=2; &c <=> 2; &d <=> 1
-c=5 ; &c <=> 5 ; &d <=> 5
+c <-> 1; d <-> 1
+c= 2; c <-> 2; d <-> 1
+c= 5 ; c <-> 5 ; d <-> 5
 
 ```
 
@@ -713,27 +713,27 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is Void) collectedValues=void
+var (#it >= 4 || it type Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
-collect e until count == 4 unless it == 10{
+collect e until count == 4 unless it == 10 {
     print count
     print collected
     collectedValues= collected
 }
 
 e=1; e=2; e=3; e=4; e=5; e=6
-&collectedValues <=> [1,2,3,4,5]
+collectedValues <-> [1,2,3,4,5]
 e=7; e=8; e=9; e=10
-&collectedValues <=> [6,7,8,9]
+collectedValues <-> [6,7,8,9]
 e=11; e=12; e=13; e=14; e=15; e=16
-&collectedValues <=> [11,12,13,14,15]
+collectedValues <-> [11,12,13,14,15]
 
 ```
 
 ## Parameters &amp; Functions
 
-In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
+In most programming languages you have the concept of functions and parameters, i.e. you can parametrize blocks of code. In Dollar you can parametrize *anything*. For example, let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
 ```dollar
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
@@ -751,7 +751,7 @@ testParams ("Hello", "World") <=> "World Hello"
 
 ```
 
-Yep we built a function just by naming an expression. You can name anything and parameterise it - including maps, lists, blocks and plain old expressions.
+Yep we built a function just by naming an expression. You can name anything and parametrize it - including maps, lists, blocks and plain old expressions.
 
 
 What about named parameters, that would be nice.
@@ -766,7 +766,7 @@ Yep you can use named parameters, then refer to the values by the names passed i
 
 ## Resources &amp; URIs
 
-URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
+URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```dollar
 var posts = << https://jsonplaceholder.typicode.com/posts 
@@ -830,41 +830,41 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 
 ```
 
-And similar to Java Dollar coerces types as required:
+And similar to Java, Dollar coerces types as required:
 
 ```dollar
-.: (1 - 1.0) is Decimal
-.: (1.0 - 1.0) is Decimal
-.: (1.0 - 1) is Decimal
-.: (1 - 1) is Integer
+.: (1 - 1.0) type Decimal
+.: (1.0 - 1.0) type Decimal
+.: (1.0 - 1) type Decimal
+.: (1 - 1) type Integer
 
-.: (1 + 1.0) is Decimal
-.: (1.0 + 1.0) is Decimal
-.: (1.0 + 1) is Decimal
-.: (1 + 1) is Integer
+.: (1 + 1.0) type Decimal
+.: (1.0 + 1.0) type Decimal
+.: (1.0 + 1) type Decimal
+.: (1 + 1) type Integer
 
-.: 1 / 1 is Integer
-.: 1 / 1.0 is Decimal
-.: 2.0 / 1 is Decimal
-.: 2.0 / 1.0 is Decimal
+.: 1 / 1 type Integer
+.: 1 / 1.0 type Decimal
+.: 2.0 / 1 type Decimal
+.: 2.0 / 1.0 type Decimal
 
-.: 1 * 1 is Integer
-.: 1 * 1.0 is Decimal
-.: 2.0 * 1 is Decimal
-.: 2.0 * 1.0 is Decimal
+.: 1 * 1 type Integer
+.: 1 * 1.0 type Decimal
+.: 2.0 * 1 type Decimal
+.: 2.0 * 1.0 type Decimal
 
 
-.: 1 % 1 is Integer
-.: 1 % 1.0 is Decimal
-.: 2.0 % 1 is Decimal
-.: 2.0 % 1.0 is Decimal
-.: ABS(1) is Integer
-.: ABS(1.0) is Decimal
+.: 1 % 1 type Integer
+.: 1 % 1.0 type Decimal
+.: 2.0 % 1 type Decimal
+.: 2.0 % 1.0 type Decimal
+.: ABS(1) type Integer
+.: ABS(1.0) type Decimal
 ```
 
 ### Logical Operators
 
-Dollar support the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `|`.
+Dollar supports the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `:-`.
 
 #### Truthy
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
@@ -894,11 +894,11 @@ The shortcut operators `||` and `&&` work the same as in Java. As do the compari
 | `and`                | `&&`     | `&&`                      |
 | `or`                 | `ǀǀ`     | `ǀǀ`                      |
 | `equal`              | `==`     | `.equals()`               |
-| `not-equal`          | `!=`     | `! .equals()`             |
-| `less-than`          | `<`      | `lhs.compareTo(rhs) < 0`  |
-| `greater-than`       | `>`      | `lhs.compareTo(rhs) > 0`  |
-| `less-than-equal`    | `<=`     | `lhs.compareTo(rhs) <= 0` |
-| `greater-than-equal` | `>=`     | `lhs.compareTo(rhs) >= 0` |
+|                      | `!=`     | `! .equals()`             |
+|                      | `<`      | `lhs.compareTo(rhs) < 0`  |
+|                      | `>`      | `lhs.compareTo(rhs) > 0`  |
+|                      | `<=`     | `lhs.compareTo(rhs) <= 0` |
+|                      | `>=`     | `lhs.compareTo(rhs) >= 0` |
 
 
 Examples:
@@ -909,11 +909,14 @@ true && false <=> false
 false && true <=> false
 false && false <=> false
 
+true and true always true
 
 true || true <=> true
 true || false <=> true
 false || true <=> true
 false || false <=> false
+
+false or false <=> false
 
 .: 1 < 2
 .: 3 > 2

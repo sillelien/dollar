@@ -1,4 +1,4 @@
-var (previous != it || previous is Void) e = 1
+var (previous != it || previous type Void) e = 1
 @@e
 e=2
 e=3

@@ -41,6 +41,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ParserSlowTest {
@@ -101,6 +102,8 @@ public class ParserSlowTest {
             resourceAsStream.close();
         } catch (Exception e) {
             fail(e);
+        } finally {
+            util().clearScopes();
         }
     }
 

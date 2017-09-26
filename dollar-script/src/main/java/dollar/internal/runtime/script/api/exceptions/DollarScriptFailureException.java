@@ -28,7 +28,7 @@ public class DollarScriptFailureException extends DollarScriptException {
         super(errorType + ":" + message);
     }
 
-    public DollarScriptFailureException(@NotNull Throwable t, @NotNull ErrorType errorType) {
+    public DollarScriptFailureException(@NotNull Exception t, @NotNull ErrorType errorType) {
         super(t, errorType + ": " + t.getMessage());
     }
 

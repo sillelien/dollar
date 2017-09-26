@@ -20,7 +20,7 @@ import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 
 class SyntaxException extends DollarException {
-    public SyntaxException(@NotNull Throwable e) {
+    public SyntaxException(@NotNull Exception e) {
         super(e);
     }
 

@@ -1,6 +1,6 @@
-var <integer> a = 1;
+var <Integer> a = 1;
 def f {
-   var <string>b = a + 1;
+   var <String>b = a + 1;
 }
 
 const i= "1+2"
@@ -9,5 +9,5 @@ const i= "1+2"
 // expected INTEGER most likely type is STRING (100%)'.
 
 if(false) {
-    const <integer> c= 3 + i
+    const <Integer> c= 3 + i
 }

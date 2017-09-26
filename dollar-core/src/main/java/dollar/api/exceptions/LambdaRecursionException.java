@@ -20,7 +20,7 @@ import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 
 public class LambdaRecursionException extends DollarException {
-    public LambdaRecursionException(@NotNull Throwable e) {
+    public LambdaRecursionException(@NotNull Exception e) {
         super(e);
     }
 

@@ -22,7 +22,7 @@ public class BuiltinNotFoundException extends DollarScriptException {
     @NotNull
     private String variable;
 
-    public BuiltinNotFoundException(@NotNull Throwable e) {
+    public BuiltinNotFoundException(@NotNull Exception e) {
         super(e);
     }
 

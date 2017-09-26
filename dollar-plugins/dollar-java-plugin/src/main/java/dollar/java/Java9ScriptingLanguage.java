@@ -70,7 +70,7 @@ public final class Java9ScriptingLanguage implements ScriptingLanguage {
 
     @Override
     @NotNull
-    public Value compile(@NotNull String script, @NotNull Scope scope) {
+    public Value compile(@NotNull String script, @NotNull Scope scope) throws Exception {
 
         Value result;
         try (JShell shell = JShell.builder()

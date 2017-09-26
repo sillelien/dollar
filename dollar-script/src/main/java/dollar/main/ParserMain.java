@@ -50,7 +50,7 @@ public final class ParserMain {
             }
         } catch (DollarExitError dee) {
             System.exit(-1);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             try {
                 ErrorHandlerFactory.instance().handleTopLevel(t, file.getName(), file);
             } catch (Throwable throwable) {

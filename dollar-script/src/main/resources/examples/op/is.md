@@ -1,1 +1,1 @@
-A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
+Asserts that at the point of execution that the left-hand-side **is** equal to the right-hand-side.

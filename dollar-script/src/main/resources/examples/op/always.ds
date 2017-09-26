@@ -1,2 +1,3 @@
 def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
+lamdaVar(5) always 15

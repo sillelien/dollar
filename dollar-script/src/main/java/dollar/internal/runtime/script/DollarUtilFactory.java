@@ -68,15 +68,20 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @NotNull
     private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
-        ArrayList<Scope> list = new ArrayList<>();
-        list.add(new ScriptScope("thread-" + Thread.currentThread().getName().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "-"), false,
-                                 false));
-        return list;
+        return initialScopes();
     });
     @NotNull
     private static final DollarUtilFactory instance = new DollarUtilFactory();
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DollarUtilFactory.class);
+
+    @NotNull
+    private static List<Scope> initialScopes() {
+        ArrayList<Scope> list = new ArrayList<>();
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getName().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "-"), false,
+                                 false));
+        return list;
+    }
 
     public static DollarUtil util() {
         return instance;
@@ -103,7 +108,6 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     public void addScope(boolean runtime, @NotNull Scope scope) {
-        boolean newScope = scopes.get().isEmpty() || !scope.equals(scope());
         scopes.get().add(scope);
         if (getConfig().debugScope()) {
             StackTraceElement caller = getCaller(Thread.currentThread().getStackTrace());
@@ -138,6 +142,11 @@ public final class DollarUtilFactory implements DollarUtil {
         }
     }
 
+    @Override
+    public void clearScopes() {
+        scopes.set(initialScopes());
+    }
+
     @NotNull
     @Override
     public Value constrain(@NotNull Scope scope,
@@ -169,7 +178,6 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public Scope endScope(boolean runtime) {
-
         Scope remove = scopes.get().remove(scopes.get().size() - 1);
         if (getConfig().debugScope()) {
             log.info("{}{}END:  {}", indent(scopes.get().size()), runtime ? "**** " : "", remove);
@@ -317,20 +325,27 @@ public final class DollarUtilFactory implements DollarUtil {
         addScope(runtime, parent);
         addScope(runtime, newScope);
         try {
-            return Optional.ofNullable(r.execute(newScope));
+            try {
+                Optional<T> execute = Optional.ofNullable(r.execute(newScope));
+                Scope poppedScope = endScope(runtime);
+//            poppedScope.destroy();
+                if (!Objects.equals(poppedScope, newScope)) {
+                    throw new IllegalStateException("Popped wrong scope");
+                }
+                final Scope poppedScope2 = endScope(runtime);
+                if (!Objects.equals(poppedScope2, parent)) {
+                    throw new IllegalStateException("Popped wrong scope");
+                }
+
+                return execute;
+            } catch (Error e) {
+                throw e;
+            }
+
         } catch (Exception e) {
             newScope.handleError(e);
             return Optional.ofNullable(null);
         } finally {
-            Scope poppedScope = endScope(runtime);
-//            poppedScope.destroy();
-            if (!Objects.equals(poppedScope, newScope)) {
-                throw new IllegalStateException("Popped wrong scope");
-            }
-            final Scope poppedScope2 = endScope(runtime);
-            if (!Objects.equals(poppedScope2, parent)) {
-                throw new IllegalStateException("Popped wrong scope");
-            }
         }
     }
 
@@ -348,17 +363,22 @@ public final class DollarUtilFactory implements DollarUtil {
             scopeAdded = true;
         }
         try {
-            return Optional.ofNullable(r.execute(scope));
+            try {
+                Optional<T> result = Optional.ofNullable(r.execute(scope));
+                if (scopeAdded) {
+                    Scope poppedScope = endScope(runtime);
+                    if (!Objects.equals(poppedScope, scope)) {
+                        throw new Error("Popped wrong scope " + poppedScope + " not " + scope);
+                    }
+                }
+                return result;
+            } catch (Error e) {
+                throw e;
+
+            }
         } catch (Exception e) {
             scope.handleError(e);
             return Optional.ofNullable(null);
-        } finally {
-            if (scopeAdded) {
-                Scope poppedScope = endScope(runtime);
-                if (!Objects.equals(poppedScope, scope)) {
-                    throw new IllegalStateException("Popped wrong scope");
-                }
-            }
 
         }
     }
@@ -578,7 +598,8 @@ public final class DollarUtilFactory implements DollarUtil {
     public Variable setVariable(@NotNull Scope scope,
                                 @NotNull VarKey key,
                                 @NotNull Value value,
-                                @Nullable DollarParser parser,
+                                @Nullable DollarParser
+                                        parser,
                                 @NotNull Token token,
                                 @Nullable Value useConstraint,
                                 @Nullable SubType useSource,
@@ -642,7 +663,8 @@ public final class DollarUtilFactory implements DollarUtil {
     public Variable updateVariable(@NotNull Scope scope,
                                    @NotNull VarKey key,
                                    @NotNull Value value,
-                                   @NotNull VarFlags varFlags,
+                                   @NotNull VarFlags
+                                           varFlags,
                                    @Nullable Value useConstraint,
                                    @Nullable SubType useSource) {
         if (getConfig().debugScope()) {

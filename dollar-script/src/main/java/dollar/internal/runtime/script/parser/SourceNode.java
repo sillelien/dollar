@@ -36,6 +36,7 @@ import dollar.api.types.meta.MetaConstants;
 import dollar.api.types.prediction.SingleValueTypePrediction;
 import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
+import dollar.internal.runtime.script.api.exceptions.DollarExitError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.scope.PureScope;
 import dollar.internal.runtime.script.parser.scope.ScriptScope;
@@ -244,15 +245,18 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 //This method does not require a valid scope for execution
                 try {
                     result = invokeMain(proxy, method, args);
-                } catch (Throwable throwable) {
+                } catch (Exception throwable) {
                     return DollarUtilFactory.util().scope().handleError(throwable, source);
+                } catch (Throwable throwable) {
+                    throw new Error(throwable);
                 }
             } else {
                 //This method does require a scope
 
+                List<Scope> scopes = null;
                 List<Scope> attachedScopes = (List<Scope>) meta.get(SCOPES);
                 if (attachedScopes != null) {
-                    List<Scope> scopes = new ArrayList<>(attachedScopes);
+                    scopes = new ArrayList<>(attachedScopes);
                     for (Scope scope : scopes) {
                         DollarUtilFactory.util().pushScope(scope);
                     }
@@ -293,14 +297,17 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                                 stack.get().remove(stack.get().size() - 1);
                             }
 
-                        } catch (Throwable throwable) {
-                            return DollarUtilFactory.util().scope().handleError(throwable, source);
+                        } catch (Exception e) {
+                            return DollarUtilFactory.util().scope().handleError(e, source);
+                        } catch (DollarExitError t) {
+                            throw t;
+                        } catch (Throwable t) {
+                            throw new Error(t);
                         }
                     }).get();
                 } finally {
 
-                    if (attachedScopes != null) {
-                        List<Scope> scopes = new ArrayList<>(attachedScopes);
+                    if (scopes != null) {
                         Collections.reverse(scopes);
                         for (Scope scope : scopes) {
                             DollarUtilFactory.util().popScope(scope);

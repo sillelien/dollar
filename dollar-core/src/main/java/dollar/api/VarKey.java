@@ -37,6 +37,10 @@ public class VarKey {
     public static final VarKey STAR = of("*");
     @NotNull
     public static final VarKey THIS = of("this");
+
+    public static final VarKey TYPE = of("errorClass");
+
+    public static final VarKey MSG = of("msg");
     @NotNull
     public static final VarKey THREE = of(3);
     @NotNull

@@ -338,7 +338,7 @@ public final class DollarFactory {
      * @return the Value
      */
     @NotNull
-    public static Value failure(@NotNull ErrorType errorType, @NotNull Throwable t, boolean quiet) {
+    public static Value failure(@NotNull ErrorType errorType, @NotNull Exception t, boolean quiet) {
         if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(t, errorType);
         } else {
@@ -354,7 +354,7 @@ public final class DollarFactory {
      * @return the Value
      */
     @NotNull
-    public static Value failure(@NotNull ErrorType errorType, @NotNull Throwable t) {
+    public static Value failure(@NotNull ErrorType errorType, @NotNull Exception t) {
         if (DollarStatic.getConfig().failFast()) {
             throw new DollarFailureException(t, errorType);
         } else {
@@ -402,7 +402,7 @@ public final class DollarFactory {
      * @return the Value
      */
     @NotNull
-    public static Value failure(@NotNull Throwable throwable) {
+    public static Value failure(@NotNull Exception throwable) {
         return failure(ErrorType.EXCEPTION, throwable, false);
     }
 
@@ -415,7 +415,7 @@ public final class DollarFactory {
      * @return the Value
      */
     @NotNull
-    public static Value failureWithSource(@NotNull ErrorType errorType, @NotNull Throwable throwable,
+    public static Value failureWithSource(@NotNull ErrorType errorType, @NotNull Exception throwable,
                                           @Nullable Source source) {
         if (source == null) {
             throw new NullPointerException();

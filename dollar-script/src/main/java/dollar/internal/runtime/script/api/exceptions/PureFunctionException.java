@@ -22,7 +22,7 @@ import dollar.internal.runtime.script.parser.Op;
 import org.jetbrains.annotations.NotNull;
 
 public class PureFunctionException extends DollarScriptException {
-    public PureFunctionException(@NotNull Throwable e) {
+    public PureFunctionException(@NotNull Exception e) {
         super(e);
     }
 
@@ -30,7 +30,7 @@ public class PureFunctionException extends DollarScriptException {
         super(errorMessage);
     }
 
-    public PureFunctionException(@NotNull Throwable t, @NotNull String s) {
+    public PureFunctionException(@NotNull Exception t, @NotNull String s) {
         super(t, s);
     }
 

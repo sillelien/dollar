@@ -29,11 +29,11 @@ public class DollarFailureException extends DollarException {
         super(errorType + ": " + message);
     }
 
-    public DollarFailureException(@NotNull Throwable t, @NotNull ErrorType errorType) {
+    public DollarFailureException(@NotNull Exception t, @NotNull ErrorType errorType) {
         super(t, errorType + ": " + t.getMessage());
     }
 
-    public DollarFailureException(@NotNull Throwable cause) {
+    public DollarFailureException(@NotNull Exception cause) {
         super(cause);
     }
 
@@ -41,7 +41,7 @@ public class DollarFailureException extends DollarException {
         super(message);
     }
 
-    public DollarFailureException(@NotNull Throwable cause, @NotNull String message) {
+    public DollarFailureException(@NotNull Exception cause, @NotNull String message) {
         super(cause, message);
     }
 }

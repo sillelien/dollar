@@ -82,13 +82,13 @@ public final class Symbols {
                                         null, OperatorPriority.AND_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final Op ASSERT_EQ_REACT = new Op(OpType.BINARY, "<=>",
-                                                    null,
-                                                    "assert-equivalence",
+                                                    "always",
+                                                    "always",
                                                     false, true,
                                                     null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
-    public static final Op ASSERT_EQ_UNREACT = new Op(OpType.BINARY, "<->", null,
-                                                      "assert-equals",
+    public static final Op ASSERT_EQ_UNREACT = new Op(OpType.BINARY, "<->", "is",
+                                                      "is",
                                                       false, false,
                                                       null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow",
                                                       BOOL_TYPE_F);
@@ -156,16 +156,7 @@ public final class Symbols {
                                         false, null, FIX_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final KeywordDef FOR = new KeywordDef("for", false, null, null);
-    /*
-    [1..3]<- <=> [3..1] //reverse
-    [1..3][/] <=> [1,2,3] //split ($list)
-    [1,2,3][<] <=> 1 //min ($min)
-    [1,2,3][>] <=> 3 //max ($min)
-    [1,2,3][+] <=> 6 //sum ($plus)
-    [1,2,3][%] <=> 2 //mean ($plus)/($size)
-    [1,2,3][*] <=> 6 //product ($multiply)
 
-     */
     @NotNull
     public static final Op FORK = new Op(OpType.PREFIX, "-<", "fork", "fork",
                                          false,
@@ -200,10 +191,12 @@ public final class Symbols {
                                                         EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null, null);
+    //    @NotNull
+//    public static final KeywordDef IS = new KeywordDef("is", false, null, null);
     @NotNull
-    public static final KeywordDef IS = new KeywordDef("is", false, null, null);
-    @NotNull
-    public static final Op IS_OP = new Op(OpType.BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+    public static final Op IS_OP = new Op(OpType.BINARY, null, "type", "type", false, true, null, IF_PRIORITY, true,
+                                          NO_SCOPE,
+                                          null,
                                           BOOL_TYPE_F);
     @NotNull
     public static final List<String> KEYWORD_STRINGS;
@@ -896,7 +889,6 @@ public final class Symbols {
                     VOLATILE,
                     UNTIL,
                     UNLESS,
-                    IS,
                     FOR,
                     AS,
                     DEF,

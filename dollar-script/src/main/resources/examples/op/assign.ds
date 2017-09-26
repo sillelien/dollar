@@ -1,7 +1,7 @@
 var (it < 100) a = 50
-var (previous is Void || it > previous ) b = 5
+var (previous type Void || it > previous ) b = 5
 b=6
 b=7
-var ( it is String) s1="String value"
+var ( it type String) s1="String value"
 var <String> (#it > 5) s2="String value"
 const immutableValue= "Hello World"

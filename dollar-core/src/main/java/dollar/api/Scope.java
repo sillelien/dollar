@@ -118,7 +118,7 @@ public interface Scope {
      * @return an error Value if the method returns.
      */
     @NotNull
-    Value handleError(@NotNull Throwable t);
+    Value handleError(@NotNull Exception t) throws RuntimeException;
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
@@ -128,7 +128,7 @@ public interface Scope {
      * @return an error Value if the method returns.
      */
     @NotNull
-    Value handleError(@NotNull Throwable t, @NotNull Value context);
+    Value handleError(@NotNull Exception t, @NotNull Value context) throws RuntimeException;
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
@@ -138,7 +138,7 @@ public interface Scope {
      * @return an error Value if the method returns.
      */
     @NotNull
-    Value handleError(@NotNull Throwable t, @NotNull Source context);
+    Value handleError(@NotNull Exception t, @NotNull Source context) throws RuntimeException;
 
     /**
      * Return's true if this scope contains a variable.

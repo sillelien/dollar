@@ -34,8 +34,8 @@ public interface ParserErrorHandler {
     @NotNull Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarException e);
 
     @NotNull
-    Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e);
+    Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Exception e);
 
-    <T extends Throwable> void handleTopLevel(@NotNull T t, @NotNull String name, @Nullable File file) throws T;
+    <T extends Exception> void handleTopLevel(@NotNull T t, @NotNull String name, @Nullable File file) throws RuntimeException;
 
 }

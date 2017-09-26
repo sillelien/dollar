@@ -665,7 +665,7 @@ public class DollarStatic {
      * @return the Value
      */
     @NotNull
-    public static Value handleError(@NotNull Throwable throwable, @Nullable Value failee) {
+    public static Value handleError(@NotNull Exception throwable, @Nullable Value failee) {
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
@@ -724,7 +724,7 @@ public class DollarStatic {
      */
     @NotNull
     @Deprecated
-    public static <R> R logAndRethrow(@NotNull Throwable throwable) {
+    public static <R> R logAndRethrow(@NotNull Exception throwable) {
         if (throwable instanceof DollarException) {
             throw (DollarException) throwable;
         } else {

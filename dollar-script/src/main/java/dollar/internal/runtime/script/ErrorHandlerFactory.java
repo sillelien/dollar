@@ -65,13 +65,20 @@ public class ErrorHandlerFactory implements ParserErrorHandler {
 
     @Override
     @NotNull
-    public Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e) {
+    public Value handle(@NotNull Scope scope, @Nullable Source source, @NotNull Exception e) {
         return handleInternal(scope, source, e);
 
     }
 
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @Override
-    public void handleTopLevel(@NotNull Throwable t, @Nullable String name, @Nullable File file) throws Throwable {
+    public void handleTopLevel(@NotNull Exception t, @Nullable String name, @Nullable File file) throws RuntimeException {
+        if ("true".equals(System.getProperty("dollar.internal.negative.test", "false"))) {
+            log.error(t.getMessage(), t);
+            System.getProperty("dollar.internal.negative.test.exception", t.getClass().getCanonicalName());
+            System.getProperty("dollar.internal.negative.test.message", t.getMessage());
+            throw new DollarExitError(t);
+        }
         log.debug(t.getMessage(), t);
         if (t instanceof DollarAssertionException) {
             System.out.println("ASSERTION FAILURE");
@@ -116,11 +123,11 @@ public class ErrorHandlerFactory implements ParserErrorHandler {
                 return;
             }
         }
-        throw t;
+        throw new DollarException(t);
     }
 
     @NotNull
-    private Value handleInternal(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e) {
+    private Value handleInternal(@NotNull Scope scope, @Nullable Source source, @NotNull Exception e) {
 
         if ((e instanceof DollarException) && (source != null)) {
             return scope.handleError(e, source);

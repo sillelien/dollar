@@ -36,7 +36,7 @@ public final class ScriptingSupport {
     @NotNull
     public static Value compile(@NotNull String language,
                                 @NotNull String script,
-                                @NotNull Scope scope) {
+                                @NotNull Scope scope) throws Exception {
         ScriptingLanguage scriptingLanguage = resolveScriptProvider(language);
         return scriptingLanguage.compile(script, scope);
     }

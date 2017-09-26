@@ -8,5 +8,5 @@ var d= TIME()
 var forkResult= $(forkId);
 @@ forkResult
 @@ d
-.: forkResult is Integer
+.: forkResult type Integer
 .: forkResult > d

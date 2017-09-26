@@ -1,11 +1,11 @@
 //Types
-.: (1..5) is Range
-.: [1..5) is Range
-.: [1..5] is Range
-.: (1..5] is Range
-.: (..5] is Range //  less than or equal to 5
-.: (5..] is Range //  greater than 5
-.: (..) is Range //   all numbers
+.: (1..5) type Range
+.: [1..5) type Range
+.: [1..5] type Range
+.: (1..5] type Range
+.: (..5] type Range //  less than or equal to 5
+.: (5..] type Range //  greater than 5
+.: (..) type Range //   all numbers
 
 
 

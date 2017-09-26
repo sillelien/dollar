@@ -1,8 +1,8 @@
 2 * 5 <=> 10
 
-.: 1 * 1 is Integer
-.: 1 * 1.0 is Decimal
-.: 2.0 * 1 is Decimal
-.: 2.0 * 1.0 is Decimal
-.: DATE() * 10 is Decimal
+.: 1 * 1 type Integer
+.: 1 * 1.0 type Decimal
+.: 2.0 * 1 type Decimal
+.: 2.0 * 1.0 type Decimal
+.: DATE() * 10 type Decimal
 

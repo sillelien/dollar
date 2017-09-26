@@ -21,7 +21,7 @@ import dollar.api.Value;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarAssertionException extends DollarException {
-    public DollarAssertionException(@NotNull Throwable e) {
+    public DollarAssertionException(@NotNull Exception e) {
         super(e);
     }
 
@@ -29,7 +29,7 @@ public class DollarAssertionException extends DollarException {
         super(errorMessage);
     }
 
-    public DollarAssertionException(@NotNull Throwable t, @NotNull String s) {
+    public DollarAssertionException(@NotNull Exception t, @NotNull String s) {
         super(t, s);
     }
 

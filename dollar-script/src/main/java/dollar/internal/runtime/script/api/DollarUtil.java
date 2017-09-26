@@ -49,6 +49,8 @@ public interface DollarUtil {
 
     void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull Value rhs, @NotNull Double threshold);
 
+    void clearScopes();
+
     @NotNull Value constrain(@NotNull Scope scope,
                              @NotNull Value value,
                              @Nullable Value constraint,

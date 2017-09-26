@@ -2,16 +2,16 @@
 @@ DATE() + 1
 @@ DATE() - 1
 
-.: DATE() + 1 is Date
-.: DATE() - 1 is Date
-.: DATE() + 1.0 is Date
-.: DATE() - 1.0 is Date
+.: DATE() + 1 type Date
+.: DATE() - 1 type Date
+.: DATE() + 1.0 type Date
+.: DATE() - 1.0 type Date
 
-.: DATE() + "1.0" is String
-.: DATE() / "1.0" is Decimal
+.: DATE() + "1.0" type String
+.: DATE() / "1.0" type Decimal
 
-.: DATE() * 10 is Decimal
-.: DATE() / 10 is Decimal
+.: DATE() * 10 type Decimal
+.: DATE() / 10 type Decimal
 
 @@ DATE().DAY_OF_WEEK
 

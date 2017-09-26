@@ -37,7 +37,6 @@ import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarExitError;
-import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -287,11 +286,11 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Value handleError(@NotNull Throwable t) {
-        Throwable unravelled = unravel(t);
+    public Value handleError(@NotNull Exception t) throws RuntimeException {
+        Exception unravelled = unravel(t);
         if (!(unravelled instanceof DollarException)) {
             if (unravelled.getCause() instanceof DollarException) {
-                return handleError(unravelled.getCause());
+                return handleError((Exception) unravelled.getCause());
             }
         }
         if (unravelled instanceof DollarAssertionException) {
@@ -305,31 +304,27 @@ public class ScriptScope implements Scope {
                 log.error(unravelled.getMessage(), unravelled);
                 if (getConfig().failFast()) {
                     log.info("Fail-fast option is set");
-                    try {
-                        String filename = file();
-                        if (filename != null) {
-                            ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, new File(filename));
-                        } else {
-                            ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, null);
 
-                        }
-                    } catch (Throwable throwable) {
-                        log.error(throwable.getMessage(), throwable);
+                    String filename = file();
+                    if (filename != null) {
+                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, new File(filename));
+                    } else {
+                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, null);
+
                     }
+
 //                    System.exit(1);
                     throw new DollarExitError(unravelled);
                 } else {
                     log.info("Fail-fast option is not set");
                     if (unravelled instanceof ParserException) {
                         if (unravelled.getCause() instanceof DollarException) {
-                            return handleError(unravelled.getCause());
+                            return handleError((Exception) unravelled.getCause());
                         } else {
                             throw (ParserException) unravelled;
                         }
                     }
-                    if (unravelled instanceof DollarParserError) {
-                        throw (DollarParserError) unravelled;
-                    }
+
                     if (unravelled instanceof DollarException) {
                         throw (DollarException) unravelled;
                     }
@@ -341,15 +336,15 @@ public class ScriptScope implements Scope {
         } else {
             return util().inSubScope(true, pure(), "error-scope", newScope -> {
                 log.info("Error handler in {}", this);
-                parameter(VarKey.of("type"), $(unravelled.getClass().getName()));
-                parameter(VarKey.of("msg"), $(unravelled.getMessage()));
+                parameter(VarKey.TYPE, $(unravelled.getClass().getName()));
+                parameter(VarKey.MSG, $(unravelled.getMessage()));
                 try {
                     for (Value handler : errorHandlers) {
                         handler.$fixDeep(false);
                     }
                 } finally {
-                    parameter(VarKey.of("type"), $void());
-                    parameter(VarKey.of("msg"), $void());
+                    parameter(VarKey.TYPE, $void());
+                    parameter(VarKey.MSG, $void());
                 }
                 return $void();
             }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
@@ -360,21 +355,21 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Value handleError(@NotNull Throwable t, @NotNull Value context) {
+    public Value handleError(@NotNull Exception t, @NotNull Value context) throws RuntimeException {
         return handleError(new DollarScriptException(t, context));
     }
 
     @NotNull
     @Override
-    public Value handleError(@NotNull Throwable t, @NotNull Source source) {
+    public Value handleError(@NotNull Exception t, @NotNull Source source) throws RuntimeException {
         if (t instanceof LambdaRecursionException) {
-            return handleError(new DollarParserError(
-                                                            "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
-                                                                    "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
-                                                                    "reduce the amount of lazy evaluation. The error occured at " +
-                                                                    source));
+            return handleError(new DollarException(
+                                                          "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
+                                                                  "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
+                                                                  "reduce the amount of lazy evaluation. The error occured at " +
+                                                                  source));
         }
-        Throwable unravel = unravel(t);
+        Exception unravel = unravel(t);
         if (unravel instanceof DollarException) {
             ((DollarException) unravel).addSource(source);
             return handleError(unravel);
@@ -530,7 +525,11 @@ public class ScriptScope implements Scope {
                             }
                             listener.pipe($(key), value);
                         } catch (Exception e) {
-                            handleError(e);
+                            try {
+                                handleError(e);
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                         }
                     });
         } else {
