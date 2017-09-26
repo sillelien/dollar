@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz)
+[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -13,7 +13,7 @@
 
 Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/manual/](http://sillelien.github.io/dollar/manual/)
 
-[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz) 
 
 ## Intro
 
@@ -21,7 +21,7 @@ Dollar is a light-weight scripting language for the JVM. More specifically it is
 
 It is currently being built for the needs of server-side developers and Java developers in general who need to produce quick prototypes or write simple scripts. Furthermore it is an internet centric language where JSON and URIs are first class citizens.
 
-[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz) 
 
 **The language is currently in early but active development.**
 
@@ -59,10 +59,10 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ## Install
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) then run the following in your shell:
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.4.5130.tgz
+    tar -zxvf dollar-0.4.5147.tgz
 ```
 
 To use dollar:
@@ -77,7 +77,7 @@ Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.
 
 Q&A: https://gitq.com/sillelien/dollar
  
-[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) 
+[Download it Now](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz) 
 
 ## Maven
 
@@ -105,7 +105,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.4.5130</version>
+            <version>0.4.5147</version>
         </dependency>
 ```
 
@@ -116,7 +116,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 ## Docker
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5130.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.4.5147.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.4  <filename>.ds
  ```
