@@ -56,6 +56,24 @@ def testParams {$2 + " " + $1}
 
 Dollar has it's own peculiarities, mostly these exists to help with it's major target: JVM based integration projects. So it's important to understand the basic concepts before getting started.
 
+### Coding Conventions
+
+I've put these at the beginning knowing that they won't make sense until you've read the whole document, so skip this if you need; but having them at the beginning will be handy if you refer back to this document later.
+
+*  **Classes and Types** in CamelCase
+*  **variables, functions and fields**, in lowerCamelCase
+*  **CONSTANT_VALUES** should be in UPPERCASE
+*  **BUILTIN** functions are in UPPERCASE
+*  **keywords** are in lower case
+
+Use **`def`** for functions rather than **`const`**. Unless otherwise required define a function using a **block** not a list or map.
+
+When choosing to use a keyword or symbol for an operator that supports both e.g. `print`/`@@` choose the keyword if the visual complexity is too high and choose the symbol if brevity adds clarity. If you're unsure err on the side of keywords.
+
+The following however should usually be used in their operator forms for most scripts as they are widely used and therefore easy for a new developer to pick up: `@@`, `.:`, `<->`, `<=>`, `#`, `<<`, `>>`, `:-`.
+
+An example of when the keyword forms are more useful is the writing of test scripts, in which case `print`, `assert`, `is`, `always`  etc. are clearer than  `@@`, `.:`, `<->`, `<=>` to the reader.
+
 ### Reactive Programming
 
 Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
