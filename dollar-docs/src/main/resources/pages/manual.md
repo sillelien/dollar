@@ -508,7 +508,7 @@ def fortnight ($1 * 14)
 
 ### Constraints
 
-Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+Although there are limited compile time type constraints (using the predictive type system) in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
 ```dollar
 var (it < 100) a = 50
@@ -545,7 +545,7 @@ Of course since the use of `(it type XXXX)` is very common Dollar provides a spe
 var <String> (#it > 5) s="String value"
 ```
 
-It is intended that the predictive type system, will be in time combined with runtime types to help spot more bugs at compile time.
+It is intended that the predictive type system combined with runtime types will help to spot a few more bugs at compile time.
 
 ### Type Coercion
 Dollar also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
@@ -653,7 +653,7 @@ a <=> 10
 
 ### Causes
 
-Dollar as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
+Dollar is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
 Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
 
@@ -670,7 +670,7 @@ a=2 ; a <-> 2 ; b <-> 2
 
 Okay so reactive programming can melt your head a little. So let's go through the example step by step.
 
-Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1 (using the imperative assert equals operator `<->`).
+Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1 (using the imperative assert equals or `is` operator `<->`).
 
 We then do the same with b to see if it is 1.
 
@@ -742,7 +742,7 @@ In most programming languages you have the concept of functions and parameters, 
 
 The naming of positional parameters is the same as in shell scripts.
 
-Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parameterise, like so:
+Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parametrise, like so:
 
 ```dollar
 
@@ -916,7 +916,7 @@ true || false <=> true
 false || true <=> true
 false || false <=> false
 
-false or false <=> false
+false or false always false
 
 .: 1 < 2
 .: 3 > 2
@@ -1041,9 +1041,6 @@ var d= TIME()
 ```
 
 In the example the value of c is greater than d because the value of c is evaluated in the background. Note that as soon as you make use of the value of c you block until the value is ready. This is exactly the same as Java's Futures.
-
-
-
 
 ## Advanced Topics
 
