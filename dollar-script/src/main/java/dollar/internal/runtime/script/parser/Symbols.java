@@ -932,7 +932,6 @@ public final class Symbols {
                     CONTINUE,
                     DO,
                     DUMP,
-                    EMIT_OP,
                     FILTER,
                     FINAL,
                     FINALLY,
