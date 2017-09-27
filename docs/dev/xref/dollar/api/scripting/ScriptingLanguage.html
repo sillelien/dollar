@@ -31,7 +31,7 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../dollar/api/scripting/ScriptingLanguage.html">ScriptingLanguage</a> <strong class="jxr_keyword">extends</strong> <a href="../../../dollar/api/plugin/ExtensionPoint.html">ExtensionPoint</a> {
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>      @NotNull <a href="../../../dollar/api/Value.html">Value</a> compile(@NotNull String java, @NotNull <a href="../../../dollar/api/Scope.html">Scope</a> scope);
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      @NotNull <a href="../../../dollar/api/Value.html">Value</a> compile(@NotNull String java, @NotNull <a href="../../../dollar/api/Scope.html">Scope</a> scope) <strong class="jxr_keyword">throws</strong> Exception;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">boolean</strong> provides(@NotNull String language);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  }
