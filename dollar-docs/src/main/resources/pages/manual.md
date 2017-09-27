@@ -2,12 +2,25 @@
 
 ## Introduction
 
+### What is Dollar?
+
+Dollar is a scripting language for the JVM, it is intended to allow the rapid development of prototype applications or occasional use scripts; especially ones dealing with systems integration. Much in the same way that you would write BASH scripts for system programming.
+
+In a Unix shell, like BASH, we largely script the execution of small programs and operate on files. In Dollar we largely script builtin functions and the transfer of data between URIs.
+
+You should find Dollar familiar if you have worked with BASH and Java as it borrows idioms from both. The exception is the use of reactive programming which may be a little novel to the reader.
+
+### When should I use it?
+
+Dollar is intended to allow the rapid development of prototype applications, small hacks and occasional use scripts; especially ones dealing with systems integration.
+
+Although Dollar is intended to be a complete programming language it is not suited to large scale application development. For that, the author recommends sticking to Java or a similar strongly typed general purpose languages.
+
 ### Executable Documentation
 
 Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar.
 
 Yep Dollar can actually run Markdown files, in fact the source file that this page was built from starts with:
-
 
 ```
 #!/usr/bin/env dollar
@@ -41,13 +54,13 @@ def testParams {$2 + " " + $1}
 ## Understanding the Basics
 
 
-Dollar has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
+Dollar has it's own peculiarities, mostly these exists to help with it's major target: JVM based integration projects. So it's important to understand the basic concepts before getting started.
 
 ### Reactive Programming
 
 Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
 
-The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollarscript works the same way by default, however you can also *fix* values when you want to write procedural code. 
+The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollar works the same way by default, however you can also *fix* values when you want to write procedural code.
 
 Let's see some of that behaviour in action:
 
@@ -75,7 +88,7 @@ At this point it's time to introduce a what is arguably a cleaner and easier to 
 The `def` keyword implies `const` and it also does not allow dynamic variable names (more on that later). A rule of thumb is if you'd like to have something act like a function use `def`.
 
 
-**TL;DR `=` behaves like it's Java equivalent, `:=` doesnt't and use `def` to create functions.**
+**TL;DR `=` behaves like it's Java equivalent, `:=` doesn't and use `def` to create functions.**
 
 > The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
@@ -179,22 +192,22 @@ The assert equals operator `<->` will compare two values only at the point that 
 
 #### Definition
 
-There are two ways of using definitions in Dollar, they are semantically the same but syntatically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
+There are two ways of using definitions in Dollar, they are semantically the same but syntactically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
 
 ```dollar
 
-const lamdaVar :=  {$1 + 10}
-lamdaVar(5) <=> 15
+const lambdaVar :=  {$1 + 10}
+lambdaVar(5) <=> 15
 
 ```
-In the above example we have parameterized the expression `lamdaVar` with the value `5` and got the value `15`. So we can clearly see that `lambdaVar` is an expression (or lambda) in this case, not a fixed value.
+In the above example we have parametrized the expression `lambdaVar` with the value `5` and got the value `15`. So we can clearly see that `lambdaVar` is an expression (or lambda) in this case, not a fixed value.
 
-The above looks a lot like a function doesn't it. So to add a little syntatic sugar you can also declare the exact same expression using the `def` syntax below.
+The above looks a lot like a function doesn't it. So to add a little syntactic sugar you can also declare the exact same expression using the `def` syntax below.
 
 ```dollar
 
-def lamdaVar  {$1 + 10}
-lamdaVar(5) <=> 15
+def lambdaVar  {$1 + 10}
+lambdaVar(5) <=> 15
 
 ```
 
@@ -235,7 +248,7 @@ When a line block is evaluated the result is the value of the last entry. For ad
 
 #### List Block
 
-Next we have the list block, the list block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
+Next we have the list block, the list block preserves all the values each part is separated by either a `,` or a newline but is delimited by `[` and `]`.
 
 ```dollar
 
@@ -254,7 +267,7 @@ list2 <=> [1,2]
 
 #### Map Block
 
-Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
 
 ```dollar
 
@@ -340,7 +353,7 @@ You can count the size of the list using the size operator `#`.
 Dollar (at present) supports numerical and character ranges using Maven style syntax
 
 
-In pseudocode:
+In pseudo-code:
 ```
 (a..b) = {x | a < x < b}
 [a..b] = {x | a <= x <= b}
@@ -377,7 +390,7 @@ def func {
 func() <=> 10;
 ```
 
-In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent's lexical scope.
+In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of declaration outer is in it's parent's lexical scope.
 
 ```dollar
 
@@ -389,7 +402,7 @@ def func {
 func()(10) <=> 20;
 ```
 
-In the above example we now return an anonymous block collection from func which we then paramterize with the value `10`. When `func` is executed it returns the paramterized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
+In the above example we now return an anonymous block collection from func which we then parametrize with the value `10`. When `func` is executed it returns the parametrized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
 
 So all of that looks fairly familiar if you've ever used JavaScript, but remember all of Dollar's collections have scope closure so the following is valid:
 
@@ -404,11 +417,11 @@ scopedArray(5)[2]() <=> 20;
 
 ```
 
-In this example the list has lexical scope closure and when we parameterize it using `(5)` we can pass in the positional parameter `($1)` for when it is evaluated.
+In this example the list has lexical scope closure and when we parametrize it using `(5)` we can pass in the positional parameter `($1)` for when it is evaluated.
 
 #### Understanding Scopes A Little Deeper
 
-Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
+Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierarchy of scopes with the previous being the parent.
 
 
 Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
@@ -538,7 +551,7 @@ var myColor="apple"
 
 ```
 
-Of course since the use of `(it type XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+Of course since the use of `(it type XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or declaration with `<XXXX>` where XXXX is the runtime type.
 
 
 ```dollar
@@ -779,7 +792,7 @@ In this example we've requested a single value (using `<<`) from a uri and assig
 
 ## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in back-ticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```dollar
 
