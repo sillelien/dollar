@@ -65,17 +65,21 @@ public final class Symbols {
 
     @NotNull
     public static final KeywordDef AS = new KeywordDef("as", false, null, null);
+
     @NotNull
-    public static final Op AVG = new Op(OpType.POSTFIX, "[%]", "avg", "avg",
-                                        false, true,
-                                        null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
+    public static final Op AVG = new Op(OpType.POSTFIX, "[%]", "avg", "avg", false, true,
+                                        " ( 'avg' <list-expression> ) | ( <list-expression> '[%]' )", PLUS_MINUS_PRIORITY, true,
+                                        NO_SCOPE, null, ANY_TYPE_F);
+
     @NotNull
     public static final KeywordDef BLOCK = new KeywordDef("block", false, null, null);
+
     @NotNull
     public static final Op BLOCK_OP = new Op(OpType.COLLECTION, null, null, "block",
                                              false, true,
                                              "'{' ( <expression> ';' ) * [ <expression> ] '}'",
                                              NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, i -> Type._BLOCK);
+
     @NotNull
     public static final Op AND = new Op(OpType.BINARY, "&&", "and", "and",
                                         false, true,
@@ -289,7 +293,7 @@ public final class Symbols {
     @NotNull
     public static final Op PARALLEL = new Op(OpType.PREFIX, "|:|", "parallel", "parallel",
                                              false, false,
-                                             null, SIGNAL_PRIORITY, true, NEW_PARALLEL_SCOPE, ":vertical_traffic_light:",
+                                             null, SIGNAL_PRIORITY, true, NO_SCOPE, ":vertical_traffic_light:",
                                              FIRST_TYPE_F);
     @NotNull
     public static final Op PARAM_OP = new Op(OpType.POSTFIX, null, null, "parameter", false, true,
@@ -372,14 +376,14 @@ public final class Symbols {
     public static final SymbolDef SEMI_COLON = new SymbolDef(";", false);
     @NotNull
     public static final Op SERIAL = new Op(OpType.PREFIX, "|..|", "serial", "serial",
-                                           false, false,
-                                           null, SIGNAL_PRIORITY, true, NEW_SERIAL_SCOPE, ":traffic_light:", FIRST_TYPE_F);
+                                           true, false,
+                                           null, SIGNAL_PRIORITY, true, NO_SCOPE, ":traffic_light:", FIRST_TYPE_F);
     @NotNull
     public static final Op SIZE = new Op(OpType.PREFIX, "#", null, "size",
                                          false, true,
                                          null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:", INTEGER_TYPE_F);
     @NotNull
-    public static final Op SORT = new Op(OpType.PREFIX, "->", "sorted", "sorted",
+    public static final Op SORT = new Op(OpType.PREFIX, "->", "sort", "sort",
                                          false, true,
                                          null, SORT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
@@ -801,7 +805,6 @@ public final class Symbols {
                     RIGHT_BRACKET,
                     RIGHT_PAREN,
                     SEMI_COLON,
-                    SERIAL,
                     START,
                     STATE,
                     STOP,
@@ -853,6 +856,7 @@ public final class Symbols {
                     WRITE_OP,
 
                     //Reserved Operators
+                    SERIAL,
                     RESERVED_OPERATOR_2,
                     RESERVED_OPERATOR_3,
                     RESERVED_OPERATOR_4,

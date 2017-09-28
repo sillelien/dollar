@@ -509,7 +509,11 @@ public class DollarMap extends AbstractDollar {
 
     @Override
     public int compareTo(@NotNull Value o) {
-        return Comparator.<Value>naturalOrder().<Value>compare(this, o);
+        if (pair() && o.pair()) {
+            return Comparator.<Value>naturalOrder().<Value>compare($pairKey(), o.$pairKey());
+        } else {
+            throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION, "Cannot compare maps");
+        }
     }
 
     @NotNull

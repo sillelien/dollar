@@ -42,7 +42,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static dollar.api.types.DollarFactory.FALSE;
@@ -54,7 +53,7 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     private final Value constructor;
     @NotNull
-    private final Map<VarKey, Variable> fields = new ConcurrentHashMap<>();
+    private final Map<VarKey, Variable> fields = new LinkedHashMap<>();
     @NotNull
     private final String name;
     @NotNull
@@ -402,7 +401,8 @@ public class DollarObject extends AbstractDollar {
         final List<Value> entries =
                 fields.entrySet()
                         .stream()
-                        .map(entry -> DollarStatic.$(entry.getKey(), entry.getValue()))
+                        .filter(i -> i.getKey().isAlphaNumeric())
+                        .map(entry -> DollarStatic.$(entry.getKey().asString(), entry.getValue().getValue()))
                         .collect(Collectors.toList());
         return ImmutableList.copyOf(entries);
     }

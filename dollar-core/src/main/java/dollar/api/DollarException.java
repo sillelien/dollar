@@ -64,7 +64,11 @@ public class DollarException extends RuntimeException {
     public static @NotNull
     Exception unravel(@NotNull Exception e) {
         if ((e instanceof InvocationTargetException) || (e instanceof ExecutionException)) {
-            return unravel((Exception) e.getCause());
+            Throwable cause = e.getCause();
+            if ((cause instanceof Error)) {
+                throw (Error) cause;
+            }
+            return unravel((Exception) cause);
         } else {
             return e;
         }

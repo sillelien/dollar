@@ -1,0 +1,11 @@
+sort ({"first":1,"second":2,"third":3}[/]) <=> [{"first":1},{"second":2},{"third":3}]
+
+class TestClass {
+    var first=1;
+    var second=2;
+    var third=3;
+}
+new TestClass() [/] <=> [{"first":1},{"second":2},{"third":3}]
+
+// Single value types become single value lists.
+1[/] <=> [1]

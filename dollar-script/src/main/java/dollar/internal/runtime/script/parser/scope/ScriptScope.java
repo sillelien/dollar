@@ -18,7 +18,6 @@ package dollar.internal.runtime.script.parser.scope;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import dollar.api.ClassName;
 import dollar.api.DollarClass;
@@ -50,7 +49,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -83,7 +84,7 @@ public class ScriptScope implements Scope {
     @NotNull
     private final UUID uuid = UUID.randomUUID();
     @NotNull
-    private final ConcurrentHashMap<VarKey, Variable> variables = new ConcurrentHashMap<>();
+    private final Map<VarKey, Variable> variables = Collections.<VarKey, Variable>synchronizedMap(new LinkedHashMap());
     @Nullable
     Scope parent;
     @Nullable
@@ -142,7 +143,7 @@ public class ScriptScope implements Scope {
     private ScriptScope(@NotNull Scope parent,
                         @NotNull String id,
                         boolean parameterScope,
-                        @NotNull ConcurrentHashMap<VarKey, Variable> variables,
+                        @NotNull Map<VarKey, Variable> variables,
                         @NotNull List<Value> errorHandlers,
                         @NotNull Multimap<VarKey, Listener> listeners,
                         @NotNull String source,
@@ -728,7 +729,7 @@ public class ScriptScope implements Scope {
     @NotNull
     @Override
     public Map<VarKey, Variable> variables() {
-        return ImmutableMap.copyOf(variables);
+        return new LinkedHashMap<>(variables);
     }
 
 // --Commented out by Inspection START (10/09/2017, 14:29):

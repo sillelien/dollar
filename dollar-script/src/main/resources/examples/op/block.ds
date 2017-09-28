@@ -1,0 +1,4 @@
+const aBlock := {
+        @@ "The first command"
+        @@ "The second command"
+}

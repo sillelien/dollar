@@ -204,7 +204,7 @@ So as you can see when we use the `=` assignment operator we assign the *value* 
 
 The assignment operator `=` has an infinite 'fix' depth This means that any expression will be evaluated completely also it means the result is not reactive.
 
-The assert equivalence operator `<=>` will compare two values and throw an exception if they are not the same at any point **proceeding** the expression,  ` a <=> b`  is the same as `.: a == b`**
+The `always` operator `<=>` will compare two values and throw an exception if they are not the same at any point **at or after** the expression,  ` a <=> b`  is the same as `.: a == b`.
 
 The assert equals operator `<->` will compare two values only at the point that the expression occurs. It is roughly the same as .equals() in Java and is the equivalent of `.: &a == &b`
 
@@ -233,14 +233,14 @@ Note that `def` implies `const`, `def` means define and therefore not variable.
 
 #### Summary
 
-> It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
+> It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable declaration.
 
 ```dollar
 const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely . More on that later.
+So `:=` supports the full reactive behaviour of Dollar, i.e. it is a definition not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely.
 
 ### Blocks
 
@@ -285,7 +285,7 @@ list2 <=> [1,2]
 
 #### Map Block
 
-Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,`  or *newline* not a `;`. The default behaviour of a map block is virtually useless, it takes each value and makes it's String value the key and the original value is the value paired with that key.
 
 ```dollar
 
@@ -320,7 +320,7 @@ mapBlock.second <=> "World"
 
 A map block with one entry that is not a pair is assumed to be a *Line Block*.
 
-The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
+> The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
 
 ```dollar
 

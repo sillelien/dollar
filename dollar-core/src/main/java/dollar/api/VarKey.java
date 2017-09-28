@@ -101,6 +101,10 @@ public class VarKey {
         return key;
     }
 
+    public boolean isAlphaNumeric() {
+        return key.matches("[a-zA-Z0-9]+");
+    }
+
     public boolean isNumeric() {
         return key.matches("[0-9]+");
     }

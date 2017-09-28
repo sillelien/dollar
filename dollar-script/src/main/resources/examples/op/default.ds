@@ -1,2 +1,3 @@
 void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
+1 default "Hello" <=> 1
