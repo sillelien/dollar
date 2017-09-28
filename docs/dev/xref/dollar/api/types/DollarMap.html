@@ -517,49 +517,53 @@
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 
 <a class="jxr_linenumber" name="L510" href="#L510">510</a>     @Override
 <a class="jxr_linenumber" name="L511" href="#L511">511</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <a href="../../../dollar/api/Value.html">Value</a> o) {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>         <strong class="jxr_keyword">return</strong> Comparator.&lt;Value&gt;naturalOrder().&lt;Value&gt;compare(<strong class="jxr_keyword">this</strong>, o);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>     }
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>     @NotNull
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; copyMap() {
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>         <strong class="jxr_keyword">return</strong> deepClone(map);
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>     }
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>     @NotNull
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; deepClone(@NotNull LinkedHashMap&lt;Value, Value&gt; o) {
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>         LinkedHashMap&lt;Value, Value&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Value, Value&gt; entry : o.entrySet()) {
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>             result.put(entry.getKey(), entry.getValue());
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>         }
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>     }
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>     @NotNull
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; mapToVarMap(@NotNull Map&lt;?, ?&gt; stringObjectMap) {
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         LinkedHashMap&lt;Value, Value&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;?, ?&gt; entry : stringObjectMap.entrySet()) {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>         }
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>     }
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>     @NotNull
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>     Map&lt;Value, Value&gt; split() {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>         <strong class="jxr_keyword">return</strong> copyMap();
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     }
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>     @NotNull
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>     <strong class="jxr_keyword">private</strong> &lt;K <strong class="jxr_keyword">extends</strong> Comparable&lt;K&gt;, V&gt; Map&lt;K, V&gt; varMapToMap() {
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>         Map&lt;K, V&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Value, Value&gt; entry : toVarMap().entrySet()) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>             result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         }
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>     }
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> }
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>         <strong class="jxr_keyword">if</strong> (pair() &amp;&amp; o.pair()) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>             <strong class="jxr_keyword">return</strong> Comparator.&lt;Value&gt;naturalOrder().&lt;Value&gt;compare($pairKey(), o.$pairKey());
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/exceptions/DollarFailureException.html">DollarFailureException</a>(ErrorType.INVALID_MAP_OPERATION, <span class="jxr_string">"Cannot compare maps"</span>);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>         }
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>     }
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>     @NotNull
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; copyMap() {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <strong class="jxr_keyword">return</strong> deepClone(map);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>     }
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>     @NotNull
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; deepClone(@NotNull LinkedHashMap&lt;Value, Value&gt; o) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         LinkedHashMap&lt;Value, Value&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Value, Value&gt; entry : o.entrySet()) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>             result.put(entry.getKey(), entry.getValue());
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         }
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>     }
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>     @NotNull
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>     <strong class="jxr_keyword">private</strong> LinkedHashMap&lt;Value, Value&gt; mapToVarMap(@NotNull Map&lt;?, ?&gt; stringObjectMap) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>         LinkedHashMap&lt;Value, Value&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;?, ?&gt; entry : stringObjectMap.entrySet()) {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>         }
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>     }
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>     @NotNull
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>     Map&lt;Value, Value&gt; split() {
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         <strong class="jxr_keyword">return</strong> copyMap();
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>     }
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>     @NotNull
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>     <strong class="jxr_keyword">private</strong> &lt;K <strong class="jxr_keyword">extends</strong> Comparable&lt;K&gt;, V&gt; Map&lt;K, V&gt; varMapToMap() {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>         Map&lt;K, V&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>         <strong class="jxr_keyword">for</strong> (Map.Entry&lt;Value, Value&gt; entry : toVarMap().entrySet()) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>             result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>         }
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>     }
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> }
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>

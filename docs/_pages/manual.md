@@ -209,7 +209,7 @@ So as you can see when we use the `=` assignment operator we assign the *value* 
 
 The assignment operator `=` has an infinite 'fix' depth This means that any expression will be evaluated completely also it means the result is not reactive.
 
-The assert equivalence operator `<=>` will compare two values and throw an exception if they are not the same at any point **proceeding** the expression,  ` a <=> b`  is the same as `.: a == b`**
+The `always` operator `<=>` will compare two values and throw an exception if they are not the same at any point **at or after** the expression,  ` a <=> b`  is the same as `.: a == b`.
 
 The assert equals operator `<->` will compare two values only at the point that the expression occurs. It is roughly the same as .equals() in Java and is the equivalent of `.: &a == &b`
 
@@ -238,14 +238,14 @@ Note that `def` implies `const`, `def` means define and therefore not variable.
 
 #### Summary
 
-> It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
+> It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable declaration.
 
 ```
 const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely . More on that later.
+So `:=` supports the full reactive behaviour of Dollar, i.e. it is a definition not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely.
 
 ### Blocks
 
@@ -290,7 +290,7 @@ list2 <=> [1,2]
 
 #### Map Block
 
-Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,`  or *newline* not a `;`. The default behaviour of a map block is virtually useless, it takes each value and makes it's String value the key and the original value is the value paired with that key.
 
 ```
 
@@ -325,7 +325,7 @@ mapBlock.second <=> "World"
 
 A map block with one entry that is not a pair is assumed to be a *Line Block*.
 
-The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
+> The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
 
 ```
 
@@ -1087,7 +1087,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.192 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.203 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -1144,6 +1144,9 @@ true && true <=> true
 true && false <=> false
 false && true <=> false
 false && false <=> false
+
+true and true <=> true
+false and true always false
 ```
 
 ___
@@ -1163,6 +1166,8 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 .: 3 > 2
 .: 1 <= 1
 .: 1 <= 2
+
+assert 1 < 2
 ```
 
 ___
@@ -1204,13 +1209,16 @@ ___
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('[%]'|'avg')`**{: style="font-size: 60%"}
+**` ( 'avg' <list-expression> ) | ( <list-expression> '[%]' )`**{: style="font-size: 60%"}
 
 
 
+The average operation `avg` or `[%]` calculates the average value of a list.
 
 
 ```
+[1,2,3,4,5][%] <=> 3
+avg [1,2,3,4,5] <=> 3
 ```
 
 ___
@@ -1223,9 +1231,31 @@ ___
 
 
 
+A line block lies between `{` and `}` and is separated by either newlines or `;` characters.
+
+```dollar
+
+var myBlock = {
+    "Hello "
+    "World"
+}
+
+myBlock <=> "World"
+
+const myBlock2 = {1;2}
+
+myBlock2 <=> 2
+
+```
+
+When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
 
 
 ```
+const aBlock := {
+        @@ "The first command"
+        @@ "The second command"
+}
 ```
 
 ___
@@ -1471,6 +1501,7 @@ If the left-hand-side is VOID this returns the right-hand-side, otherwise return
 ```
 void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
+1 default "Hello" <=> 1
 ```
 
 ___
@@ -1513,7 +1544,8 @@ ___
 
 
 
-destroy
+TODO:
+
 
 ```
 ```
@@ -1593,35 +1625,6 @@ var a=5
 //Parenthesis added for clarity, not required.
 var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
-```
-
-___
-
-### `emit` or `...` {#op-emit}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-
-
-The emit operator `...` takes a list and converts it to a set of events, typically this is piped to a function to process each event as it occurs.
-
-
-```
-var e=0;
-
-def updateE {e=$1}
-
-var collectedValues=[]
-
-collect e until it == 4 unless it == 3{
-    print count
-    print collected
-    collectedValues= collected
-}
-
-([1,2,3,4] ...) | updateE
-
-collectedValues <=> [ 1, 2, 4 ]
 ```
 
 ___
@@ -2214,7 +2217,7 @@ ___
 
 ### `parallel` or `|:|` {#op-parallel}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Parallel Scope](https://img.shields.io/badge/scope-new%20parallel-red.svg?style=flat-square) ![Parallel Execution](https://img.shields.io/badge/order-parallel-blue.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -2617,21 +2620,6 @@ javaWithParam <=> 10*20*30
 
 ___
 
-### `serial` or `|..|` {#op-serial}
-
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Serial Scope](https://img.shields.io/badge/scope-new%20serial-yellow.svg?style=flat-square) ![Serial Execution](https://img.shields.io/badge/order-serial-green.svg?style=flat-square)
-
-**`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
-
-
-
-Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.
-
-```
-```
-
-___
-
 ### `#` (size) {#op-size}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2647,17 +2635,19 @@ Returns the size of non-scalar types or the length of a string.
 
 ___
 
-### `sorted` or `->` {#op-sorted}
+### `sort` or `->` {#op-sort}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('->'|'sorted') <expression>`**{: style="font-size: 60%"}
+**`('->'|'sort') <expression>`**{: style="font-size: 60%"}
 
 
 
 
 
 ```
+->[3,1,2] <=> [1,2,3]
+sort [3,1,2] <=> [1,2,3]
 ```
 
 ___
@@ -2670,9 +2660,21 @@ ___
 
 
 
+The list split operator `[/]` will convert any non list type to a list with division as the preferred method. The split operator will split a Map or an Object into pairs for example.
 
 
 ```
+sort ({"first":1,"second":2,"third":3}[/]) <=> [{"first":1},{"second":2},{"third":3}]
+
+class TestClass {
+    var first=1;
+    var second=2;
+    var third=3;
+}
+new TestClass() [/] <=> [{"first":1},{"second":2},{"third":3}]
+
+// Single value types become single value lists.
+1[/] <=> [1]
 ```
 
 ___
@@ -2776,9 +2778,12 @@ ___
 
 
 
+The sum operator reduces a list using the `+` operation.
 
 
 ```
+[1,2,3,4,5][+] <=> 15
+["a","b","c"][+] <=> "abc"
 ```
 
 ___
@@ -2794,6 +2799,15 @@ ___
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
 ```
+.: ~ [1,2,3]
+.: ! ~ []
+.: ~ "anything"
+.: ! ~ ""
+.: ~ 1
+.: ! ~ 0
+.: ! ~ {void}
+.:  ~ { "a" : 1}
+.: ! ~ void
 ```
 
 ___
@@ -2828,6 +2842,8 @@ ___
 
 
 ```
+[1,2,2,3][!] <=> [1,2,3]
+["aaa","a","aaa","b"][!] <=> ["aaa","a","b"]
 ```
 
 ___
@@ -2922,6 +2938,11 @@ ___
 while operator
 
 ```
+var a= 1;
+while a < 10 {
+    print a
+    a=a+1;
+}
 ```
 
 ___
@@ -3124,11 +3145,11 @@ The following keywords are reserved:
 
 The following operator keywords are reserved:
 
-> 
+> serial
 
 The following operator symbols are reserved:
 
-> `&=, &>, +>, ->, -_-, ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
+> `&=, &>, +>, ->, -_-, ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |*, |..| `
 
 ### Symbols
 
@@ -3143,7 +3164,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |Name                          |Keyword        |Operator  |Type      |
 |-------                       |-------        |-------   |-------   |
 |[fix](#op-fix)                |`fix`          | `&`      |prefix    |
-|[sorted](#op-sorted)          |`sorted`       | `->`     |prefix    |
+|[sort](#op-sort)              |`sort`         | `->`     |prefix    |
 |[range](#op-range)            |               | `..`     |binary    |
 |[default](#op-default)        |`default`      | `:-`     |binary    |
 |[member](#op-member)          |               | `.`      |binary    |
@@ -3175,7 +3196,6 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[sum](#op-sum)                |`sum`          | `[+]`    |postfix   |
 |[unique](#op-unique)          |`unique`       | `[!]`    |postfix   |
 |[emit](#op-emit)              |`emit`         | `...`    |reserved  |
-|[emit](#op-emit)              |`emit`         | `...`    |reserved  |
 |[greater-than](#op-greater-than)|               | `>`      |binary    |
 |[less-than](#op-less-than)    |               | `<`      |binary    |
 |[pipe](#op-pipe)              |               | `|`      |binary    |
@@ -3204,7 +3224,6 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[if](#op-if)                  |`if`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
-|[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
 |[start](#op-start)            |`start`        | `|>`     |prefix    |
 |[state](#op-state)            |`state`        | `<|>`    |prefix    |
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
