@@ -7,12 +7,25 @@ permalink: /manual/
 
 ## Introduction
 
+### What is Dollar?
+
+Dollar is a scripting language for the JVM, it is intended to allow the rapid development of prototype applications or occasional use scripts; especially ones dealing with systems integration. Much in the same way that you would write BASH scripts for system programming.
+
+In a Unix shell, like BASH, we largely script the execution of small programs and operate on files. In Dollar we largely script builtin functions and the transfer of data between URIs.
+
+You should find Dollar familiar if you have worked with BASH and Java as it borrows idioms from both. The exception is the use of reactive programming which may be a little novel to the reader.
+
+### When should I use it?
+
+Dollar is intended to allow the rapid development of prototype applications, small hacks and occasional use scripts; especially ones dealing with systems integration.
+
+Although Dollar is intended to be a complete programming language it is not suited to large scale application development. For that, the author recommends sticking to Java or a similar strongly typed general purpose languages.
+
 ### Executable Documentation
 
 Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar.
 
 Yep Dollar can actually run Markdown files, in fact the source file that this page was built from starts with:
-
 
 ```
 #!/usr/bin/env dollar
@@ -23,7 +36,7 @@ The source for this page (minus that header) is [here](manual.md)
 
 ### Getting Started
 
-NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
+NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is supported, however since Dollar is entirely based in Java it's trivial to port to other systems. Please add an issue on the GitHub project specifying the platform you'd like to help support.
 
 First download the Dollar scripting runtime from [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-{{site.release}}.tgz)
 
@@ -46,32 +59,31 @@ def testParams {$2 + " " + $1}
 ## Understanding the Basics
 
 
-Dollar has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
+Dollar has it's own peculiarities, mostly these exists to help with it's major target: JVM based integration projects. So it's important to understand the basic concepts before getting started.
 
-### Functional Programming and the 'pure' operator
+### Coding Conventions
 
-Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
+I've put these at the beginning knowing that they won't make sense until you've read the whole document, so skip this if you need; but having them at the beginning will be handy if you refer back to this document later.
 
-In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
+*  **Classes and Types** in CamelCase
+*  **variables, functions and fields**, in lowerCamelCase
+*  **CONSTANT_VALUES** should be in UPPERCASE
+*  **BUILTIN** functions are in UPPERCASE
+*  **keywords** are in lower case
 
- ```
- pure def reverse [$1[1],$1[0]]
+Use **`def`** for functions rather than **`const`**. Unless otherwise required define a function using a **block** not a list or map.
 
- a= pure {
-     reverse([2,1])
- }
+When choosing to use a keyword or symbol for an operator that supports both e.g. `print`/`@@` choose the keyword if the visual complexity is too high and choose the symbol if brevity adds clarity. If you're unsure err on the side of keywords.
 
- ```
+The following however should usually be used in their operator forms for most scripts as they are widely used and therefore easy for a new developer to pick up: `@@`, `.:`, `<->`, `<=>`, `#`, `<<`, `>>`, `:-`.
 
-Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
-
-
+An example of when the keyword forms are more useful is the writing of test scripts, in which case `print`, `assert`, `is`, `always`  etc. are clearer than  `@@`, `.:`, `<->`, `<=>` to the reader.
 
 ### Reactive Programming
 
 Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
 
-The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollarscript works the same way by default, however you can also *fix* values when you want to write procedural code. 
+The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollar works the same way by default, however you can also *fix* values when you want to write procedural code.
 
 Let's see some of that behaviour in action:
 
@@ -84,9 +96,9 @@ variableA = 2
 .: variableB == 2
 ```
 
-In the above example we are declaring (using the declarative operator `:=`) that variableA is current the value 1, we then declare that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
+In the above example we are assigning the variableA to the value 1, we then declare (using the declarative operator `:=`) that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
 
-Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the logic [described here](https://math.stackexchange.com/questions/1838678/confused-about-notation-versus-plain-old) so that the `:=` operator is a definition (and by it's nature reactive) and `=` is an assignment ( not reactive and has a fix depth of 1 - more on that later).
+Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the logic [described here](https://math.stackexchange.com/questions/1838678/confused-about-notation-versus-plain-old) so that the `:=` operator is a definition (and by it's nature reactive) and `=` is an assignment ( not reactive and has an infinite fix depth, more on that later).
 
 This means that `a := b + 1` translates to **a is defined as b + 1** so a is behaving reactively, changes to b cause a change in the value of a. It also means that `a = b + 1` simply assigns `b + 1` to the variable a, changes to b do not cause changes to a. 
 
@@ -99,7 +111,7 @@ At this point it's time to introduce a what is arguably a cleaner and easier to 
 The `def` keyword implies `const` and it also does not allow dynamic variable names (more on that later). A rule of thumb is if you'd like to have something act like a function use `def`.
 
 
-**TL;DR `=` behaves like it's Java equivalent, `:=` doesnt't and use `def` to create functions.**
+**TL;DR `=` behaves like it's Java equivalent, `:=` doesn't and use `def` to create functions.**
 
 > The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
@@ -161,11 +173,28 @@ b=2
 ```
 
 
+### Functional Programming and the 'pure' operator
+
+Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
+
+In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
+
+ ```
+ pure def reverse [$1[1],$1[0]]
+
+ a= pure {
+     reverse([2,1])
+ }
+
+ ```
+
+Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
 
 
-### Assignment
+### Assignment and Definition
 
-Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
+
+#### Assignment
 
 ```
 
@@ -176,33 +205,38 @@ variableA = 2
 .: variableB == 1
 ```
 
-So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable. Watch what happens when we use expressions.
+So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable.
 
+The assignment operator `=` has an infinite 'fix' depth This means that any expression will be evaluated completely also it means the result is not reactive.
 
-```
+The assert equivalence operator `<=>` will compare two values and throw an exception if they are not the same at any point **proceeding** the expression,  ` a <=> b`  is the same as `.: a == b`**
 
-var variableA = 1
-var variableB = variableA
-var variableC = (variableA +1 )
-const variableD := (variableA + 1)
-variableA = 2
+The assert equals operator `<->` will compare two values only at the point that the expression occurs. It is roughly the same as .equals() in Java and is the equivalent of `.: &a == &b`
 
-.: variableB == 1
-.: variableC == 2
-.: variableD == 3
+#### Definition
+
+There are two ways of using definitions in Dollar, they are semantically the same but syntactically different. Firstly we can just use the `:=` definition operator. This is not an assignment in the sense that the variable being defined is in fact being assigned the `expression` on the right hand side. Not the value of the expression.
 
 ```
 
-The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
+const lambdaVar :=  {$1 + 10}
+lambdaVar(5) <=> 15
 
-The assert equals operator `<=>` will compare two values and throw an exception if they are ever not the same ` a <=> b` is the same as `.: a == b`**
+```
+In the above example we have parametrized the expression `lambdaVar` with the value `5` and got the value `15`. So we can clearly see that `lambdaVar` is an expression (or lambda) in this case, not a fixed value.
+
+The above looks a lot like a function doesn't it. So to add a little syntactic sugar you can also declare the exact same expression using the `def` syntax below.
 
 ```
 
-def lamdaVar  {$1 + 10}
-lamdaVar(5) <=> 15
+def lambdaVar  {$1 + 10}
+lambdaVar(5) <=> 15
 
 ```
+
+Note that `def` implies `const`, `def` means define and therefore not variable.
+
+#### Summary
 
 > It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
@@ -237,7 +271,7 @@ When a line block is evaluated the result is the value of the last entry. For ad
 
 #### List Block
 
-Next we have the list block, the list block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
+Next we have the list block, the list block preserves all the values each part is separated by either a `,` or a newline but is delimited by `[` and `]`.
 
 ```
 
@@ -256,7 +290,7 @@ list2 <=> [1,2]
 
 #### Map Block
 
-Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is separated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
 
 ```
 
@@ -342,7 +376,7 @@ You can count the size of the list using the size operator `#`.
 Dollar (at present) supports numerical and character ranges using Maven style syntax
 
 
-In pseudocode:
+In pseudo-code:
 ```
 (a..b) = {x | a < x < b}
 [a..b] = {x | a <= x <= b}
@@ -379,7 +413,7 @@ def func {
 func() <=> 10;
 ```
 
-In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent's lexical scope.
+In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of declaration outer is in it's parent's lexical scope.
 
 ```
 
@@ -391,7 +425,7 @@ def func {
 func()(10) <=> 20;
 ```
 
-In the above example we now return an anonymous block collection from func which we then paramterize with the value `10`. When `func` is executed it returns the paramterized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
+In the above example we now return an anonymous block collection from func which we then parametrize with the value `10`. When `func` is executed it returns the parametrized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
 
 So all of that looks fairly familiar if you've ever used JavaScript, but remember all of Dollar's collections have scope closure so the following is valid:
 
@@ -406,14 +440,14 @@ scopedArray(5)[2]() <=> 20;
 
 ```
 
-In this example the list has lexical scope closure and when we parameterize it using `(5)` we can pass in the positional parameter `($1)` for when it is evaluated.
+In this example the list has lexical scope closure and when we parametrize it using `(5)` we can pass in the positional parameter `($1)` for when it is evaluated.
 
 #### Understanding Scopes A Little Deeper
 
-Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
+Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierarchy of scopes with the previous being the parent.
 
 
-Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)# Implementation_and_theory)).
+Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
 
 >Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
 
@@ -448,14 +482,14 @@ Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and 
 
 ## Type System
 ### Intro
-Although Dollar is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+Although Dollar has a very loose type system, it does support basic runtime typing and a type prediction system. At present the inbuilt types includes: String, Integer, Decimal, List, Map, URI, Void, Range, Boolean. The value for a type can be checked using the `type` operator:
 
 ```
-.: "Hello World" is String
-.: ["Hello World"] is List
+.: "Hello World" type String
+.: ["Hello World"] type List
 ```
 
-### DATE
+### Date
 
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
@@ -464,8 +498,8 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 @@ DATE() + 1
 @@ DATE() - 1
 
-.: DATE() + "1.0" is String
-.: DATE() / "1.0" is Decimal
+.: DATE() + "1.0" type String
+.: DATE() / "1.0" type Decimal
 ```
 
 Components of the date can be accessed using the subscript operators:
@@ -510,14 +544,14 @@ def fortnight ($1 * 14)
 
 ### Constraints
 
-Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+Although there are limited compile time type constraints (using the predictive type system) in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
 ```
 var (it < 100) a = 50
-var (previous is Void|| it > previous) b = 5
+var (previous type Void|| it > previous) b = 5
 b=6
 b=7
-var ( it is String) s="String value"
+var ( it type String) s="String value"
 ```
 
 The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
@@ -540,14 +574,14 @@ var myColor="apple"
 
 ```
 
-Of course since the use of `(it is XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+Of course since the use of `(it type XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or declaration with `<XXXX>` where XXXX is the runtime type.
 
 
 ```
 var <String> (#it > 5) s="String value"
 ```
 
-It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
+It is intended that the predictive type system combined with runtime types will help to spot a few more bugs at compile time.
 
 ### Type Coercion
 Dollar also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
@@ -655,7 +689,7 @@ a <=> 10
 
 ### Causes
 
-Dollar as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
+Dollar is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
 Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
 
@@ -664,19 +698,19 @@ var a=1; var b=1
 
 a => (b= a)
 
-&a <=> 1 ; &b <=> 1
+a <-> 1 ; b <-> 1
 
-a=2 ; &a <=> 2 ; &b <=> 2
+a=2 ; a <-> 2 ; b <-> 2
 
 ```
 
 Okay so reactive programming can melt your head a little. So let's go through the example step by step.
 
-Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1, we use the fix operator `&` here to say that we are only interested in the current value. Because `<=>` is a reactive operator if we didn't use the fix operator then `a <=> 1` would mean a is always 1. When we add the fix operator it fixes the value of a to the value at this point in the code.
+Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1 (using the imperative assert equals or `is` operator `<->`).
 
 We then do the same with b to see if it is 1.
 
-Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `->` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
+Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `=>` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
 
 ### When
 
@@ -691,9 +725,9 @@ var d=1
 //When c is greater than 3 assign it's value to d
 c > 3 ? (d= c)
 
-&c <=> 1; &d <=> 1
-c=2; &c <=> 2; &d <=> 1
-c=5 ; &c <=> 5 ; &d <=> 5
+c <-> 1; d <-> 1
+c= 2; c <-> 2; d <-> 1
+c= 5 ; c <-> 5 ; d <-> 5
 
 ```
 
@@ -715,27 +749,27 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is Void) collectedValues=void
+var (#it >= 4 || it type Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
-collect e until count == 4 unless it == 10{
+collect e until count == 4 unless it == 10 {
     print count
     print collected
     collectedValues= collected
 }
 
 e=1; e=2; e=3; e=4; e=5; e=6
-&collectedValues <=> [1,2,3,4,5]
+collectedValues <-> [1,2,3,4,5]
 e=7; e=8; e=9; e=10
-&collectedValues <=> [6,7,8,9]
+collectedValues <-> [6,7,8,9]
 e=11; e=12; e=13; e=14; e=15; e=16
-&collectedValues <=> [11,12,13,14,15]
+collectedValues <-> [11,12,13,14,15]
 
 ```
 
 ## Parameters &amp; Functions
 
-In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
+In most programming languages you have the concept of functions and parameters, i.e. you can parametrize blocks of code. In Dollar you can parametrize *anything*. For example, let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
 ```
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
@@ -744,7 +778,7 @@ In most programming languages you have the concept of functions and parameters, 
 
 The naming of positional parameters is the same as in shell scripts.
 
-Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parameterise, like so:
+Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parametrise, like so:
 
 ```
 
@@ -753,7 +787,7 @@ testParams ("Hello", "World") <=> "World Hello"
 
 ```
 
-Yep we built a function just by naming an expression. You can name anything and parameterise it - including maps, lists, blocks and plain old expressions.
+Yep we built a function just by naming an expression. You can name anything and parametrize it - including maps, lists, blocks and plain old expressions.
 
 
 What about named parameters, that would be nice.
@@ -768,7 +802,7 @@ Yep you can use named parameters, then refer to the values by the names passed i
 
 ## Resources &amp; URIs
 
-URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
+URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```
 var posts = << https://jsonplaceholder.typicode.com/posts 
@@ -781,7 +815,7 @@ In this example we've requested a single value (using `<<`) from a uri and assig
 
 ## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in back-ticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```
 
@@ -832,41 +866,41 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 
 ```
 
-And similar to Java Dollar coerces types as required:
+And similar to Java, Dollar coerces types as required:
 
 ```
-.: (1 - 1.0) is Decimal
-.: (1.0 - 1.0) is Decimal
-.: (1.0 - 1) is Decimal
-.: (1 - 1) is Integer
+.: (1 - 1.0) type Decimal
+.: (1.0 - 1.0) type Decimal
+.: (1.0 - 1) type Decimal
+.: (1 - 1) type Integer
 
-.: (1 + 1.0) is Decimal
-.: (1.0 + 1.0) is Decimal
-.: (1.0 + 1) is Decimal
-.: (1 + 1) is Integer
+.: (1 + 1.0) type Decimal
+.: (1.0 + 1.0) type Decimal
+.: (1.0 + 1) type Decimal
+.: (1 + 1) type Integer
 
-.: 1 / 1 is Integer
-.: 1 / 1.0 is Decimal
-.: 2.0 / 1 is Decimal
-.: 2.0 / 1.0 is Decimal
+.: 1 / 1 type Integer
+.: 1 / 1.0 type Decimal
+.: 2.0 / 1 type Decimal
+.: 2.0 / 1.0 type Decimal
 
-.: 1 * 1 is Integer
-.: 1 * 1.0 is Decimal
-.: 2.0 * 1 is Decimal
-.: 2.0 * 1.0 is Decimal
+.: 1 * 1 type Integer
+.: 1 * 1.0 type Decimal
+.: 2.0 * 1 type Decimal
+.: 2.0 * 1.0 type Decimal
 
 
-.: 1 % 1 is Integer
-.: 1 % 1.0 is Decimal
-.: 2.0 % 1 is Decimal
-.: 2.0 % 1.0 is Decimal
-.: ABS(1) is Integer
-.: ABS(1.0) is Decimal
+.: 1 % 1 type Integer
+.: 1 % 1.0 type Decimal
+.: 2.0 % 1 type Decimal
+.: 2.0 % 1.0 type Decimal
+.: ABS(1) type Integer
+.: ABS(1.0) type Decimal
 ```
 
 ### Logical Operators
 
-Dollar support the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `|`.
+Dollar supports the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `:-`.
 
 #### Truthy
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
@@ -896,11 +930,11 @@ The shortcut operators `||` and `&&` work the same as in Java. As do the compari
 | `and`                | `&&`     | `&&`                      |
 | `or`                 | `ǀǀ`     | `ǀǀ`                      |
 | `equal`              | `==`     | `.equals()`               |
-| `not-equal`          | `!=`     | `! .equals()`             |
-| `less-than`          | `<`      | `lhs.compareTo(rhs) < 0`  |
-| `greater-than`       | `>`      | `lhs.compareTo(rhs) > 0`  |
-| `less-than-equal`    | `<=`     | `lhs.compareTo(rhs) <= 0` |
-| `greater-than-equal` | `>=`     | `lhs.compareTo(rhs) >= 0` |
+|                      | `!=`     | `! .equals()`             |
+|                      | `<`      | `lhs.compareTo(rhs) < 0`  |
+|                      | `>`      | `lhs.compareTo(rhs) > 0`  |
+|                      | `<=`     | `lhs.compareTo(rhs) <= 0` |
+|                      | `>=`     | `lhs.compareTo(rhs) >= 0` |
 
 
 Examples:
@@ -911,11 +945,14 @@ true && false <=> false
 false && true <=> false
 false && false <=> false
 
+true and true always true
 
 true || true <=> true
 true || false <=> true
 false || true <=> true
 false || false <=> false
+
+false or false always false
 
 .: 1 < 2
 .: 3 > 2
@@ -1008,23 +1045,20 @@ export def state_ [STATE(www),STATE(redis)]
 Notes:
 
 All types are immutable, including collections.
-You cannot reassign a variable from a different thread, so they are readonly from other threads.
+You cannot reassign a variable from a different thread unless it is declared as `volatile`.
 
 
-### Parallel &amp; Serial Operators
-The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+### Parallel &amp; Serial Lists
+The parallel operator `|:|` or `parallel` causes a list to be evaluated in parallel, otherwise it is executed in serial even if the current expression is being evaluated in parallel.
 
 ```
 
-const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+const a = [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
+const b = |:| [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
 ```
-
-As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
 ### Fork
 
@@ -1044,9 +1078,6 @@ var d= TIME()
 
 In the example the value of c is greater than d because the value of c is evaluated in the background. Note that as soon as you make use of the value of c you block until the value is ready. This is exactly the same as Java's Futures.
 
-
-
-
 ## Advanced Topics
 
 TODO
@@ -1056,7 +1087,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.208 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.192 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 
@@ -1076,6 +1107,24 @@ Returns a non-destructive read of all the values of a collection or URI addresse
 
 ```
 var posts = <@ https://jsonplaceholder.typicode.com/posts
+```
+
+___
+
+### `always` or `<=>` {#op-always}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('<=>'|'always') <expression>`**{: style="font-size: 60%"}
+
+
+
+Asserts that the left-hand-side is **always** equal to the right-hand-side.
+
+```
+def lamdaVar  {$1 + 10}
+lamdaVar(5) <=> 15
+lamdaVar(5) always 15
 ```
 
 ___
@@ -1118,39 +1167,6 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 
 ___
 
-### `<->` (assert-equals) {#op-assert-equals}
-
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-**`<expression> '<->' <expression>`**{: style="font-size: 60%"}
-
-
-
-Asserts that at the point of execution that the left-hand-side is equal to the right-hand-side.
-
-```
- 1 + 1 <-> 2
-```
-
-___
-
-### `<=>` (assert-equals-reactive) {#op-assert-equals-reactive}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-**`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
-
-
-
-Asserts that the left-hand-side is **always** equal to the right-hand-side.
-
-```
-def lamdaVar  {$1 + 10}
-lamdaVar(5) <=> 15
-```
-
-___
-
 ### `=` (assign) {#op-assign}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1174,10 +1190,10 @@ Although there are no compile type constraints in Dollar a runtime type system c
 
 ```
 var (it < 100) a = 50
-var (previous is Void || it > previous ) b = 5
+var (previous type Void || it > previous ) b = 5
 b=6
 b=7
-var ( it is String) s1="String value"
+var ( it type String) s1="String value"
 var <String> (#it > 5) s2="String value"
 const immutableValue= "Hello World"
 ```
@@ -1333,6 +1349,27 @@ ___
 
 
 ```
+class MyClass {
+    <String> name=$1;
+    <Integer> age=$2;
+    def updateAge {
+          this.age=$1
+    }
+}
+
+<MyClass> clazz= new MyClass("Neil",47);
+clazz.name <=> "Neil"
+clazz.age <=> 47
+
+//Objects are immutable, just like all types in Dollar
+//When you perform a mutation operation you get a new instance back with
+//the change made.
+var newClazz= clazz.updateAge(20)
+
+//So this hasn't changed
+clazz.age <=> 47
+newClazz.age <=> 20
+
 ```
 
 ___
@@ -1352,7 +1389,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is Void) collectedValues=void
+var (#it >= 4 || it type Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
 collect e until count == 4 unless it == 10{
@@ -1362,11 +1399,11 @@ collect e until count == 4 unless it == 10{
 }
 
 e=1; e=2; e=3; e=4; e=5; e=6
-&collectedValues <=> [1,2,3,4,5]
+collectedValues is [1,2,3,4,5]
 e=7; e=8; e=9; e=10
-&collectedValues <=> [6,7,8,9]
+collectedValues is [6,7,8,9]
 e=11; e=12; e=13; e=14; e=15; e=16
-&collectedValues <=> [11,12,13,14,15]
+collectedValues is [11,12,13,14,15]
 ```
 
 ___
@@ -1398,29 +1435,6 @@ Sends the result of the right-hand-side to the debug log.
 
 ```
 !! "I'm a debug message"
-```
-
-___
-
-### `:=` (declaration) {#op-declaration}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
-
-
-
-Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
-
-Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
-
-
-```
-var variableA = 1
-const variableB := variableA
-variableA = 2
-
-.: variableB == 2
 ```
 
 ___
@@ -1461,6 +1475,36 @@ void :- "Hello" <=> "Hello"
 
 ___
 
+### `:=` (definition) {#op-definition}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
+
+
+
+Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
+
+
+```
+var variableA = 1
+const variableB := variableA
+variableA = 2
+
+.: variableB == 2
+```
+
+___
+
+### definition-constraint {#op-definition-constraint}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+
+___
+
 ### `destroy` or `<|||` {#op-destroy}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1487,13 +1531,13 @@ ___
 Divides one value by another.
 
 ```
- .: DATE() / "1.0" is Decimal
+ .: DATE() / "1.0" type Decimal
  5 / 4 <=> 1
  5.0 /4 <=> 1.25
- .: 1 / 1 is Integer
- .: 1 / 1.0 is Decimal
- .: 2.0 / 1 is Decimal
- .: 2.0 / 1.0 is Decimal
+ .: 1 / 1 type Integer
+ .: 1 / 1.0 type Decimal
+ .: 2.0 / 1 type Decimal
+ .: 2.0 / 1.0 type Decimal
 ```
 
 ___
@@ -1549,6 +1593,64 @@ var a=5
 //Parenthesis added for clarity, not required.
 var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
+```
+
+___
+
+### `emit` or `...` {#op-emit}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+
+
+The emit operator `...` takes a list and converts it to a set of events, typically this is piped to a function to process each event as it occurs.
+
+
+```
+var e=0;
+
+def updateE {e=$1}
+
+var collectedValues=[]
+
+collect e until it == 4 unless it == 3{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+([1,2,3,4] ...) | updateE
+
+collectedValues <=> [ 1, 2, 4 ]
+```
+
+___
+
+### `emit` or `...` {#op-emit}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+
+
+The emit operator `...` takes a list and converts it to a set of events, typically this is piped to a function to process each event as it occurs.
+
+
+```
+var e=0;
+
+def updateE {e=$1}
+
+var collectedValues=[]
+
+collect e until it == 4 unless it == 3{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+([1,2,3,4] ...) | updateE
+
+collectedValues <=> [ 1, 2, 4 ]
 ```
 
 ___
@@ -1667,7 +1769,7 @@ var d= TIME()
 var forkResult= $(forkId);
 @@ forkResult
 @@ d
-.: forkResult is Integer
+.: forkResult type Integer
 .: forkResult > d
 ```
 
@@ -1779,21 +1881,19 @@ unchanged <-> 1;
 
 ___
 
-### `is` {#op-is}
+### `is` or `<->` {#op-is}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> 'is' <expression>`**{: style="font-size: 60%"}
+**`<expression> ('<->'|'is') <expression>`**{: style="font-size: 60%"}
 
 
 
-A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
-
+Asserts that at the point of execution that the left-hand-side **is** equal to the right-hand-side.
 
 ```
-.: 1 is Integer,Decimal
-.: "Hello" is String
-.: 1.0 is Decimal,String
+ 1 + 1 <-> 2
+ 1 + 1 is 2
 ```
 
 ___
@@ -1903,7 +2003,7 @@ ___
 
 ### `.` (member) {#op-member}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -1977,10 +2077,10 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 
 ```
 5 % 4 <=> 1
-.: 1 % 1 is Integer
-.: 1 % 1.0 is Decimal
-.: 2.0 % 1 is Decimal
-.: 2.0 % 1.0 is Decimal
+.: 1 % 1  type Integer
+.: 1 % 1.0  type Decimal
+.: 2.0 % 1  type Decimal
+.: 2.0 % 1.0  type Decimal
 ```
 
 ___
@@ -1998,11 +2098,11 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 ```
 2 * 5 <=> 10
 
-.: 1 * 1 is Integer
-.: 1 * 1.0 is Decimal
-.: 2.0 * 1 is Decimal
-.: 2.0 * 1.0 is Decimal
-.: DATE() * 10 is Decimal
+.: 1 * 1 type Integer
+.: 1 * 1.0 type Decimal
+.: 2.0 * 1 type Decimal
+.: 2.0 * 1.0 type Decimal
+.: DATE() * 10 type Decimal
 
 ```
 
@@ -2123,18 +2223,17 @@ ___
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
-const testListS := fix [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-const testListP := fix |:|  [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-var a= testListS("serial: ") ;
-var b= testListP("parallel: ") ;
-
-@@"a="+a
-@@"b="+b
+var s=     [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+var p= |:| [ TIME(), {SLEEP(4 S); TIME();}(),  TIME() ];
+@@ s
+@@ p
 //Test different execution orders
-.: a[0] is Integer
-.: a[1] >= a[0]
-.: a[2] >= a[1]
-.: b[2] <= b[1]
+.: s[0] type Integer
+.: s[1] >= s[0]
+.: s[2] >= s[1]
+.: p[0] < p[1]
+.: p[2] <= p[1]
+.: p[1] - p[2] > 1000
 ```
 
 ___
@@ -2217,20 +2316,33 @@ ___
 
 
 
-The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
+The pipe operator pipes a value **and all it's changes** to the function on the right-hand-side. Pipes can be chained.
+
+The pipe operator is ideal for using with the emit (`...`) operator for reactive stream processing.
+
 
 ```
-def funcA {
-    $1 + 10
+var inputValue= void;
+<Integer> collectable=0;
+
+def update {
+    collectable= $1;
+}
+
+<List> result=[]
+
+collect collectable until it == 6 unless it == 5 {
+    print count
+    print collected
+    result= collected
 }
 
 
-def funcB {
-    $1 - 10
-}
+inputValue + 2 | update
 
-10 | funcA | funcA <=> 30
-10 | funcA | funcB <=> 10
+inputValue= 1; inputValue= 2; inputValue= 3; inputValue= 4;
+
+result <=> [ 3, 4, 6]
 ```
 
 ___
@@ -2256,10 +2368,10 @@ var pair2 = "second" : "World";
 .: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
-.: (1 + 1.0) is Decimal
-.: (1.0 + 1.0) is Decimal
-.: (1.0 + 1) is Decimal
-.: (1 + 1) is Integer
+.: (1 + 1.0) type Decimal
+.: (1.0 + 1.0) type Decimal
+.: (1.0 + 1) type Decimal
+.: (1 + 1) type Integer
 ```
 
 ___
@@ -2366,13 +2478,13 @@ Please see https://github.com/google/guava/wiki/RangesExplained for more informa
 
 ```
 //Types
-.: (1..5) is Range
-.: [1..5) is Range
-.: [1..5] is Range
-.: (1..5] is Range
-.: (..5] is Range //  less than or equal to 5
-.: (5..] is Range //  greater than 5
-.: (..) is Range //   all numbers
+.: (1..5) type Range
+.: [1..5) type Range
+.: [1..5] type Range
+.: (1..5] type Range
+.: (..5] type Range //  less than or equal to 5
+.: (5..] type Range //  greater than 5
+.: (..) type Range //   all numbers
 
 
 
@@ -2686,6 +2798,25 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 
 ___
 
+### `type` {#op-type}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> 'type' <expression>`**{: style="font-size: 60%"}
+
+
+
+A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
+
+
+```
+.: 1 type Integer,Decimal
+.: "Hello" type String
+.: 1.0 type Decimal,String
+```
+
+___
+
 ### `unique` or `[!]` {#op-unique}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2766,16 +2897,16 @@ ___
 
 
 
-The 'when assign' operator assigns updates a variable to the assignment expression whenever the 'condition expression' changes and is true.
+The 'when assign' operator `?` .. `=`  updates a variable to the assignment expression whenever the 'condition expression' changes and is true.
 
 
 ```
 var h=1
 var i ? (h < 3) = (h + 2)
 h=4
-i is VOID
+.: i type Void
 h=2
-i <=>4
+i <=> 4
 ```
 
 ___
@@ -2822,16 +2953,17 @@ Finally the window-expression is the expression which is evaluated with the foll
 
 
 ```
-var a= 1;
+var changeable= 1;
 volatile collectedValues= void;
-window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
+
+window (changeable) over (10 S) period (5 S) unless (it == 5)  until (it == 29) {
         @@collected
         collectedValues= collected;
 }
 
 for i in [1..32] {
     SLEEP (1 S)
-    a=a+1
+    changeable=changeable+1
 }
 
 
@@ -2912,9 +3044,6 @@ Boolean false.
 ### infinity
 
 
-### is
-
-
 ### mutate
 
 
@@ -2989,7 +3118,7 @@ Boolean true.
 
 The following keywords are reserved:
 
-> abstract, await, break, case, catch, closure, continue, dispatch, do, dump, emit, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
+> abstract, await, break, case, catch, closure, continue, dispatch, do, dump, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
 
 ### Operators
 
@@ -2999,7 +3128,7 @@ The following operator keywords are reserved:
 
 The following operator symbols are reserved:
 
-> `&=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
+> `&=, &>, +>, ->, -_-, ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
 
 ### Symbols
 
@@ -3045,6 +3174,8 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[split](#op-split)            |`split`        | `[/]`    |postfix   |
 |[sum](#op-sum)                |`sum`          | `[+]`    |postfix   |
 |[unique](#op-unique)          |`unique`       | `[!]`    |postfix   |
+|[emit](#op-emit)              |`emit`         | `...`    |reserved  |
+|[emit](#op-emit)              |`emit`         | `...`    |reserved  |
 |[greater-than](#op-greater-than)|               | `>`      |binary    |
 |[less-than](#op-less-than)    |               | `<`      |binary    |
 |[pipe](#op-pipe)              |               | `|`      |binary    |
@@ -3071,24 +3202,25 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[else](#op-else)              |`else`         |          |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
 |[if](#op-if)                  |`if`           |          |binary    |
-|[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
 |[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
 |[start](#op-start)            |`start`        | `|>`     |prefix    |
 |[state](#op-state)            |`state`        | `<|>`    |prefix    |
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
+|[type](#op-type)              |`type`         |          |binary    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
-|[declaration](#op-declaration)|               | `:=`     |assignment|
+|[definition](#op-definition)  |               | `:=`     |assignment|
+|[definition-constraint](#op-definition-constraint)|               |          |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[when-assign](#op-when-assign)|               |          |assignment|
+|[always](#op-always)          |`always`       | `<=>`    |binary    |
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
-|[assert-equals](#op-assert-equals)|               | `<->`    |binary    |
-|[assert-equals-reactive](#op-assert-equals-reactive)|               | `<=>`    |binary    |
 |[debug](#op-debug)            |`debug`        | `!!`     |prefix    |
 |[err](#op-err)                |`err`          | `!?`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |
+|[is](#op-is)                  |`is`           | `<->`    |binary    |
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
 |[block](#op-block)            |               |          |collection|
 |[builtin](#op-builtin)        |               |          |other     |
