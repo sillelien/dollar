@@ -485,7 +485,7 @@ public class DollarStatic {
      */
     @NotNull
     public static Value $uri(@NotNull String uri) {
-        return DollarFactory.fromValue(URI.parse(uri));
+        return DollarFactory.fromValue(URI.of(uri));
     }
 
     /**

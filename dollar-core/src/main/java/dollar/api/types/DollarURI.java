@@ -97,6 +97,18 @@ public class DollarURI extends AbstractDollar {
         }
     }
 
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public Value $clear() {
+        handler.drain();
+        return this;
+    }
+
     @NotNull
     @Override
     public Value $containsKey(@NotNull Value value) {
@@ -133,6 +145,18 @@ public class DollarURI extends AbstractDollar {
     @Override
     public Value $insert(@NotNull Value value, int position) {
         return handler.insert(DollarStatic.$(value));
+    }
+
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+
     }
 
     @NotNull
@@ -238,6 +262,12 @@ public class DollarURI extends AbstractDollar {
     @Override
     public Type $type() {
         return new Type(Type._URI, constraintLabel());
+    }
+
+    @Override
+    public Value $wall(Value in) {
+        ensureRunning();
+        return handler.writeAll(in);
     }
 
     @Override

@@ -19,7 +19,6 @@ package dollar.api.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
@@ -32,19 +31,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.DollarFactory.wrap;
 
-public class DollarSequence extends AbstractDollar {
+public class DollarSequence extends DollarCollection {
 
 
     @NotNull
-    private final List<Value> list;
+    protected final List<Value> list;
     private final boolean parallel;
 
 
@@ -123,7 +120,6 @@ public class DollarSequence extends AbstractDollar {
         return DollarFactory.fromValue(getStream(false).count() == 0);
     }
 
-
     @NotNull
     @Override
     public Value $mimeType() {
@@ -153,7 +149,6 @@ public class DollarSequence extends AbstractDollar {
     public Value $negate() {
         return getValue().$negate();
     }
-
 
     @NotNull
     @Override
@@ -190,12 +185,6 @@ public class DollarSequence extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $size() {
-        return DollarFactory.fromValue(getStream(false).count());
-    }
-
-    @NotNull
-    @Override
     public Value $stream(boolean parallel) {
         return this;
     }
@@ -222,11 +211,6 @@ public class DollarSequence extends AbstractDollar {
     @Override
     public Value $write(@NotNull Value $write) {
         return getValue().$write($write);
-    }
-
-    @Override
-    public boolean collection() {
-        return true;
     }
 
     @NotNull
@@ -292,11 +276,6 @@ public class DollarSequence extends AbstractDollar {
     @Override
     public int size() {
         return (int) getStream(false).count();
-    }
-
-    @Override
-    public @NotNull Stream<Value> stream(boolean parallel) {
-        return getStream(false);
     }
 
     @NotNull
@@ -382,12 +361,6 @@ public class DollarSequence extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $avg(boolean parallel) {
-        return $sum(parallel).$divide($size());
-    }
-
-    @NotNull
-    @Override
     public Value $choose(@NotNull Value map) {
         return getValue().$choose(map);
     }
@@ -424,39 +397,13 @@ public class DollarSequence extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $each(@NotNull Pipeable pipe) {
-        return eachInternal(pipe);
-    }
-
-    @NotNull
-    @Override
     public Value $fix(int depth, boolean parallel) {
         return getValue().$fix(depth, parallel);
-    }
-
-    @NotNull
-    @Override
-    public Value $max(boolean parallel) {
-        return getStream(false).max(Comparator.comparing(Value::toDouble)).orElseThrow(
-                () -> new DollarException("Null encountered"));
-    }
-
-    @NotNull
-    @Override
-    public Value $min(boolean parallel) {
-        return getStream(false).min(Comparator.comparing(Value::toDouble)).orElseThrow(
-                () -> new DollarException("Null encountered"));
     }
 
     @Override
     public Value $notify(NotificationType type, Value value) {
         return getValue().$notify(type, value);
-    }
-
-    @NotNull
-    @Override
-    public Value $product(boolean parallel) {
-        return getStream(false).reduce(Value::$multiply).orElse($void());
     }
 
     @NotNull
@@ -476,25 +423,6 @@ public class DollarSequence extends AbstractDollar {
     @Override
     public Value $reverse(boolean parallel) {
         return getValue().$reverse(parallel);
-    }
-
-    @NotNull
-    @Override
-    public Value $sort(boolean parallel) {
-        return wrapStream(getStream(true).sorted());
-    }
-
-    @NotNull
-    @Override
-    public Value $sum(boolean parallel) {
-        return DollarFactory.fromValue(
-                getStream(false).reduce(Value::$plus).orElseThrow(() -> new DollarException("Reduce returned null")));
-    }
-
-    @NotNull
-    @Override
-    public Value $unique(boolean parallel) {
-        return wrapStream(getStream(true).distinct());
     }
 
     @NotNull
@@ -720,19 +648,9 @@ public class DollarSequence extends AbstractDollar {
         return getValue().compareTo(o.$unwrap());
     }
 
+    @Override
     @NotNull
-    private Value eachInternal(@NotNull Pipeable pipe) {
-        return wrapStream(getStream(true).map(i -> {
-            try {
-                return pipe.pipe(i);
-            } catch (Exception e) {
-                throw new DollarException(e);
-            }
-        }));
-    }
-
-    @NotNull
-    private Stream<Value> getStream(boolean chain) {
+    protected Stream<Value> getStream(boolean chain) {
         if (parallel) {
             return list.parallelStream();
         } else {
@@ -742,7 +660,7 @@ public class DollarSequence extends AbstractDollar {
 
     @NotNull
     Value getValue() {
-        return DollarFactory.fromList(getStream(false).collect(Collectors.toList()));
+        return DollarFactory.fromList(list);
     }
 
     @NotNull

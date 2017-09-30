@@ -124,6 +124,11 @@ public class DollarMap extends AbstractDollar {
         }
     }
 
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
+    }
+
     @NotNull
     @Override
     public Value $containsKey(@NotNull Value value) {
@@ -201,10 +206,22 @@ public class DollarMap extends AbstractDollar {
         return this;
     }
 
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
+
+    }
+
     @NotNull
     @Override
     public Value $mimeType() {
         return DollarStatic.$("application/json");
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
+
     }
 
     @NotNull

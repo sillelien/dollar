@@ -104,6 +104,11 @@
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>
+            <artifactId>dollar-file-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sillelien</groupId>
             <artifactId>dollar-metrics-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>

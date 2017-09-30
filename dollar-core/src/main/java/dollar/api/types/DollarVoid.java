@@ -75,6 +75,11 @@ public class DollarVoid extends AbstractDollar {
         }
     }
 
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        return this;
+    }
+
     @NotNull
     @Override
     public Value $containsKey(@NotNull Value value) {
@@ -108,6 +113,16 @@ public class DollarVoid extends AbstractDollar {
     @NotNull
     @Override
     public Value $insert(@NotNull Value value, int position) {
+        return this;
+    }
+
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
         return this;
     }
 
@@ -169,6 +184,12 @@ public class DollarVoid extends AbstractDollar {
     @Override
     public Value $size() {
         return DollarStatic.$(0);
+    }
+
+    @NotNull
+    @Override
+    public Value $stream(boolean parallel) {
+        return DollarFactory.fromStream(Stream.empty());
     }
 
     @NotNull
@@ -304,12 +325,14 @@ public class DollarVoid extends AbstractDollar {
         return false;
     }
 
-    @NotNull
     @Override
-    public Value $stream(boolean parallel) {
-        return DollarFactory.fromStream(Stream.empty());
+    public int compareTo(@NotNull Value o) {
+        if (o.isVoid()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
-
 
     @Override
     public int hashCode() {
@@ -322,14 +345,5 @@ public class DollarVoid extends AbstractDollar {
             return true;
         }
         return ((obj instanceof Value) && (((Value) obj).toJavaObject() == null)) || (obj == null);
-    }
-
-    @Override
-    public int compareTo(@NotNull Value o) {
-        if (o.isVoid()) {
-            return 0;
-        } else {
-            return 1;
-        }
     }
 }

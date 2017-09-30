@@ -84,17 +84,9 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $all() {
-        return $stream(false).$all();
+        return this;
     }
 
-    @NotNull
-    @Override
-    @StreamFunction
-    @CollectionFunction
-    public Value $avg(boolean parallel) {
-        return $stream(false).$avg(parallel);
-
-    }
 
     @NotNull
     @Override
@@ -153,7 +145,11 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $each(@NotNull Pipeable pipe) {
-        return $stream(false).$each(pipe);
+        try {
+            return pipe.pipe(this);
+        } catch (Exception e) {
+            throw new DollarException(e);
+        }
     }
 
     @NotNull
@@ -174,22 +170,6 @@ public abstract class AbstractDollar implements Value {
         return $fix(Integer.MAX_VALUE, parallel);
     }
 
-    @NotNull
-    @Override
-    @StreamFunction
-    @CollectionFunction
-    public Value $max(boolean parallel) {
-        return $stream(parallel).$max(parallel);
-    }
-
-    @NotNull
-    @Override
-    @StreamFunction
-    @CollectionFunction
-    public Value $min(boolean parallel) {
-        return $stream(parallel).$min(parallel);
-
-    }
 
     @Override
     public Value $notify(NotificationType type, Value value) {
@@ -202,7 +182,7 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $product(boolean parallel) {
-        return $stream(parallel).$product(parallel);
+        return this;
     }
 
     @NotNull
@@ -229,7 +209,7 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $sort(boolean parallel) {
-        return $stream(parallel).$sort(parallel);
+        return this;
     }
 
     @NotNull
@@ -237,7 +217,7 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $sum(boolean parallel) {
-        return $stream(parallel).$sum(parallel);
+        return this;
 
     }
 
@@ -246,7 +226,7 @@ public abstract class AbstractDollar implements Value {
     @StreamFunction
     @CollectionFunction
     public Value $unique(boolean parallel) {
-        return $stream(parallel).$unique(parallel);
+        return this;
     }
 
     @NotNull

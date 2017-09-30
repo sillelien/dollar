@@ -64,6 +64,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class DollarFactory {
@@ -220,7 +221,7 @@ public final class DollarFactory {
             return wrap(new DollarURI((URI) o));
         }
         if ((o instanceof java.net.URI) || (o instanceof java.net.URL)) {
-            return wrap(new DollarURI(URI.parse(o.toString())));
+            return wrap(new DollarURI(URI.of(o.toString())));
         }
         if (o instanceof Date) {
             return wrap(new DollarDate(((Date) o).getTime()));
@@ -469,7 +470,7 @@ public final class DollarFactory {
     }
 
     @NotNull
-    private static Value fromJson(@NotNull JsonObject jsonObject) {
+    public static Value fromJson(@NotNull JsonObject jsonObject) {
         final Type type;
         if (!jsonObject.containsField(TYPE_KEY)) {
             type = Type._MAP;
@@ -514,7 +515,7 @@ public final class DollarFactory {
             final Value upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
             return wrap(new DollarRange(lower, upper));
         } else if (type.is(Type._URI)) {
-            return wrap(new DollarURI(URI.parse(jsonObject.getString(VALUE_KEY))));
+            return wrap(new DollarURI(URI.of(jsonObject.getString(VALUE_KEY))));
         } else if (type.is(Type._INFINITY)) {
             return wrap(new DollarInfinity(jsonObject.getBoolean(POSITIVE_KEY)));
         } else if (type.is(Type._STRING)) {
@@ -528,7 +529,7 @@ public final class DollarFactory {
     }
 
     @NotNull
-    private static Value fromJson(@Nullable Object value) {
+    public static Value fromJson(@Nullable Object value) {
         if (value == null) {
             return DollarStatic.$void();
         } else if (value instanceof LinkedHashMap) {
@@ -561,6 +562,11 @@ public final class DollarFactory {
         } else {
             throw new DollarException("Unrecognized type " + value.getClass() + " for " + value);
         }
+    }
+
+    @NotNull
+    public static Value fromJsonString(@NotNull String s) {
+        return fromJson(new JsonObject(s));
     }
 
     /**
@@ -616,12 +622,21 @@ public final class DollarFactory {
     }
 
     public static Value fromStream(@NotNull Stream<Value> stream) {
-        return wrap(new DollarSequence(stream));
+        return wrap(new DollarList(ImmutableList.copyOf(stream.collect(Collectors.toList()))));
     }
 
     public static Value fromStream(@NotNull List<Value> stream, boolean parallel) {
-        return wrap(new DollarSequence(stream, parallel));
+        return wrap(new DollarList(ImmutableList.copyOf(stream)));
     }
+
+    public static <T> Value fromStreamObjects(@NotNull Stream<T> lines) {
+        return wrap(new DollarList(ImmutableList.copyOf(lines.map(DollarFactory::fromValue).collect(Collectors.toList()))));
+    }
+
+    public static Value fromStreamStrings(@NotNull Stream<String> lines) {
+        return wrap(new DollarList(ImmutableList.copyOf(lines.map(DollarFactory::fromJsonString).collect(Collectors.toList()))));
+    }
+
 
     /**
      * From string value.
@@ -658,7 +673,7 @@ public final class DollarFactory {
     @NotNull
     public static Value fromURI(@NotNull String uri) {
         try {
-            return wrap(new DollarURI(URI.parse(uri)));
+            return wrap(new DollarURI(URI.of(uri)));
         } catch (Exception e) {
             return DollarStatic.handleError(e, null);
         }

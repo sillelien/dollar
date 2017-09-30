@@ -42,6 +42,8 @@ import java.io.Serializable;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static dollar.api.DollarStatic.$void;
+
 public interface Value extends Serializable, Comparable<Value>, StateAware<Value> {
 
 
@@ -104,7 +106,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     Value $avg(boolean parallel);
 
     @NotNull
-    default Value $cancel(@NotNull Value id) {return DollarStatic.$void();}
+    default Value $cancel(@NotNull Value id) {return $void();}
 
     /**
      * Select a value from map based upon the current value and return that.
@@ -116,6 +118,8 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     Value $choose(@NotNull Value map);
+
+    default Value $clear() {return $void();}
 
     @NotNull Value $constrain(@NotNull Value constraint, @Nullable SubType label);
 
@@ -315,7 +319,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
      * @param pipeable action
      */
     @NotNull
-    default Value $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
+    default Value $listen(@NotNull Pipeable pipeable) {return $void();}
 
     /**
      * For Lambdas and reactive programming, do not use.
@@ -325,7 +329,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
      * @return
      */
     @NotNull
-    default Value $listen(@NotNull Pipeable pipeable, @NotNull String id) {return DollarStatic.$void();}
+    default Value $listen(@NotNull Pipeable pipeable, @NotNull String id) {return $void();}
 
     /**
      * $ map.
@@ -573,6 +577,7 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
      * @return a stream of values.
      */
     @NotNull
+    @Deprecated
     default Value $stream(boolean parallel) {
         return DollarFactory.fromStream(toVarList(), parallel);
     }
@@ -615,6 +620,10 @@ public interface Value extends Serializable, Comparable<Value>, StateAware<Value
     @Guarded(ChainGuard.class)
     @Nullable
     Value $unwrap();
+
+    default Value $wall(Value value) {
+        return value;
+    }
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)

@@ -55,7 +55,7 @@ public class HttpURIHandler implements URIHandler {
 
     public HttpURIHandler(@NotNull String scheme, @NotNull URI uri) {
         if (uri.hasSubScheme()) {
-            this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
+            this.uri = URI.of(scheme + ":" + uri.sub().sub().asString());
             method = this.uri.sub().scheme();
         } else {
             this.uri = uri;
@@ -199,7 +199,7 @@ public class HttpURIHandler implements URIHandler {
         @Override
         public Response serve(@NotNull IHTTPSession session) {
             URI uri;
-            uri = URI.parse(session.getUri());
+            uri = URI.of(session.getUri());
             RequestHandler requestHandler = handlers.get(uri.path());
             if (requestHandler == null) {
                 return new Response(Response.Status.NOT_FOUND, "text/plain", "");

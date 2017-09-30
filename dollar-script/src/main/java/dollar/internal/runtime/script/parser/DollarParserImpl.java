@@ -570,6 +570,8 @@ public class DollarParserImpl implements DollarParser {
             table = infixl(false, table, PUBLISH, Func::publishFunc);
             table = infixl(false, table, SUBSCRIBE, Func::subscribeFunc);
             table = infixl(false, table, WRITE_SIMPLE, Func::writeFunc);
+            table = infixl(false, table, WRITE_ALL, (l, r) -> r.$wall(l));
+
             table = prefix(false, table, READ_SIMPLE, (v, s) -> Func.readFunc(v));
 
             table = prefix(false, table, DRAIN, (v, s) -> v.$drain());

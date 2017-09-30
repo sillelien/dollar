@@ -31,10 +31,13 @@ public interface URIHandler {
     @NotNull
     default Value append(@NotNull Value value) {return write(value, true, true);}
 
+
     default void destroy() {}
 
     @NotNull
-    default Value drain() {return DollarStatic.$void();}
+    default Value drain() {
+        return DollarStatic.$void();
+    }
 
     @NotNull
     default Value get(@NotNull Value key) {return DollarStatic.$void();}
@@ -82,4 +85,6 @@ public interface URIHandler {
 
     @NotNull
     default Value write(@NotNull Value value, boolean blocking, boolean mutating) {return DollarStatic.$void();}
+
+    default @NotNull Value writeAll(Value value) {return value;}
 }

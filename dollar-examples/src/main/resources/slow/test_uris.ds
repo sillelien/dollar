@@ -1,3 +1,5 @@
+var <URI> syntaxTestPlus= file+lines+json:./testFile.txt
+
 const posts = << https://jsonplaceholder.typicode.com/posts
 
 const firstPost= posts[0]

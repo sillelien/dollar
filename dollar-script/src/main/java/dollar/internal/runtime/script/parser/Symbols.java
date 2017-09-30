@@ -214,6 +214,10 @@ public final class Symbols {
     public static final Op ALL = new Op(OpType.PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE,
                                         null, LIST_TYPE_F);
     @NotNull
+    public static final Op WRITE_ALL = new Op(OpType.BINARY, "@>", "wall", "write-all", false, true, null, OUTPUT_PRIORITY, false,
+                                              NO_SCOPE,
+                                              null, LIST_TYPE_F);
+    @NotNull
     public static final Op DRAIN = new Op(OpType.PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false,
                                           NO_SCOPE, null, LIST_TYPE_F);
     @NotNull
@@ -743,7 +747,7 @@ public final class Symbols {
     @NotNull
     private static final List<? extends Comparable<?>> tokens =
             asList(
-                    //simple perators,
+                    //simple operators,
                     ALL,
                     AND,
                     ASSERT_EQ_REACT,
@@ -812,6 +816,7 @@ public final class Symbols {
                     SUBSCRIBE,
                     TRUTHY,
                     UNPAUSE,
+                    WRITE_ALL,
                     WRITE_SIMPLE,
                     COMMA,
                     TRUE,

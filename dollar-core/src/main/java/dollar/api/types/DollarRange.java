@@ -31,12 +31,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.DollarFactory.INFINITY;
 import static dollar.api.types.DollarFactory.wrap;
 
-public class DollarRange extends AbstractDollar {
+public class DollarRange extends DollarCollection {
 
     @NotNull
     private final Range<Value> range;
@@ -352,19 +353,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $size() {
-        return diff().$abs();
-    }
-
-    @NotNull
-    @Override
     public Type $type() {
         return new Type(Type._RANGE, constraintLabel());
-    }
-
-    @Override
-    public boolean collection() {
-        return true;
     }
 
     @Override
@@ -518,8 +508,13 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $reverse(boolean parallel) {
-        return wrap(new DollarRange(range, !reversed));
+    public Value $size() {
+        return diff().$abs();
+    }
+
+    @Override
+    public boolean collection() {
+        return true;
     }
 
     @NotNull
@@ -532,6 +527,17 @@ public class DollarRange extends AbstractDollar {
     @Override
     public Value $unique(boolean parallel) {
         return this;
+    }
+
+    @Override
+    protected @NotNull Stream<Value> getStream(boolean chain) {
+        return toVarList().stream();
+    }
+
+    @NotNull
+    @Override
+    public Value $reverse(boolean parallel) {
+        return wrap(new DollarRange(range, !reversed));
     }
 
     @Override

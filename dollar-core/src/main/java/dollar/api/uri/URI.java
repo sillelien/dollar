@@ -70,11 +70,6 @@ public class URI implements Serializable {
         this(scheme + ":" + url.asString());
     }
 
-    @NotNull
-    public String asString() {
-        return uri;
-    }
-
     protected URI(@NotNull final URI url, @NotNull final String subPath) {
         this(url.path().endsWith("/")
                      ? (url + subPath)
@@ -83,37 +78,11 @@ public class URI implements Serializable {
                                 subPath));
     }
 
-    @NotNull
-    public String path() {
-        final String withoutQuery;
-        withoutQuery = withoutQuery().asString();
-        int i = withoutQuery.indexOf(':');
-        if (i >= 0) {
-            final String withoutScheme = withoutQuery.substring(i + 1);
-            if (withoutScheme.startsWith("//")) {
-                i = withoutScheme.indexOf('/', 3);
-            }
-            return withoutScheme.substring(i);
-        } else {
-            return withoutQuery;
-        }
-    }
-
-    @NotNull
-    public URI withoutQuery() {
-        if (uri.contains("?")) {
-            final int i = uri.indexOf('?');
-            return new URI(uri.substring(0, i));
-        } else {
-            return new URI(uri);
-        }
-    }
-
     protected URI() {
     }
 
     @NotNull
-    public static URI parse(@NotNull String s) {
+    public static URI of(@NotNull String s) {
         return new URI(s);
     }
 
@@ -139,12 +108,25 @@ public class URI implements Serializable {
     }
 
     @NotNull
+    public String asString() {
+        return uri;
+    }
+
+    @NotNull
     public String authority() {
         try {
             return new java.net.URI(uri).getAuthority();
         } catch (URISyntaxException e) {
             throw new DollarException(e);
         }
+    }
+
+    private int getColonPos() {
+        final int i = uri.indexOf(':');
+        if (i < 0) {
+            throw new DollarException("No scheme.");
+        }
+        return i;
     }
 
     @NotNull
@@ -165,40 +147,6 @@ public class URI implements Serializable {
         return query().containsKey(param);
     }
 
-    @NotNull
-    public Map<String, List<String>> query() {
-        if (query == null) {
-            final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
-            final String[] pairs = queryString().split("&");
-            for (String pair : pairs) {
-                final int idx = pair.indexOf("=");
-                final String key;
-                try {
-                    key = (idx > 0) ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
-                    if (!query_pairs.containsKey(key)) {
-                        query_pairs.put(key, new LinkedList<>());
-                    }
-                    final String value;
-                    value =
-                            ((idx > 0) && (pair.length() > (idx + 1))) ?
-                                    URLDecoder.decode(pair.substring(idx + 1), "UTF-8") :
-                                    null;
-                    query_pairs.get(key).add(value);
-                } catch (UnsupportedEncodingException e) {
-                    log.debug(e.getMessage(), e);
-                }
-            }
-            query = query_pairs;
-            return query_pairs;
-        } else {
-            return query;
-        }
-
-    }
-
-    @NotNull
-    public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
-
     public boolean hasSubScheme() {
         final int i = getColonPos();
         if (i <= 0) {
@@ -206,14 +154,6 @@ public class URI implements Serializable {
         }
         final String substring = uri.substring(i + 1);
         return substring.matches("^[a-zA-Z0-9_-]+:.*");
-    }
-
-    private int getColonPos() {
-        final int i = uri.indexOf(':');
-        if (i < 0) {
-            throw new DollarException("No scheme.");
-        }
-        return i;
     }
 
     @Override
@@ -260,12 +200,6 @@ public class URI implements Serializable {
     }
 
     @NotNull
-    private String[] pathElements() {
-        final String path = path();
-        return path.split("/");
-    }
-
-    @NotNull
     public List<String> paramWithDefault(@NotNull String key, @NotNull String defaultValue) {
         return query().getOrDefault(key, Collections.singletonList(defaultValue));
     }
@@ -284,13 +218,26 @@ public class URI implements Serializable {
         return new URI(scheme + path.substring(0, i));
     }
 
-    @Nullable
-    public String schemeString() {
-        final int index = uri.indexOf(':');
-        if (index <= 0) {
-            return null;
+    @NotNull
+    public String path() {
+        final String withoutQuery;
+        withoutQuery = withoutQuery().asString();
+        int i = withoutQuery.indexOf(':');
+        if (i >= 0) {
+            final String withoutScheme = withoutQuery.substring(i + 1);
+            if (withoutScheme.startsWith("//")) {
+                i = withoutScheme.indexOf('/', 3);
+            }
+            return withoutScheme.substring(i);
+        } else {
+            return withoutQuery;
         }
-        return uri.substring(0, index);
+    }
+
+    @NotNull
+    private String[] pathElements() {
+        final String path = path();
+        return path.split("/");
     }
 
     public int port() {
@@ -301,6 +248,40 @@ public class URI implements Serializable {
         }
     }
 
+    @NotNull
+    public Map<String, List<String>> query() {
+        if (query == null) {
+            final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
+            final String[] pairs = queryString().split("&");
+            for (String pair : pairs) {
+                final int idx = pair.indexOf("=");
+                final String key;
+                try {
+                    key = (idx > 0) ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+                    if (!query_pairs.containsKey(key)) {
+                        query_pairs.put(key, new LinkedList<>());
+                    }
+                    final String value;
+                    value =
+                            ((idx > 0) && (pair.length() > (idx + 1))) ?
+                                    URLDecoder.decode(pair.substring(idx + 1), "UTF-8") :
+                                    null;
+                    query_pairs.get(key).add(value);
+                } catch (UnsupportedEncodingException e) {
+                    log.debug(e.getMessage(), e);
+                }
+            }
+            query = query_pairs;
+            return query_pairs;
+        } else {
+            return query;
+        }
+
+    }
+
+    @NotNull
+    public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
+
     @Nullable
     public String scheme() {
         final String schemeStr = schemeString();
@@ -308,6 +289,15 @@ public class URI implements Serializable {
             throw new DollarException("No scheme.");
         }
         return schemeStr;
+    }
+
+    @Nullable
+    public String schemeString() {
+        final int index = uri.indexOf(':');
+        if (index <= 0) {
+            return null;
+        }
+        return uri.substring(0, index);
     }
 
     @NotNull
@@ -347,6 +337,16 @@ public class URI implements Serializable {
             newStr = uri.substring(0, i);
         }
         return new URI(newStr);
+    }
+
+    @NotNull
+    public URI withoutQuery() {
+        if (uri.contains("?")) {
+            final int i = uri.indexOf('?');
+            return new URI(uri.substring(0, i));
+        } else {
+            return new URI(uri);
+        }
     }
 
 }

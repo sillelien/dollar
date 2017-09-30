@@ -35,6 +35,7 @@
         <module>dollar-socketio-plugin</module>
         <module>dollar-mapdb-plugin</module>
         <module>dollar-http-plugin</module>
+        <module>dollar-file-plugin</module>
         <module>dollar-maven-resolver-plugin</module>
         <module>dollar-github-resolver-plugin</module>
         <module>dollar-class-resolver-plugin</module>

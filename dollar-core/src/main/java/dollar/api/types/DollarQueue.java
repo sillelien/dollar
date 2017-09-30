@@ -77,6 +77,11 @@ public class DollarQueue extends AbstractDollar {
         throw new DollarFailureException(ErrorType.INVALID_CAST);
     }
 
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        return $list().$avg(parallel);
+    }
+
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
@@ -117,6 +122,18 @@ public class DollarQueue extends AbstractDollar {
     @Guarded(NotNullGuard.class)
     public Value $insert(@NotNull Value value, int position) {
         throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        return $list().$max(parallel);
+
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
+        return $list().$min(parallel);
+
     }
 
     @NotNull

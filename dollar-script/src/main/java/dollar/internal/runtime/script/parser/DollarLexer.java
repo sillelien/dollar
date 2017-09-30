@@ -342,15 +342,14 @@ final class DollarLexer {
     }
 
     private static Parser<?> url() {
-        return (
-                       isChar(CharPredicates.IS_ALPHA_)
-                               .many1()
-                               .next(isChar(':')
-                                             .next(among("=\"").not())
-                                             .next(among("-._~:/?#@!$&'*+,;=%").or(
-                                                     isChar(CharPredicates.IS_ALPHA_NUMERIC_)).many1()
-                                             )
-                               ).toScanner("uri").source()
+        return (isChar(CharPredicates.IS_ALPHA_).next(
+                isChar(CharPredicates.IS_ALPHA_NUMERIC_).many1().next(among("+").optional())).many1()
+                        .next(isChar(':')
+                                      .next(among("=\"").not())
+                                      .next(among("-._~:/?#@!$&'*+,;=%").or(
+                                              isChar(CharPredicates.IS_ALPHA_NUMERIC_)).many1()
+                                      )
+                        ).toScanner("uri").source()
         ).map(new Function<String, Tokens.Fragment>() {
             @Override
             @NotNull

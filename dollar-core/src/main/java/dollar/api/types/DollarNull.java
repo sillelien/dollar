@@ -63,6 +63,11 @@ public class DollarNull extends AbstractDollar {
 
     }
 
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        return this;
+    }
+
     @NotNull
     @Override
     public Value $containsKey(@NotNull Value value) {
@@ -96,6 +101,16 @@ public class DollarNull extends AbstractDollar {
     @NotNull
     @Override
     public Value $insert(@NotNull Value value, int position) {
+        return this;
+    }
+
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
         return this;
     }
 

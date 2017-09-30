@@ -26,6 +26,7 @@ import dollar.api.Type;
 import dollar.api.Value;
 import dollar.api.VarKey;
 import dollar.api.Variable;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
@@ -95,6 +96,12 @@ public class DollarObject extends AbstractDollar {
     public @NotNull
     Value $as(@NotNull Type type) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public @NotNull Value $avg(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_OBJECT_OPERATION);
+
     }
 
     @NotNull
@@ -180,10 +187,22 @@ public class DollarObject extends AbstractDollar {
         return this;
     }
 
+    @Override
+    public @NotNull Value $max(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_OBJECT_OPERATION);
+
+    }
+
     @NotNull
     @Override
     public Value $mimeType() {
         return DollarStatic.$("application/json");
+    }
+
+    @Override
+    public @NotNull Value $min(boolean parallel) {
+        throw new DollarFailureException(ErrorType.INVALID_OBJECT_OPERATION);
+
     }
 
     @NotNull

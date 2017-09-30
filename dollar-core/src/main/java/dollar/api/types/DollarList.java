@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DollarList extends AbstractDollar {
+public class DollarList extends DollarCollection {
 
     public static final int MAX_LIST_MULTIPLIER = 1000;
 
@@ -316,12 +316,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public Value $size() {
-        return DollarStatic.$(list.size());
-    }
-
-    @NotNull
-    @Override
     public Value $stream(boolean parallel) {
         Stream<Value> stream;
         if (parallel) {
@@ -336,11 +330,6 @@ public class DollarList extends AbstractDollar {
     @Override
     public Type $type() {
         return new Type(Type._LIST, constraintLabel());
-    }
-
-    @Override
-    public boolean collection() {
-        return true;
     }
 
     @Override
@@ -573,6 +562,22 @@ public class DollarList extends AbstractDollar {
             return list.equals(((Value) obj).toVarList());
         }
         return false;
+    }
+
+    @NotNull
+    @Override
+    public Value $size() {
+        return DollarStatic.$(list.size());
+    }
+
+    @Override
+    public boolean collection() {
+        return true;
+    }
+
+    @Override
+    protected @NotNull Stream<Value> getStream(boolean chain) {
+        return list.stream();
     }
 
     @Override
