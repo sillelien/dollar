@@ -16,12 +16,16 @@
 
 package dollar.api;
 
+import com.google.common.base.Objects;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
+/**
+ * Format: representational-type / logical-type : constraint-type
+ * <p>
+ * e.g. String/JSON:sizeLessThanOne
+ */
 public final class Type {
 
 
@@ -99,10 +103,15 @@ public final class Type {
      */
     @NotNull
     public static final Type _VOID = new Type("Void");
+
     @NotNull
-    private final String constraint;
+    private final String constraintType;
+
+    @Nullable
+    private final String logicalType;
+
     @NotNull
-    private final String name;
+    private final String representationalType;
 
 
     /**
@@ -112,12 +121,13 @@ public final class Type {
      */
     public Type(@NotNull String name, @NotNull String constraint) {
 
-        this.name = name;
+        representationalType = name;
         if (constraint != null) {
-            this.constraint = constraint;
+            constraintType = constraint;
         } else {
-            this.constraint = "";
+            constraintType = "";
         }
+        logicalType = null;
     }
 
     /**
@@ -125,12 +135,13 @@ public final class Type {
      */
     public Type(@NotNull Type type, @Nullable String constraint) {
 
-        name = type.name;
+        representationalType = type.representationalType;
         if (constraint != null) {
-            this.constraint = constraint;
+            constraintType = constraint;
         } else {
-            this.constraint = "";
+            constraintType = "";
         }
+        logicalType = null;
     }
 
     /**
@@ -140,18 +151,26 @@ public final class Type {
      */
     public Type(@NotNull String name) {
 
-        this.name = name
+        representationalType = name
         ;
-        constraint = "";
+        constraintType = "";
+        logicalType = null;
     }
 
     public Type(@NotNull Type type, @Nullable SubType subType) {
-        name = type.name;
+        representationalType = type.representationalType;
         if (subType != null) {
-            constraint = subType.asString();
+            constraintType = subType.asString();
         } else {
-            constraint = "";
+            constraintType = "";
         }
+        logicalType = null;
+    }
+
+    public Type(@NotNull String rep, @Nullable String logical, @NotNull String constraint) {
+        representationalType = rep;
+        logicalType = logical;
+        constraintType = constraint;
     }
 
     /**
@@ -164,9 +183,19 @@ public final class Type {
     public static Type of(@NotNull String name) {
         String[] split = name.split(":");
         if (split.length == 2) {
-            return new Type(split[0], split[1]);
+            String[] split2 = split[0].split("/");
+            if (split2.length == 2) {
+                return new Type(split2[0], split2[1], split[1]);
+            } else {
+                return new Type(split[0], split[1]);
+            }
         } else {
-            return new Type(name);
+            String[] split2 = split[0].split("/");
+            if (split2.length == 2) {
+                return new Type(split2[0], split2[1], "");
+            } else {
+                return new Type(name);
+            }
         }
     }
 
@@ -178,16 +207,15 @@ public final class Type {
      */
     @NotNull
     public static Type of(@NotNull Value name) {
-        String[] split = name.$S().split(":");
-        if (split.length == 2) {
-            return new Type(split[0], split[1]);
-        } else {
-            return new Type(name.$S());
-        }
+        return Type.of(name.$S());
+    }
+
+    public static Type of(@NotNull Object o, @Nullable Object o1, @Nullable Object o2) {
+        return new Type(o.toString(), (o1 != null) ? o1.toString() : null, (o2 != null) ? o2.toString() : "");
     }
 
     public boolean canBe(@NotNull Type type) {
-        return type.name.equals(name);
+        return type.representationalType.equals(representationalType);
     }
 
     /**
@@ -198,32 +226,33 @@ public final class Type {
     @Contract(pure = true)
     @NotNull
     public String constraint() {
-        return constraint;
+        return constraintType;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return Objects.hashCode(constraintType, logicalType, representationalType);
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if ((o == null) || (getClass() != o.getClass())) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Type type = (Type) o;
-        return Objects.equals(name, type.name) &&
-                       Objects.equals(constraint, type.constraint);
+        return Objects.equal(constraintType, type.constraintType) &&
+                       Objects.equal(logicalType, type.logicalType) &&
+                       Objects.equal(representationalType, type.representationalType);
     }
 
     @Contract(pure = true)
     @NotNull
     @Override
     public String toString() {
-        return constraint.isEmpty() ? name : (name + ":" + constraint);
+        return constraintType.isEmpty() ? representationalType : (representationalType + ":" + constraintType);
     }
 
     public boolean is(@Nullable Type t) {
-        return name.equals((t != null) ? t.name : null);
+        return representationalType.equals((t != null) ? t.representationalType : null);
 
     }
 
@@ -235,6 +264,6 @@ public final class Type {
     @Contract(pure = true)
     @NotNull
     public String name() {
-        return name;
+        return representationalType;
     }
 }

@@ -17,6 +17,7 @@
 package dollar.file;
 
 import dollar.api.Value;
+import dollar.api.types.DollarFactory;
 import dollar.api.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -26,8 +27,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -153,11 +156,29 @@ class FileURIHandlerSlowTest {
     }
 
     @Test
-    void write() {
+    void write() throws IOException {
+        FileURIHandler handler = new FileURIHandler("file", URI.of("file:///tmp/test_write.json.txt"));
+        handler.drain();
+        Value firstRecord = createRecord();
+        handler.write(firstRecord, false, true);
+        handler.write(createRecord(), false, true);
+        handler.write(createRecord(), false, true);
+        List<String> lines = Files.readAllLines(Paths.get("/tmp/test_write.json.txt"));
+        assertEquals("Should be only 3 lines", 3, lines.size());
+        assertEquals("First record was incorrect", DollarFactory.fromJsonString(lines.get(0)), firstRecord);
     }
 
     @Test
-    void writeAll() {
+    void writeAll() throws IOException {
+        FileURIHandler handler = new FileURIHandler("file", URI.of("file:///tmp/test_write_all.json.txt"));
+        handler.drain();
+        Value firstRecord = createRecord();
+        Value secondRecord = createRecord();
+        Value thirdRecord = createRecord();
+        handler.writeAll(DollarFactory.fromList(firstRecord, secondRecord, thirdRecord));
+        List<String> lines = Files.readAllLines(Paths.get("/tmp/test_write_all.json.txt"));
+        assertEquals("Should be only 3 lines", 3, lines.size());
+        assertEquals("First record was incorrect", DollarFactory.fromJsonString(lines.get(0)), firstRecord);
     }
 
 }

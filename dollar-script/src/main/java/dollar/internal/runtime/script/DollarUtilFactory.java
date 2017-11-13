@@ -598,8 +598,7 @@ public final class DollarUtilFactory implements DollarUtil {
     public Variable setVariable(@NotNull Scope scope,
                                 @NotNull VarKey key,
                                 @NotNull Value value,
-                                @Nullable DollarParser
-                                        parser,
+                                @Nullable DollarParser parser,
                                 @NotNull Token token,
                                 @Nullable Value useConstraint,
                                 @Nullable SubType useSource,

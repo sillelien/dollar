@@ -581,13 +581,18 @@ public final class DollarFactory {
     }
 
     @NotNull
-    public static Value fromList(@NotNull ImmutableList<Value> Values) {
-        return wrap(new DollarList(Values));
+    public static Value fromList(@NotNull ImmutableList<Value> values) {
+        return wrap(new DollarList(values));
     }
 
     @NotNull
-    public static Value fromList(@NotNull List<Value> Values) {
-        return wrap(new DollarList(ImmutableList.copyOf(Values)));
+    public static Value fromList(@NotNull List<Value> values) {
+        return wrap(new DollarList(ImmutableList.copyOf(values)));
+    }
+
+    @NotNull
+    public static Value fromList(@NotNull Value... values) {
+        return wrap(new DollarList(ImmutableList.copyOf(values)));
     }
 
     @NotNull

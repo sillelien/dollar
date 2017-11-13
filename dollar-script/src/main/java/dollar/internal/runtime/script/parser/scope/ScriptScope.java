@@ -313,7 +313,7 @@ public class ScriptScope implements Scope {
                         ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, null);
 
                     }
-
+                    util().clearScopes();
 //                    System.exit(1);
                     throw new DollarExitError(unravelled);
                 } else {
