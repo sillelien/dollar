@@ -50,7 +50,8 @@ public class FileURIHandlerFactory implements URIHandlerFactory {
 
     @Override
     public boolean handlesScheme(@NotNull String scheme) {
-        return "file".equals(scheme) || "file+lines+json".equals(scheme);
+        return "file".equals(scheme) || "file+lines+json".equals(scheme) || "file+resource".equals(
+                scheme) || "file+resource+lines+json".equals(scheme);
     }
 }
 
