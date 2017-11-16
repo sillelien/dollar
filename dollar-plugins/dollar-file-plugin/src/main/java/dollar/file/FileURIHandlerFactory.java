@@ -42,6 +42,9 @@ public class FileURIHandlerFactory implements URIHandlerFactory {
         if ("file".equals(scheme) || "file+lines+json".equals(scheme)) {
             return new FileURIHandler(scheme, uri);
         }
+        if ("file+resource".equals(scheme) || "file+resource+lines+json".equals(scheme)) {
+            return new FileResourceURIHandler(scheme, uri);
+        }
         throw new DollarFailureException(ErrorType.INVALID_SCHEME, "Unrecognized scheme " + scheme);
     }
 

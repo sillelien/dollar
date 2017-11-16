@@ -228,6 +228,9 @@ public class URI implements Serializable {
             if (withoutScheme.startsWith("//")) {
                 i = withoutScheme.indexOf('/', 3);
             }
+            if (i == -1) {
+                throw new DollarException("Could not find start of path in " + withoutScheme);
+            }
             return withoutScheme.substring(i);
         } else {
             return withoutQuery;

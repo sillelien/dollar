@@ -1,0 +1,1 @@
+{"name":"Neil","progYears":{"$type":"Range","lower":1981,"upper":2014},"blog":"http://neilellis.me","age":47,"timestamp":{"$type":"Date","text":"2017-11-16T13:39:37.915425Z","millis":1510839577915},"wroteDollar":true,"empty":null,"rating":0.7,"gender":"male","projects":["snapito","dollar"],"location":{"city":"brighton","postcode":"bn1 6jj","number":343}}
